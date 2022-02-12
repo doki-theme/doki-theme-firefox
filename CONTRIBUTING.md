@@ -1,5 +1,4 @@
-Contributing
----
+## Contributing
 
 # Outline
 
@@ -122,10 +121,10 @@ Inside the `buildSrc` directory, there will be 2 directories:
 - `src` - holds the code that builds the themes.
 - `assets` - defines the platform specific assets needed to build the themes. This directory normally contains two child
   directories.
-    - `themes` - holds the [application definitions](#application-specific-templates)
-    - `templates` - if not empty, normally contains various text files that can be evaluated to replace variables with
-      values. Some cases, they also contain templates for evaluating things such as look and feel, colors, and other
-      things.
+  - `themes` - holds the [application definitions](#application-specific-templates)
+  - `templates` - if not empty, normally contains various text files that can be evaluated to replace variables with
+    values. Some cases, they also contain templates for evaluating things such as look and feel, colors, and other
+    things.
 
 The `buildSrc` directory houses a `buildThemes` script that generates the application specific files necessary for apply
 the Doki Theme Suite.
@@ -135,8 +134,8 @@ the Doki Theme Suite.
 There is one important piece that composes a theme:
 
 - `DokiThemeDefinition.ts` which is a generated typescript file that houses all of the information necessary to:
-    - Color the application & syntax highlighting
-    - Download remote content assets.
+  - Color the application & syntax highlighting
+  - Download remote content assets.
 
 You can generate these artifacts by running this command in the `buildSrc` directory:
 

@@ -1,10 +1,8 @@
-The Doki Theme: <<App>>
----
+## The Doki Theme: <<App>>
 
 ## Quick Theme Preview
 
 ![Themes](https://raw.githubusercontent.com/doki-theme/doki-theme-jupyter/main/readmeAssets/quick_theme_preview.webp)
-
 
 # [More Screenshots](https://github.com/doki-theme/doki-theme-jupyter/blob/main/albums/screenshot_album.md)
 
@@ -15,12 +13,12 @@ The Doki Theme: <<App>>
 - [Installation](#installation)
 - [Usage](#usage)
 - [Miscellaneous](#miscellaneous)
-    - [Contributing](#contributing) 
-    - [Theme Requests](#theme-requests)
-    - [Helping the community](#enjoying-the-themes)
-    - [Feature Requests](#contributions)
+  - [Contributing](#contributing)
+  - [Theme Requests](#theme-requests)
+  - [Helping the community](#enjoying-the-themes)
+  - [Feature Requests](#contributions)
 
-# Installation 
+# Installation
 
 # Usage
 
@@ -46,4 +44,3 @@ Be sure to ⭐ and share it with other weebs!
 I think your voice needs to be heard! You probably have good ideas, so feel free to submit your feedback as [an issue](https://github.com/doki-theme/doki-theme-jupyter/issues/new).
 
 Help make this plugin better!
-

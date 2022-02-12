@@ -9,9 +9,7 @@
     "96": "icons/doki-theme-logo@96.png"
   },
   "background": {
-    "scripts": [
-      "background/background.js"
-    ]
+    "scripts": ["background/background.js"]
   },
   "browser_specific_settings": {
     "gecko": {
