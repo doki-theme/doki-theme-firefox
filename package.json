@@ -1,15 +1,16 @@
 {
-  "dependencies": {
-    "lodash": "^4.17.21"
-  },
+  "dependencies": {},
   "scripts": {
     "start": "web-ext run --source-dir ./dist/",
     "watch": "webpack --config webpack.dev.js --watch",
     "build": "webpack --config webpack.prod.js",
-    "lint": "npx prettier --write ."
+    "lint": "npx prettier --write . && npx eslint ./src --ext .js,.jsx,.ts,.tsx"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.11.0",
+    "@typescript-eslint/parser": "^5.11.0",
     "copy-webpack-plugin": "^10.2.4",
+    "eslint": "^8.9.0",
     "prettier": "2.5.1",
     "ts-loader": "^9.2.6",
     "typescript": "^4.5.5",
