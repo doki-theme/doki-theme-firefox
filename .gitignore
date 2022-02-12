@@ -25,3 +25,5 @@ masterThemes/
 
 *.pyc
 .ipynb_checkpoints/
+
+dist/
