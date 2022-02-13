@@ -1,10 +1,15 @@
 import React from "react";
+import { ThemeContext } from "../../themes/DokiThemeProvider";
 
 const Popup = () => {
   return (
-    <div>
-      Hello world
-    </div>
+    <ThemeContext.Consumer>
+      {
+        ({ theme }) => <div>
+          Current Theme: {theme.themeId}
+        </div>
+      }
+    </ThemeContext.Consumer>
   );
 };
 

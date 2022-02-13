@@ -168,7 +168,6 @@ evaluateTemplates(
           ]),
         },
         colors: dokiDefinition.colors,
-        overrides: dokiTheme.appThemeDefinition.overrides
       };
     }).reduce((accum: StringDictionary<any>, definition: any) => {
       accum[definition.information.id] = definition;
