@@ -8,8 +8,12 @@
     "48": "icons/doki-theme-logo@48.png",
     "96": "icons/doki-theme-logo@96.png"
   },
+  "permissions": [
+    "storage",
+    "theme"
+  ],
   "background": {
-    "scripts": ["background/background.js"]
+    "scripts": ["js/background.js"]
   },
   "browser_action": {
     "browser_style": true,
@@ -23,6 +27,7 @@
   },
   "browser_specific_settings": {
     "gecko": {
+      "id": "{daf44bf7-a45e-4450-979c-91cf07434c3d}",
       "strict_min_version": "95.0"
     }
   }

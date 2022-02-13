@@ -1,6 +1,9 @@
+import ThemeType = browser._manifest.ThemeType;
+
 export interface DokiThemeDefinition {
-
-
+  information: any;
+  fireFoxTheme: any;
+  colors: any;
 }
 
 export class CharacterThemes {
@@ -12,29 +15,13 @@ export class CharacterThemes {
 
 export class DokiTheme {
 
-  constructor(private readonly dokiDefinitions: DokiThemeDefinition) {
+  constructor(private readonly dokiDefinition: DokiThemeDefinition) {
   }
 
   public get themeId(): string {
-    return "ayy lmao"
+    return this.dokiDefinition.information.id
+  }
+  public get browserTheme(): ThemeType {
+    return this.dokiDefinition.fireFoxTheme
   }
 }
-
-
-class ThemeManager {
-
-  getDefaultTheme(): DokiTheme {
-    return new DokiTheme([]);
-  }
-
-  getCurrentThemeId() {
-    return "8c99ec4b-fda0-4ab7-95ad-a6bf80c3924b";
-
-  }
-
-  getThemeById(themeId: string): DokiTheme {
-    return new DokiTheme([]);
-  }
-}
-
-export const ThemeManagerService = new ThemeManager();

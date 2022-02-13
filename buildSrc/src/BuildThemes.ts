@@ -1,22 +1,24 @@
 import {
   BaseAppDokiThemeDefinition,
-  constructNamedColorTemplate,
+  constructNamedColorTemplate, dictionaryReducer,
   DokiThemeDefinitions,
   evaluateTemplates,
-  MasterDokiThemeDefinition,
+  MasterDokiThemeDefinition, readJson,
   resolveColor,
   resolvePaths,
-  StringDictionary
+  StringDictionary, toRGBArray
 } from "doki-build-source";
 import omit from "lodash/omit";
 import fs from "fs";
 import path from "path";
+import { FireFoxTheme } from "./types";
 
 type AppDokiThemeDefinition = BaseAppDokiThemeDefinition;
 
 const {
   repoDirectory,
   masterThemeDefinitionDirectoryPath,
+  appTemplatesDirectoryPath
 } = resolvePaths(__dirname);
 
 type DokiThemeFirefox = BaseAppDokiThemeDefinition;
@@ -24,11 +26,11 @@ type DokiThemeFirefox = BaseAppDokiThemeDefinition;
 function buildColors(
   dokiThemeDefinition: MasterDokiThemeDefinition,
   dokiTemplateDefinitions: DokiThemeDefinitions,
-  dokiThemeChromeDefinition: DokiThemeFirefox,
+  dokiThemeChromeDefinition: DokiThemeFirefox
 ): StringDictionary<string> {
   const namedColors = constructNamedColorTemplate(
     dokiThemeDefinition, dokiTemplateDefinitions
-  )
+  );
   const themeOverrides = dokiThemeChromeDefinition.overrides.theme &&
     dokiThemeChromeDefinition.overrides.theme.colors || {};
   const colorsOverride: StringDictionary<string> = {
@@ -37,21 +39,53 @@ function buildColors(
     ...dokiThemeChromeDefinition.colors,
     editorAccentColor: dokiThemeDefinition.overrides?.editorScheme?.colors.accentColor ||
       dokiThemeDefinition.colors.accentColor
-  }
+  };
   return Object.entries<string>(colorsOverride).reduce(
     (accum, [colorName, colorValue]) => ({
       ...accum,
-      [colorName]: resolveColor(colorValue, namedColors),
+      [colorName]: resolveColor(colorValue, namedColors)
     }),
     {}
   );
+}
+
+const toPairs = require("lodash/toPairs");
+
+function replaceValues<T, R>(itemToReplace: T, valueConstructor: (key: string, value: string) => R): T {
+  return toPairs(itemToReplace)
+    .map(([key, value]: [string, string]) => ([key, valueConstructor(key, value)]))
+    .reduce(dictionaryReducer, {});
+}
+
+
+function buildFireFoxTheme(
+  dokiThemeDefinition: MasterDokiThemeDefinition,
+  dokiTemplateDefinitions: DokiThemeDefinitions,
+  dokiThemeChromeDefinition: DokiThemeFirefox,
+  manifestTemplate: FireFoxTheme
+): FireFoxTheme {
+  const namedColors = constructNamedColorTemplate(
+    dokiThemeDefinition, dokiTemplateDefinitions
+  );
+  const colorsOverride = dokiThemeChromeDefinition.overrides.theme &&
+    dokiThemeChromeDefinition.overrides.theme.colors || {};
+  return {
+    ...manifestTemplate,
+    colors: replaceValues(
+      manifestTemplate.colors,
+      (key: string, color: string) => toRGBArray(resolveColor(
+        colorsOverride[key] || color,
+        namedColors
+      ))
+    )
+  };
 }
 
 
 function buildTemplateVariables(
   dokiThemeDefinition: MasterDokiThemeDefinition,
   masterTemplateDefinitions: DokiThemeDefinitions,
-  dokiThemeAppDefinition: AppDokiThemeDefinition,
+  dokiThemeAppDefinition: AppDokiThemeDefinition
 ): StringDictionary<string> {
   const namedColors: StringDictionary<string> = constructNamedColorTemplate(
     dokiThemeDefinition,
@@ -62,20 +96,21 @@ function buildTemplateVariables(
   const cleanedColors = Object.entries(namedColors)
     .reduce((accum, [colorName, colorValue]) => ({
       ...accum,
-      [colorName]: colorValue,
+      [colorName]: colorValue
     }), {});
   return {
     ...cleanedColors,
-    ...colorsOverride,
+    ...colorsOverride
   };
 }
 
 interface FireFoxDokiThemeBuild {
   path: string,
-  definition: MasterDokiThemeDefinition | {colors: StringDictionary<string>},
+  definition: MasterDokiThemeDefinition | { colors: StringDictionary<string> },
   stickers: Stickers,
   templateVariables: StringDictionary<string>
-  appThemeDefinition: DokiThemeFirefox
+  appThemeDefinition: DokiThemeFirefox,
+  fireFoxTheme: FireFoxTheme,
 }
 
 function createDokiTheme(
@@ -84,6 +119,7 @@ function createDokiTheme(
   appTemplateDefinitions: DokiThemeDefinitions,
   appThemeDefinition: DokiThemeFirefox,
   masterTemplateDefinitions: DokiThemeDefinitions,
+  firefoxTemplate: FireFoxTheme
 ): FireFoxDokiThemeBuild {
   try {
     return {
@@ -100,9 +136,15 @@ function createDokiTheme(
       templateVariables: buildTemplateVariables(
         masterThemeDefinition,
         masterTemplateDefinitions,
-        appThemeDefinition,
+        appThemeDefinition
       ),
       appThemeDefinition: appThemeDefinition,
+      fireFoxTheme: buildFireFoxTheme(
+        masterThemeDefinition,
+        masterTemplateDefinitions,
+        appThemeDefinition,
+        fireFoxTemplate
+      )
     };
   } catch (e) {
     throw new Error(
@@ -131,28 +173,44 @@ const getStickers: (dokiDefinition: MasterDokiThemeDefinition, themePath: string
   return {
     default: {
       path: resolveStickerPath(themePath, dokiDefinition.stickers.default),
-      name: dokiDefinition.stickers.default,
+      name: dokiDefinition.stickers.default
     },
     ...(secondary
       ? {
         secondary: {
           path: resolveStickerPath(themePath, secondary),
-          name: secondary,
-        },
+          name: secondary
+        }
       }
-      : {}),
+      : {})
   };
 };
 
 console.log("Preparing to generate themes.");
 const themesDirectory = path.resolve(repoDirectory, "src", "dokithemejupyter");
 
+const fireFoxTemplate = readJson<FireFoxTheme>(path.resolve(appTemplatesDirectoryPath, "firefox.theme.template.json"));
+
 evaluateTemplates(
   {
-    appName: 'firefox',
-    currentWorkingDirectory: __dirname,
+    appName: "firefox",
+    currentWorkingDirectory: __dirname
   },
-  createDokiTheme
+  (
+    masterThemeDefinitionPath: string,
+    masterThemeDefinition: MasterDokiThemeDefinition,
+    appTemplateDefinitions: DokiThemeDefinitions,
+    appThemeDefinition: DokiThemeFirefox,
+    masterTemplateDefinitions: DokiThemeDefinitions
+  ) =>
+    createDokiTheme(
+      masterThemeDefinitionPath,
+      masterThemeDefinition,
+      appTemplateDefinitions,
+      appThemeDefinition,
+      masterTemplateDefinitions,
+      fireFoxTemplate
+    )
 )
   .then((dokiThemes) => {
     // write things for extension
@@ -161,13 +219,14 @@ evaluateTemplates(
       return {
         information: {
           ...omit(dokiDefinition, [
-            'colors',
-            'overrides',
-            'ui',
-            'icons'
-          ]),
+            "colors",
+            "overrides",
+            "ui",
+            "icons"
+          ])
         },
         colors: dokiDefinition.colors,
+        fireFoxTheme: dokiTheme.fireFoxTheme,
       };
     }).reduce((accum: StringDictionary<any>, definition: any) => {
       accum[definition.information.id] = definition;
