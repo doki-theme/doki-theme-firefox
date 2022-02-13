@@ -27,3 +27,4 @@ masterThemes/
 .ipynb_checkpoints/
 
 dist/
+DokiThemeDefinitions.ts
