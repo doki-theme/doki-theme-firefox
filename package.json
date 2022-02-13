@@ -1,5 +1,8 @@
 {
-  "dependencies": {},
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
   "scripts": {
     "start": "web-ext run --source-dir ./dist/",
     "watch": "webpack --config webpack.dev.js --watch",
@@ -7,6 +10,9 @@
     "lint": "npx prettier --write . && npx eslint ./src --ext .js,.jsx,.ts,.tsx"
   },
   "devDependencies": {
+    "@types/firefox-webext-browser": "^94.0.1",
+    "@types/react": "^17.0.39",
+    "@types/react-dom": "^17.0.11",
     "@typescript-eslint/eslint-plugin": "^5.11.0",
     "@typescript-eslint/parser": "^5.11.0",
     "copy-webpack-plugin": "^10.2.4",
