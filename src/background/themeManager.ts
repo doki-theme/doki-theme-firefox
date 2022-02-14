@@ -1,45 +1,31 @@
 import { DokiTheme } from "../themes/DokiTheme";
-import { DEFAULT_DOKI_THEME } from "./background";
-import { PluginMode, pluginSettings } from "../Storage";
+import { setThemedFavicon } from "./themedIcon";
 
-export abstract class ThemeManager {
+export abstract class ThemeManager<T> {
 
-  abstract initializeFirefox(): Promise<void>;
+  async initializeFirefox() {
+    this.connect()
+    await this.initializeTheme()
+  }
+
+  abstract initializeTheme(): Promise<void>;
 
   setTheme(dokiTheme: DokiTheme) {
+    setThemedFavicon(dokiTheme);
     browser.theme.update(dokiTheme.browserTheme);
   }
-}
 
-export class SingleThemeManager extends ThemeManager {
-  initializeFirefox(): Promise<void> {
-    this.setTheme(DEFAULT_DOKI_THEME)
-    return Promise.resolve(undefined);
-  }
-}
+  abstract handleMessage(message: T): void
 
-export class MixedThemeManager extends ThemeManager {
-  initializeFirefox(): Promise<void> {
-    return Promise.resolve(undefined);
+  connect() {
+    browser.runtime.onMessage.addListener(this.dispatchMessage)
   }
 
-}
-
-export class DayNightThemeManager extends ThemeManager {
-  initializeFirefox(): Promise<void> {
-    return Promise.resolve(undefined);
+  dispatchMessage(event: any) {
+    this.handleMessage(event)
   }
-}
 
-export async function getCurrentThemeManager(): Promise<ThemeManager> {
-  const { currentMode } = await pluginSettings.getAll();
-  switch (currentMode) {
-    case PluginMode.DAY_NIGHT:
-      return new DayNightThemeManager();
-    case PluginMode.MIXED:
-      return new MixedThemeManager();
-    case PluginMode.SINGLE:
-    default:
-      return new SingleThemeManager();
+  disconnect() {
+    browser.runtime.onMessage.removeListener(this.dispatchMessage)
   }
 }

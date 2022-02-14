@@ -19,9 +19,14 @@ export class DokiTheme {
   }
 
   public get themeId(): string {
-    return this.dokiDefinition.information.id
+    return this.dokiDefinition.information.id;
   }
+
+  public get colors(): { [key: string]: string } {
+    return this.dokiDefinition.colors;
+  }
+
   public get browserTheme(): ThemeType {
-    return this.dokiDefinition.fireFoxTheme
+    return this.dokiDefinition.fireFoxTheme;
   }
 }
