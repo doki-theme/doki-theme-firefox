@@ -1,21 +1,21 @@
 import { DokiTheme } from "../themes/DokiTheme";
-import { setThemedFavicon } from "./themedIcon";
+import { themeExtensionIconInToolBar } from "./themedIcon";
 
 export abstract class ThemeManager<T> {
+
+  abstract initializeTheme(): Promise<void>;
+
+  abstract handleMessage(message: T): void
 
   async initializeFirefox() {
     this.connect()
     await this.initializeTheme()
   }
 
-  abstract initializeTheme(): Promise<void>;
-
   setTheme(dokiTheme: DokiTheme) {
-    setThemedFavicon(dokiTheme);
+    themeExtensionIconInToolBar(dokiTheme);
     browser.theme.update(dokiTheme.browserTheme);
   }
-
-  abstract handleMessage(message: T): void
 
   connect() {
     browser.runtime.onMessage.addListener(this.dispatchMessage)
