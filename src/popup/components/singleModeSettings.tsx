@@ -1,81 +1,76 @@
 import React, { useMemo } from "react";
-import { Formik } from "formik";
+import { Formik, Field } from "formik";
 import ThemedSelect from "./ThemedSelect";
 import { characterThemes } from "./Characters";
+import { CharacterTheme, ContentType } from "../../themes/DokiTheme";
+
+interface FormValues {
+  character: CharacterTheme;
+  contentType: ContentType;
+}
 
 const SingleModeSettings = () => {
-
-  const options = useMemo(() => {
-    const characterOptions = characterThemes.map(characterTheme => ({
-      value: characterTheme, label: characterTheme.name
+  const [options, defaultChar] = useMemo(() => {
+    const characterOptions = characterThemes.map((characterTheme) => ({
+      value: characterTheme,
+      label: characterTheme.name,
     }));
     characterOptions.sort((a, b) => a.label.localeCompare(b.label));
-    return characterOptions;
+    return [characterOptions, characterOptions.find(((theme) => theme.value.name === "Zero Two"))];
   }, []);
+
+  const initialValues: FormValues = {
+    character: defaultChar!!.value,
+    contentType: ContentType.PRIMARY,
+  };
 
   return (
     <div>
-      <h1>Anywhere in your app!</h1>
+      <h3>Choose a character</h3>
 
       <Formik
-        initialValues={{ email: "", password: "" }}
-        validate={(values) => {
-          const errors: any = {};
-
-          if (!values.email) {
-            errors.email = "Required";
-          } else if (
-            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-          ) {
-            errors.email = "Invalid email address";
-          }
-
-          return errors;
-        }}
+        initialValues={initialValues}
         onSubmit={(values, { setSubmitting }) => {
           setTimeout(() => {
             alert(JSON.stringify(values, null, 2));
-
             setSubmitting(false);
           }, 400);
         }}
       >
-        {({
-            values,
-            errors,
-            touched,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            isSubmitting,
-            dirty
-
-            /* and other goodies */
-          }) => (
+        {({ values, handleSubmit, isSubmitting, dirty, setFieldValue }) => (
           <form onSubmit={handleSubmit}>
-
-            <ThemedSelect options={options} />
-
-            <input
-              type="email"
-              name="email"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.email}
+            <ThemedSelect
+              options={options}
+              defaultValue={defaultChar}
+              onChange={(selectedCharacter) =>
+                setFieldValue("character", selectedCharacter!!.value)
+              }
             />
 
-            {errors.email && touched.email && errors.email}
-
-            <input
-              type="password"
-              name="password"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.password}
-            />
-
-            {errors.password && touched.password && errors.password}
-
+            {
+              values.character.hasSecondaryContent &&
+              (<>
+                <div id="contentTypeGroup">Content Type</div>
+                <div role="group" aria-labelledby="contentTypeGroup">
+                  <label>
+                    <Field
+                      type="radio"
+                      name="contentType"
+                      value={ContentType.PRIMARY}
+                    />
+                    Primary
+                  </label>
+                  <label>
+                    <Field
+                      type="radio"
+                      name="contentType"
+                      value={ContentType.SECONDARY}
+                    />
+                    Secondary
+                  </label>
+                </div>
+              </>)
+            }
             <button type="submit" disabled={isSubmitting || !dirty}>
               Apply
             </button>

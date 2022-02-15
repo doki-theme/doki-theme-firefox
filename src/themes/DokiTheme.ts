@@ -68,7 +68,11 @@ export interface DokiThemeDefinition {
   colors: Colors;
 }
 
-export class CharacterThemes {
+export enum ContentType {
+  PRIMARY, SECONDARY
+}
+
+export class CharacterTheme {
 
   constructor(private readonly dokiDefinitions: DokiThemeDefinition[]) {
   }
@@ -76,6 +80,12 @@ export class CharacterThemes {
   public get name(): string {
     return this.dokiDefinitions
       .map(def => def.information.conflictName || def.information.displayName)
+      .find(Boolean);
+  }
+
+  public get hasSecondaryContent(): string {
+    return this.dokiDefinitions
+      .map(def => def.information.stickers.secondary)
       .find(Boolean);
   }
 
