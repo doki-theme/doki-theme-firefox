@@ -1,13 +1,14 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { ThemeContext } from "../../themes/DokiThemeProvider";
-import Select from "react-select";
 import { DokiTheme } from "../../themes/DokiTheme";
 import ThemedSelect from "./ThemedSelect";
+import { PluginMode } from "../../Storage";
+import { OptionSwitch } from "./optionSwitch";
 
-const options: any[] = [
-  { value: "chocolate", label: "Chocolate" },
-  { value: "strawberry", label: "Strawberry" },
-  { value: "vanilla", label: "Vanilla" }
+const options: { value: PluginMode, label: string }[] = [
+  { value: PluginMode.SINGLE, label: "Individual" },
+  { value: PluginMode.DAY_NIGHT, label: "Day/Night" },
+  { value: PluginMode.MIXED, label: "Mixed" }
 ];
 
 const ThemeStuff: FC<{ theme: DokiTheme }> = ({ theme }) => {
@@ -18,7 +19,7 @@ const ThemeStuff: FC<{ theme: DokiTheme }> = ({ theme }) => {
 };
 
 const Popup = () => {
-
+  const [currentMode, setCurrentMode] = useState<PluginMode>(options[0].value);
   return (
     <ThemeContext.Consumer>
       {
@@ -35,9 +36,13 @@ const Popup = () => {
             <header>
               <h1 style={{ margin: "0 0 1rem 0" }}>Doki Theme</h1>
             </header>
-
+            <label>Plugin Mode</label>
             <ThemedSelect options={options}
+                          onChange={(thing) => {
+                            setCurrentMode(thing!!.value);
+                          }}
                           defaultValue={options[0]} />
+            <OptionSwitch pluginMode={currentMode} />
           </div>;
         }
       }
