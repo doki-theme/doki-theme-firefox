@@ -1,7 +1,18 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Formik } from "formik";
+import ThemedSelect from "./ThemedSelect";
+import { characterThemes } from "./Characters";
 
 const SingleModeSettings = () => {
+
+  const options = useMemo(() => {
+    const characterOptions = characterThemes.map(characterTheme => ({
+      value: characterTheme, label: characterTheme.name
+    }));
+    characterOptions.sort((a, b) => a.label.localeCompare(b.label));
+    return characterOptions;
+  }, []);
+
   return (
     <div>
       <h1>Anywhere in your app!</h1>
@@ -30,17 +41,21 @@ const SingleModeSettings = () => {
         }}
       >
         {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          isSubmitting,
+            values,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            isSubmitting,
+            dirty
 
-          /* and other goodies */
-        }) => (
+            /* and other goodies */
+          }) => (
           <form onSubmit={handleSubmit}>
+
+            <ThemedSelect options={options} />
+
             <input
               type="email"
               name="email"
@@ -61,8 +76,8 @@ const SingleModeSettings = () => {
 
             {errors.password && touched.password && errors.password}
 
-            <button type="submit" disabled={isSubmitting}>
-              Submit
+            <button type="submit" disabled={isSubmitting || !dirty}>
+              Apply
             </button>
           </form>
         )}

@@ -4,14 +4,11 @@ export interface Colors {
   "caretRow": string;
   "lineNumberColor": string;
   "infoForeground": string;
-  "completionWindowBackground": string;
   "baseIconColor": string;
   "contrastColor": string;
   "nonProjectFileScopeColor": string;
   "secondaryBackground": string;
   "selectionForeground": string;
-  "inactiveBackground": string;
-  "inactiveBackgroundDarker": string;
   "headerColor": string;
   "baseBackground": string;
   "borderColor": string;
@@ -19,7 +16,6 @@ export interface Colors {
   "selectionInactive": string;
   "identifierHighlight": string;
   "selectionBackground": string;
-  "selectionBackgroundTransparent": string;
   "searchBackground": string;
   "searchForeground": string;
   "buttonFont": string;
@@ -76,6 +72,13 @@ export class CharacterThemes {
 
   constructor(private readonly dokiDefinitions: DokiThemeDefinition[]) {
   }
+
+  public get name(): string {
+    return this.dokiDefinitions
+      .map(def => def.information.conflictName || def.information.displayName)
+      .find(Boolean);
+  }
+
 
 }
 
