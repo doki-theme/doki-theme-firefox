@@ -1,4 +1,5 @@
 import ThemeType = browser._manifest.ThemeType;
+import DokiThemeDefinitions from "../DokiThemeDefinitions";
 
 export interface Colors {
   caretRow: string;
@@ -75,6 +76,7 @@ export enum ContentType {
 
 export class CharacterTheme {
   private dokiThemes: DokiTheme[];
+
   constructor(private readonly dokiDefinitions: DokiThemeDefinition[]) {
     this.dokiThemes = dokiDefinitions.map((dokiDef) => new DokiTheme(dokiDef));
   }
@@ -101,7 +103,8 @@ export class CharacterTheme {
 }
 
 export class DokiTheme {
-  constructor(private readonly dokiDefinition: DokiThemeDefinition) {}
+  constructor(private readonly dokiDefinition: DokiThemeDefinition) {
+  }
 
   public get themeId(): string {
     return this.dokiDefinition.information.id;
@@ -127,3 +130,9 @@ export class DokiTheme {
     return this.dokiDefinition.fireFoxTheme;
   }
 }
+
+export const DokiThemes =
+  Object.fromEntries(
+    Object.entries(DokiThemeDefinitions)
+      .map(([key, value]) => ([key, new DokiTheme(value)]))
+  );
