@@ -1,6 +1,6 @@
-import { DEFAULT_DOKI_THEME } from "./background";
 import { ThemeManager } from "./themeManager";
 import { Message } from "./message";
+import { DEFAULT_DOKI_THEME } from "../themes/DokiTheme";
 
 export class SingleThemeManager extends ThemeManager<Message> {
 

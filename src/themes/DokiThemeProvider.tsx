@@ -1,6 +1,12 @@
-import React, { FC, useMemo, useState } from "react";
-import { ContentType, DokiTheme, DokiThemes } from "./DokiTheme";
-import { DEFAULT_DOKI_THEME } from "../background/background";
+import React, { FC, useEffect, useMemo, useState } from "react";
+import {
+  ContentType,
+  DEFAULT_DOKI_THEME,
+  DEFAULT_THEME_ID,
+  DokiTheme,
+  DokiThemes
+} from "./DokiTheme";
+import { pluginSettings } from "../Storage";
 
 interface ThemeContext {
   selectedTheme: DokiTheme;
@@ -10,27 +16,42 @@ interface ThemeContext {
 export interface DokiThemeContext {
   theme: DokiTheme;
   setTheme: (context: ThemeContext) => void;
+  isInitialized: boolean;
 }
 
 export const ThemeContext = React.createContext<DokiThemeContext>({
   theme: DEFAULT_DOKI_THEME,
   setTheme: (context: ThemeContext) => {
-  }
+  },
+  isInitialized: false
 });
 
 const DokiThemeProvider: FC = ({ children }) => {
-
-  const [themeId, setThemeId] = useState<string>("e55e70ea-454b-47ef-9270-d46390dd2769");
+  const [themeId, setThemeId] = useState<string>(DEFAULT_THEME_ID);
+  const [initialized, setInitialized] = useState<boolean>(false);
   const setTheme = (context: ThemeContext) => {
     // do stuff
     setThemeId(context.selectedTheme.themeId);
   };
 
-  const themeContext = useMemo<DokiThemeContext>(() => ({
-    setTheme,
-    theme: DokiThemes[themeId]
-  }), [themeId]);
+  useEffect(() => {
+    pluginSettings.getAll().then((setting) => {
+      const currentTheme = setting.currentTheme;
+      if (currentTheme) {
+        setThemeId(currentTheme);
+      }
+      setInitialized(true);
+    });
+  }, []);
 
+  const themeContext = useMemo<DokiThemeContext>(
+    () => ({
+      setTheme,
+      theme: DokiThemes[themeId],
+      isInitialized: initialized
+    }),
+    [themeId, initialized]
+  );
 
   return (
     <ThemeContext.Provider value={themeContext}>

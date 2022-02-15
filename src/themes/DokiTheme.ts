@@ -102,6 +102,9 @@ export class CharacterTheme {
   }
 }
 
+// RYUKO DARK
+export const DEFAULT_THEME_ID = "19b65ec8-133c-4655-a77b-13623d8e97d3"
+
 export class DokiTheme {
   constructor(private readonly dokiDefinition: DokiThemeDefinition) {
   }
@@ -130,6 +133,8 @@ export class DokiTheme {
     return this.dokiDefinition.fireFoxTheme;
   }
 }
+
+export const DEFAULT_DOKI_THEME = new DokiTheme(DokiThemeDefinitions[DEFAULT_THEME_ID]);
 
 export const DokiThemes =
   Object.fromEntries(
