@@ -8,7 +8,18 @@ const Tab = () => {
       {({ theme }) => (
         <>
           <ThemeStuff theme={theme}></ThemeStuff>
-          <div style={{ color: theme.colors.foregroundColor }}>
+          <div
+            style={{
+              color: theme.colors.foregroundColor,
+              width: "100%",
+              height: "100%",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundImage: `url(${browser.runtime.getURL(
+                "backgrounds/rikka_dark.png"
+              )})`,
+            }}
+          >
             早上好中國，現在我有冰淇淋 {theme.name}
           </div>
         </>
