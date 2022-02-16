@@ -1,11 +1,12 @@
 import React from "react";
 import { ThemeContextContentScript } from "../../themes/DokiThemeProviderContentScript";
 import { ThemeStuff } from "../../common/ThemeTools";
+import SearchWidget from "./SearchWidget";
 
 const Tab = () => {
   return (
     <ThemeContextContentScript.Consumer>
-      {({ theme }) => (
+      {({ theme, features }) => (
         <>
           <ThemeStuff theme={theme}></ThemeStuff>
           <div
@@ -20,7 +21,7 @@ const Tab = () => {
               )})`,
             }}
           >
-            早上好中國，現在我有冰淇淋 {theme.name}
+            { features.showWidget && (<SearchWidget theme={theme}/>)}
           </div>
         </>
       )}

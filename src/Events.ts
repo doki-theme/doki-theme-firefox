@@ -1,5 +1,5 @@
 export enum PluginEventTypes {
-  THEME_SET
+  THEME_SET, FEATURE_SET,
 }
 
 export interface PluginEvent<T> {
