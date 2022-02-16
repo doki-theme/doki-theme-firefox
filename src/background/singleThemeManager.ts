@@ -1,14 +1,20 @@
 import { ThemeManager } from "./themeManager";
-import { Message } from "./message";
-import { DEFAULT_DOKI_THEME } from "../themes/DokiTheme";
+import { DEFAULT_DOKI_THEME, DokiTheme } from "../themes/DokiTheme";
+import { pluginSettings } from "../Storage";
+import { ThemeSetEventPayload } from "../Events";
 
-export class SingleThemeManager extends ThemeManager<Message> {
+export class SingleThemeManager extends ThemeManager {
 
-  initializeTheme(): Promise<void> {
-    this.setTheme(DEFAULT_DOKI_THEME);
-    return Promise.resolve(undefined);
+  async initializeTheme(): Promise<void> {
+    await this.setTheme(DEFAULT_DOKI_THEME);
   }
 
-  handleMessage(message: Message): void {
+  handleMessage(message: ThemeSetEventPayload): void {
+  }
+
+
+  async setTheme(dokiTheme: DokiTheme) {
+    await super.setTheme(dokiTheme);
+    await pluginSettings.set({singleModeTheme: dokiTheme.themeId})
   }
 }

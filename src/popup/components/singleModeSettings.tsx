@@ -59,7 +59,6 @@ const SingleModeSettings = () => {
       {({ theme, setTheme, isInitialized }) => {
         if(!isInitialized) return (<></>);
 
-
         const initialValues: FormValues = {
           character: characterThemes.find((character) =>
             character.themes.some(
@@ -73,8 +72,6 @@ const SingleModeSettings = () => {
           value: theme,
           label: createThemeVariantName(theme),
         };
-
-
         return (
           <>
             <h3>Choose a character</h3>

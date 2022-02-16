@@ -1,28 +1,34 @@
-import { DokiTheme } from "../themes/DokiTheme";
+import { DokiTheme, DokiThemes } from "../themes/DokiTheme";
 import { themeExtensionIconInToolBar } from "./themedIcon";
+import { pluginSettings } from "../Storage";
+import { PluginEventTypes, ThemeSetEventPayload } from "../Events";
 
-export abstract class ThemeManager<T> {
+export abstract class ThemeManager {
 
   abstract initializeTheme(): Promise<void>;
 
-  abstract handleMessage(message: T): void
+  abstract handleMessage(message: ThemeSetEventPayload): void
 
   async initializeFirefox() {
     this.connect()
     await this.initializeTheme()
   }
 
-  setTheme(dokiTheme: DokiTheme) {
+  async setTheme(dokiTheme: DokiTheme) {
     themeExtensionIconInToolBar(dokiTheme);
     browser.theme.update(dokiTheme.browserTheme);
+    await pluginSettings.set({currentTheme: dokiTheme.themeId})
   }
 
   connect() {
-    browser.runtime.onMessage.addListener(this.dispatchMessage)
+    browser.runtime.onMessage.addListener(this.dispatchMessage.bind(this))
   }
 
   dispatchMessage(event: any) {
-    this.handleMessage(event)
+    if(event.type === PluginEventTypes.THEME_SET) {
+      const payload = event.payload as ThemeSetEventPayload
+      this.setTheme(DokiThemes[payload.themeId])
+    }
   }
 
   disconnect() {

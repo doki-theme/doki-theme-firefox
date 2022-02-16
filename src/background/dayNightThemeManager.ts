@@ -1,7 +1,7 @@
 import { ThemeManager } from "./themeManager";
 import { Message } from "./message";
 
-export class DayNightThemeManager extends ThemeManager<Message> {
+export class DayNightThemeManager extends ThemeManager {
   initializeTheme(): Promise<void> {
     return Promise.resolve(undefined);
   }
