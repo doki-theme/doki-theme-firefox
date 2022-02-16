@@ -3,7 +3,7 @@ import { ContentType, DEFAULT_DOKI_THEME, DEFAULT_THEME_ID, DokiTheme, DokiTheme
 import { pluginSettings } from "../Storage";
 import { PluginEvent, PluginEventTypes, ThemeSetEventPayload } from "../Events";
 
-interface ThemeContext {
+export interface ThemeContext {
   selectedTheme: DokiTheme;
   contentType: ContentType;
 }

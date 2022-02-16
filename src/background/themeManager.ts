@@ -7,7 +7,7 @@ export abstract class ThemeManager {
 
   abstract initializeTheme(): Promise<void>;
 
-  abstract handleMessage(message: ThemeSetEventPayload): void
+  abstract handleMessage(message: ThemeSetEventPayload): Promise<void>
 
   async initializeFirefox() {
     this.connect()
@@ -24,11 +24,12 @@ export abstract class ThemeManager {
     browser.runtime.onMessage.addListener(this.dispatchMessage.bind(this))
   }
 
-  dispatchMessage(event: any) {
+  async dispatchMessage(event: any) {
     if(event.type === PluginEventTypes.THEME_SET) {
       const payload = event.payload as ThemeSetEventPayload
-      this.setTheme(DokiThemes[payload.themeId])
+      await this.setTheme(DokiThemes[payload.themeId])
     }
+    await this.handleMessage(event)
   }
 
   disconnect() {

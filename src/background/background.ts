@@ -5,7 +5,7 @@ import { getCurrentThemeManager } from "./getCurrentThemeManager";
 
 console.log("早上好中國。現在我有冰淇淋。");
 
-var currentThemeManager: ThemeManager<any>;
+var currentThemeManager: ThemeManager;
 
 const initializePlugin = async () => {
   currentThemeManager = await getCurrentThemeManager();

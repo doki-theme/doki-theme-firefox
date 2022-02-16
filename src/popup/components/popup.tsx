@@ -4,19 +4,13 @@ import { DokiTheme } from "../../themes/DokiTheme";
 import ThemedSelect from "./ThemedSelect";
 import { PluginMode } from "../../Storage";
 import { OptionSwitch } from "./optionSwitch";
+import { ThemeStuff } from "../../common/ThemeTools";
 
 const options: { value: PluginMode, label: string }[] = [
   { value: PluginMode.SINGLE, label: "Individual" },
   { value: PluginMode.DAY_NIGHT, label: "Day/Night" },
   { value: PluginMode.MIXED, label: "Mixed" }
 ];
-
-const ThemeStuff: FC<{ theme: DokiTheme }> = ({ theme }) => {
-  useEffect(() => {
-    document.documentElement.style.setProperty("--base-background", theme.colors.baseBackground);
-  }, [theme]);
-  return <></>;
-};
 
 const Popup = () => {
   const [currentMode, setCurrentMode] = useState<PluginMode>(options[0].value);

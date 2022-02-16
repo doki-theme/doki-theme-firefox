@@ -25,6 +25,12 @@
     "default_popup": "popup.html",
     "default_title": "Doki Theme"
   },
+  "chrome_url_overrides": {
+    "newtab": "tab.html"
+  },
+  "chrome_settings_overrides": {
+    "homepage": "tab.html"
+  },
   "browser_specific_settings": {
     "gecko": {
       "id": "{daf44bf7-a45e-4450-979c-91cf07434c3d}",
