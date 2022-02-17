@@ -26,7 +26,6 @@ function setThemedAboutIcon(currentTheme: DokiTheme) {
 }
 
 const SearchWidget = ({theme}:{theme: DokiTheme}) => {
-
   const logoElement = useRef(null);
   useEffect(()=> {
     if(logoElement) {
