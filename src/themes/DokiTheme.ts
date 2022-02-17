@@ -132,6 +132,10 @@ export class DokiTheme {
   public get browserTheme(): ThemeType {
     return this.dokiDefinition.fireFoxTheme;
   }
+
+  public get stickerName(): string {
+    return this.dokiDefinition.information.stickers.default;
+  }
 }
 
 export const DEFAULT_DOKI_THEME = new DokiTheme(DokiThemeDefinitions[DEFAULT_THEME_ID]);

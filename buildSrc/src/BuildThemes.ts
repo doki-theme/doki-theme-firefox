@@ -1,12 +1,16 @@
 import {
   BaseAppDokiThemeDefinition,
-  constructNamedColorTemplate, dictionaryReducer,
+  constructNamedColorTemplate,
+  dictionaryReducer,
   DokiThemeDefinitions,
   evaluateTemplates,
-  MasterDokiThemeDefinition, readJson,
+  MasterDokiThemeDefinition,
+  readJson,
   resolveColor,
   resolvePaths,
-  StringDictionary, toRGBArray
+  StringDictionary,
+  toRGBArray,
+  walkDir
 } from "doki-build-source";
 import omit from "lodash/omit";
 import fs from "fs";
@@ -187,31 +191,52 @@ const getStickers: (dokiDefinition: MasterDokiThemeDefinition, themePath: string
 };
 
 console.log("Preparing to generate themes.");
-const themesDirectory = path.resolve(repoDirectory, "src", "dokithemejupyter");
-
 const fireFoxTemplate = readJson<FireFoxTheme>(path.resolve(appTemplatesDirectoryPath, "firefox.theme.template.json"));
 
-evaluateTemplates(
-  {
-    appName: "firefox",
-    currentWorkingDirectory: __dirname
-  },
-  (
-    masterThemeDefinitionPath: string,
-    masterThemeDefinition: MasterDokiThemeDefinition,
-    appTemplateDefinitions: DokiThemeDefinitions,
-    appThemeDefinition: DokiThemeFirefox,
-    masterTemplateDefinitions: DokiThemeDefinitions
-  ) =>
-    createDokiTheme(
-      masterThemeDefinitionPath,
-      masterThemeDefinition,
-      appTemplateDefinitions,
-      appThemeDefinition,
-      masterTemplateDefinitions,
-      fireFoxTemplate
-    )
-)
+const firefoxBackgroundAssets = path.resolve(
+  repoDirectory, "public", "backgrounds"
+);
+
+async function walkAndCopyAssets(): Promise<void> {
+  const assetsToCopy = await walkDir(
+    path.resolve(repoDirectory, "..", "doki-theme-assets", "backgrounds", "wallpapers")
+  );
+
+  assetsToCopy.filter(assetPath => assetPath.indexOf("transparent") < 0 && assetPath.indexOf("checksum") < 0)
+    .forEach(assetPath => {
+      fs.copyFileSync(
+        assetPath,
+        path.join(
+          firefoxBackgroundAssets, assetPath.substring(
+            assetPath.lastIndexOf(path.sep) + 1
+          )
+        )
+      );
+    });
+}
+
+walkAndCopyAssets().then(() =>
+  evaluateTemplates(
+    {
+      appName: "firefox",
+      currentWorkingDirectory: __dirname
+    },
+    (
+      masterThemeDefinitionPath: string,
+      masterThemeDefinition: MasterDokiThemeDefinition,
+      appTemplateDefinitions: DokiThemeDefinitions,
+      appThemeDefinition: DokiThemeFirefox,
+      masterTemplateDefinitions: DokiThemeDefinitions
+    ) =>
+      createDokiTheme(
+        masterThemeDefinitionPath,
+        masterThemeDefinition,
+        appTemplateDefinitions,
+        appThemeDefinition,
+        masterTemplateDefinitions,
+        fireFoxTemplate
+      )
+  ))
   .then((dokiThemes) => {
     // write things for extension
     const dokiThemeDefinitions = dokiThemes.map(dokiTheme => {
@@ -226,7 +251,7 @@ evaluateTemplates(
           ])
         },
         colors: dokiDefinition.colors,
-        fireFoxTheme: dokiTheme.fireFoxTheme,
+        fireFoxTheme: dokiTheme.fireFoxTheme
       };
     }).reduce((accum: StringDictionary<any>, definition: any) => {
       accum[definition.information.id] = definition;

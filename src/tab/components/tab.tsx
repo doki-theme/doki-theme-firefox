@@ -20,7 +20,7 @@ const Tab = () => {
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   backgroundImage: `url(${browser.runtime.getURL(
-                    "backgrounds/rikka_dark.png"
+                    "backgrounds/" + theme.stickerName 
                   )})`,
                 }}
               >
