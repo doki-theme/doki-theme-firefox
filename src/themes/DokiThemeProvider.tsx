@@ -3,39 +3,29 @@ import { ContentType, DEFAULT_DOKI_THEME, DEFAULT_THEME_ID, DokiTheme, DokiTheme
 import { pluginSettings } from "../Storage";
 import { PluginEvent, PluginEventTypes, ThemeSetEventPayload } from "../Events";
 
-export interface PluginFeatures {
-  showWidget: boolean;
-}
 
 export interface ThemeContext {
   selectedTheme: DokiTheme;
   contentType: ContentType;
-  features: PluginFeatures;
 }
 
 export interface DokiThemeContext {
   theme: DokiTheme;
   setTheme: (context: ThemeContext) => void;
   isInitialized: boolean;
-  features: PluginFeatures;
 }
 
-export const defaultFeatures = {
-  showWidget: true
-};
 
 export const ThemeContext = React.createContext<DokiThemeContext>({
   theme: DEFAULT_DOKI_THEME,
   setTheme: (context: ThemeContext) => {
   },
   isInitialized: false,
-  features: defaultFeatures
 });
 
 const DokiThemeProvider: FC = ({ children }) => {
   const [themeId, setThemeId] = useState<string>(DEFAULT_THEME_ID);
   const [initialized, setInitialized] = useState<boolean>(false);
-  const [features, setFeatures] = useState<PluginFeatures>(defaultFeatures);
   const setTheme = (context: ThemeContext) => {
     const nextTheme = context.selectedTheme.themeId;
     setThemeId(nextTheme);
@@ -45,7 +35,6 @@ const DokiThemeProvider: FC = ({ children }) => {
         themeId: nextTheme,
       }
     }
-    setFeatures(context.features);
 
     browser.runtime.sendMessage(themeSetEvent)
   };
@@ -65,9 +54,8 @@ const DokiThemeProvider: FC = ({ children }) => {
       setTheme,
       theme: DokiThemes[themeId],
       isInitialized: initialized,
-      features,
     }),
-    [themeId, initialized, features]
+    [themeId, initialized]
   );
 
   return (

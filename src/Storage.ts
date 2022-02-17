@@ -9,6 +9,7 @@ export interface PluginLocalStorage extends Options {
   currentMode: PluginMode;
   singleModeTheme: string;
   currentTheme: string;
+  showWidget: boolean;
 }
 
 export const pluginSettings = new OptionsSync<PluginLocalStorage>({
@@ -16,5 +17,6 @@ export const pluginSettings = new OptionsSync<PluginLocalStorage>({
     currentMode: PluginMode.SINGLE,
     singleModeTheme: DEFAULT_THEME_ID,
     currentTheme: DEFAULT_THEME_ID,
+    showWidget: true,
   }
 });
