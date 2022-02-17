@@ -1,0 +1,16 @@
+:root {
+  --highlight-color: #573238;
+  --accent-color: #a73035;
+}
+
+.doki-tabs__tab--selected {
+  background-color: var(--highlight-color);
+  border-color: var(--accent-color);
+  border-bottom: 1px solid var(--accent-color);
+}
+
+.doki-tabs__tab-list {
+  margin: 0 0 10px;
+  padding: 0;
+}
+

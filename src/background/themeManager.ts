@@ -7,7 +7,7 @@ export abstract class ThemeManager {
 
   abstract initializeTheme(): Promise<void>;
 
-  abstract handleMessage(message: ThemeSetEventPayload): Promise<void>
+  abstract handleMessage(message: any): Promise<void>
 
   async initializeFirefox() {
     this.connect()

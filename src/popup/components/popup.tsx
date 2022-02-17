@@ -6,6 +6,8 @@ import { OptionSwitch } from "./optionSwitch";
 import { ThemeStuff } from "../../common/ThemeTools";
 import Switch from "react-switch";
 import { FeatureContext } from "../../themes/FeatureProvider";
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import './popup.css';
 
 const options: { value: PluginMode; label: string }[] = [
   { value: PluginMode.SINGLE, label: "Individual" },
@@ -32,7 +34,7 @@ const Popup = () => {
                 <div
                   style={{
                     backgroundColor: colors.baseBackground,
-                    color: colors.lineNumberColor,
+                    color: colors.foregroundColor,
                     padding: "1rem",
                     minHeight: "500px",
                     minWidth: "250px",
@@ -42,19 +44,29 @@ const Popup = () => {
                   <header>
                     <h1 style={{ margin: "0 0 1rem 0" }}>Doki Theme</h1>
                   </header>
-                  <Switch
-                    onChange={handleWidgetChange}
-                    checked={features.showWidget}
-                  />
-                  <label>Plugin Mode</label>
-                  <ThemedSelect
-                    options={options}
-                    onChange={(thing) => {
-                      setCurrentMode(thing!!.value);
-                    }}
-                    defaultValue={options[0]}
-                  />
-                  <OptionSwitch pluginMode={currentMode} />
+                  <Tabs>
+                    <TabList className='doki-tabs__tab-list' >
+                      <Tab selectedClassName='doki-tabs__tab--selected' >Theme Settings</Tab>
+                      <Tab selectedClassName='doki-tabs__tab--selected'>Plugin Features</Tab>
+                    </TabList>
+                    <TabPanel>
+                      <label>Plugin Mode</label>
+                      <ThemedSelect
+                        options={options}
+                        onChange={(thing) => {
+                          setCurrentMode(thing!!.value);
+                        }}
+                        defaultValue={options[0]}
+                      />
+                      <OptionSwitch pluginMode={currentMode} />
+                    </TabPanel>
+                    <TabPanel>
+                      <Switch
+                        onChange={handleWidgetChange}
+                        checked={features.showWidget}
+                      />
+                    </TabPanel>
+                  </Tabs>
                 </div>
               );
             }}
