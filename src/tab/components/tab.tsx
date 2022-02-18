@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ThemeContextContentScript } from "../../themes/DokiThemeProviderContentScript";
 import { ThemeStuff } from "../../common/ThemeTools";
 import SearchWidget from "./SearchWidget";
 import { FeatureContextContentScript } from "../../themes/FeatureProviderContentScript";
+import { notifyTabAttached } from "../TabBackgroundListener";
 
 const Tab = () => {
+  useEffect(()=>{
+    notifyTabAttached()
+  },[]);
   return (
     <ThemeContextContentScript.Consumer>
       {({ theme }) => (

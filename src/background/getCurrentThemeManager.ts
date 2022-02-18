@@ -4,8 +4,7 @@ import { MixedThemeManager } from "./mixedThemeManager";
 import { SingleThemeManager } from "./singleThemeManager";
 import { ThemeManager } from "./themeManager";
 
-export async function getCurrentThemeManager(): Promise<ThemeManager> {
-  const { currentMode } = await pluginSettings.getAll();
+export function getThemeManager(currentMode: PluginMode) {
   switch (currentMode) {
     case PluginMode.DAY_NIGHT:
       return new DayNightThemeManager();
@@ -15,4 +14,9 @@ export async function getCurrentThemeManager(): Promise<ThemeManager> {
     default:
       return new SingleThemeManager();
   }
+}
+
+export async function getCurrentThemeManager(): Promise<ThemeManager> {
+  const { currentMode } = await pluginSettings.getAll();
+  return getThemeManager(currentMode);
 }

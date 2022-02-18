@@ -7,7 +7,7 @@ export class FireFoxDokiTheme extends DokiTheme {
 
   constructor(
     readonly dokiTheme: DokiTheme,
-    private readonly activeContent: ContentType
+    readonly activeContent: ContentType
   ) {
     super(dokiTheme.dokiDefinition);
   }

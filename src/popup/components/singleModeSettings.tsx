@@ -5,6 +5,7 @@ import { characterThemes } from "./Characters";
 import { CharacterTheme, ContentType, DokiTheme, DokiThemes } from "../../themes/DokiTheme";
 import { FireFoxDokiTheme, ThemeContext } from "../../themes/DokiThemeProvider";
 import { sample } from "lodash";
+import { chooseRandomTheme } from "../../common/ThemeTools";
 
 interface FormValues {
   character: CharacterTheme;
@@ -47,18 +48,6 @@ function getThemeSelector(
   );
 }
 
-function chooseRandomTheme(): {
-  dokiTheme: DokiTheme,
-  contentType: ContentType,
-} {
-  const dokiTheme = sample(DokiThemes)!!;
-  const contentType = dokiTheme.hasSecondaryContent ?
-    sample([ContentType.SECONDARY, ContentType.PRIMARY])!! : ContentType.PRIMARY
-  return {
-    dokiTheme,
-    contentType
-  }
-}
 
 const SingleModeSettings = () => {
   const options = useMemo(() => {

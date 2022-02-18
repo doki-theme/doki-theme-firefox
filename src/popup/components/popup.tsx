@@ -6,8 +6,9 @@ import { OptionSwitch } from "./optionSwitch";
 import { ThemeStuff } from "../../common/ThemeTools";
 import Switch from "react-switch";
 import { FeatureContext } from "../../themes/FeatureProvider";
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import './popup.css';
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+import "./popup.css";
+import { ModeSetEventPayload, PluginEvent, PluginEventTypes } from "../../Events";
 
 const options: { value: PluginMode; label: string }[] = [
   { value: PluginMode.SINGLE, label: "Individual" },
@@ -29,6 +30,16 @@ const Popup = () => {
                   ...features,
                   showWidget: isSet,
                 });
+              };
+              const handleModeChange = (thing: any) => {
+                setCurrentMode(thing!!.value);
+                const modeSetEvent: PluginEvent<ModeSetEventPayload> = {
+                  type: PluginEventTypes.MODE_SET,
+                  payload: {
+                    mode: thing!!.value,
+                  }
+                }
+                browser.runtime.sendMessage(modeSetEvent)
               };
               return (
                 <div
@@ -53,9 +64,7 @@ const Popup = () => {
                       <label>Plugin Mode</label>
                       <ThemedSelect
                         options={options}
-                        onChange={(thing) => {
-                          setCurrentMode(thing!!.value);
-                        }}
+                        onChange={handleModeChange}
                         defaultValue={options[0]}
                       />
                       <OptionSwitch pluginMode={currentMode} />

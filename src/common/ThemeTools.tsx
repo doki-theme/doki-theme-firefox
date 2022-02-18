@@ -1,5 +1,6 @@
 import React, { FC, useEffect } from "react";
-import { DokiTheme } from "../themes/DokiTheme";
+import { ContentType, DokiTheme, DokiThemes } from "../themes/DokiTheme";
+import { sample } from "lodash";
 
 export const ThemeStuff: FC<{ theme: DokiTheme }> = ({ theme }) => {
   useEffect(() => {
@@ -9,3 +10,16 @@ export const ThemeStuff: FC<{ theme: DokiTheme }> = ({ theme }) => {
   }, [theme]);
   return <></>;
 };
+
+export function chooseRandomTheme(): {
+  dokiTheme: DokiTheme,
+  contentType: ContentType,
+} {
+  const dokiTheme = sample(DokiThemes)!!;
+  const contentType = dokiTheme.hasSecondaryContent ?
+    sample([ContentType.SECONDARY, ContentType.PRIMARY])!! : ContentType.PRIMARY
+  return {
+    dokiTheme,
+    contentType
+  }
+}

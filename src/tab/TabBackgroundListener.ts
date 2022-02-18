@@ -1,7 +1,7 @@
 import { pluginSettings } from "../Storage";
 import { DokiTheme, DokiThemes } from "../themes/DokiTheme";
 import { svgToPng } from "../background/svgTools";
-import { PluginEventTypes, ThemeSetEventPayload } from "../Events";
+import { PluginEvent, PluginEventTypes, TabAttachedEventPayload, ThemeSetEventPayload } from "../Events";
 
 export function setThemedFavicon(dokiTheme: DokiTheme) {
   const faviconOptions = { width: 32, height: 32 };
@@ -24,6 +24,18 @@ function themeFavicon(themeId: string) {
   }
 }
 
+export const notifyTabAttached = () => {
+  browser.tabs.getCurrent().then(tab => {
+    const tabAttachedEvent: PluginEvent<TabAttachedEventPayload> = {
+      type: PluginEventTypes.TAB_ATTACHED,
+      payload: {
+        tabId: tab.id!!
+      }
+    }
+    return browser.runtime.sendMessage(tabAttachedEvent);
+  })
+}
+
 export const attachBackgroundListener = ()=> {
   pluginSettings.getAll().then((setting) => {
     const themeId = setting.currentTheme;
@@ -34,5 +46,5 @@ export const attachBackgroundListener = ()=> {
       const themeSetPayload: ThemeSetEventPayload = event.payload;
       themeFavicon(themeSetPayload.themeId)
     }
-  })
+  });
 }
