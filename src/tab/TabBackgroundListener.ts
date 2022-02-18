@@ -1,6 +1,7 @@
 import { pluginSettings } from "../Storage";
 import { DokiTheme, DokiThemes } from "../themes/DokiTheme";
 import { svgToPng } from "../background/svgTools";
+import { PluginEventTypes, ThemeSetEventPayload } from "../Events";
 
 export function setThemedFavicon(dokiTheme: DokiTheme) {
   const faviconOptions = { width: 32, height: 32 };
@@ -16,11 +17,22 @@ export function setThemedFavicon(dokiTheme: DokiTheme) {
 }
 
 
+function themeFavicon(themeId: string) {
+  const currentTheme = DokiThemes[themeId];
+  if (currentTheme) {
+    setThemedFavicon(currentTheme);
+  }
+}
+
 export const attachBackgroundListener = ()=> {
   pluginSettings.getAll().then((setting) => {
-    const currentTheme = DokiThemes[setting.currentTheme];
-    if (currentTheme) {
-      setThemedFavicon(currentTheme)
+    const themeId = setting.currentTheme;
+    themeFavicon(themeId);
+  })
+  browser.runtime.onMessage.addListener((event: any) => {
+    if(event.type === PluginEventTypes.THEME_SET) {
+      const themeSetPayload: ThemeSetEventPayload = event.payload;
+      themeFavicon(themeSetPayload.themeId)
     }
   })
 }

@@ -19,6 +19,9 @@ function setThemedAboutIcon(currentTheme: DokiTheme) {
   const aboutOptions = {width: 96, height: 96};
   svgToPng(currentTheme, aboutOptions,).then( (imgData) => {
     const logo = document.querySelector("div[class='logo']")
+    logo?.childNodes?.forEach(node => {
+      logo.removeChild(node)
+    });
     const pngImage = document.createElement('img');
     logo!!.appendChild(pngImage);
     pngImage.src = imgData;
