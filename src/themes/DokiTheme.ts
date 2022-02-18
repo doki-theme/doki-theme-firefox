@@ -64,7 +64,7 @@ export interface Colors {
 }
 
 export interface DokiThemeDefinition {
-  information: any;
+  information: any; // todo: not any
   fireFoxTheme: any;
   colors: Colors;
 }
@@ -134,7 +134,11 @@ export class DokiTheme {
   }
 
   public get stickerName(): string {
-    return this.dokiDefinition.information.stickers.default;
+    return this.dokiDefinition.information.stickers.default.name;
+  }
+
+  public get anchor(): string {
+    return this.dokiDefinition.information.stickers.default.anchor;
   }
 }
 

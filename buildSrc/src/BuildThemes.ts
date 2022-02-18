@@ -111,7 +111,6 @@ function buildTemplateVariables(
 interface FireFoxDokiThemeBuild {
   path: string,
   definition: MasterDokiThemeDefinition | { colors: StringDictionary<string> },
-  stickers: Stickers,
   templateVariables: StringDictionary<string>
   appThemeDefinition: DokiThemeFirefox,
   fireFoxTheme: FireFoxTheme,
@@ -136,7 +135,6 @@ function createDokiTheme(
           appThemeDefinition
         )
       },
-      stickers: getStickers(masterThemeDefinition, masterThemeDefinitionPath),
       templateVariables: buildTemplateVariables(
         masterThemeDefinition,
         masterTemplateDefinitions,
@@ -168,27 +166,6 @@ function resolveStickerPath(themeDefinitionPath: string, sticker: string) {
 }
 
 type Stickers = { default: { path: string; name: string } };
-const getStickers: (dokiDefinition: MasterDokiThemeDefinition, themePath: string) => Stickers = (
-  dokiDefinition: MasterDokiThemeDefinition,
-  themePath: string
-) => {
-  const secondary =
-    dokiDefinition.stickers.secondary || dokiDefinition.stickers.normal;
-  return {
-    default: {
-      path: resolveStickerPath(themePath, dokiDefinition.stickers.default),
-      name: dokiDefinition.stickers.default
-    },
-    ...(secondary
-      ? {
-        secondary: {
-          path: resolveStickerPath(themePath, secondary),
-          name: secondary
-        }
-      }
-      : {})
-  };
-};
 
 console.log("Preparing to generate themes.");
 const fireFoxTemplate = readJson<FireFoxTheme>(path.resolve(appTemplatesDirectoryPath, "firefox.theme.template.json"));

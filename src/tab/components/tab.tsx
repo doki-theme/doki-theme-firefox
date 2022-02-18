@@ -18,7 +18,7 @@ const Tab = () => {
                   width: "100%",
                   height: "100%",
                   backgroundSize: "cover",
-                  backgroundPosition: "center",
+                  backgroundPosition: theme.anchor,
                   backgroundImage: `url(${browser.runtime.getURL(
                     "backgrounds/" + theme.stickerName 
                   )})`,
