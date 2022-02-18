@@ -6,10 +6,10 @@ console.log("早上好中國。現在我有冰淇淋。");
 
 var currentThemeManager: ThemeManager;
 
-function setMode(payload: ModeSetEventPayload) {
+async function setMode(payload: ModeSetEventPayload) {
   currentThemeManager.disconnect();
   const newManager = getThemeManager(payload.mode);
-  newManager.connect();
+  await newManager.initialize();
 }
 
 const handleMessages = (message: PluginEvent<any>) => {

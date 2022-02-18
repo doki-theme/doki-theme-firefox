@@ -48,6 +48,10 @@ export class MixedThemeManager extends ThemeManager {
   private async tellTabToSetItsThemePls(message: PluginEvent<any>) {
     const tabAttachedPayload: TabAttachedEventPayload = message.payload;
     const tabId = tabAttachedPayload.tabId;
+    await this.tellTabItsTheme(tabId);
+  }
+
+  private async tellTabItsTheme(tabId: number) {
     const associatedTheme = this.getAssociatedTheme(tabId);
     const themeSetEvent: PluginEvent<ThemeSetEventPayload> = {
       type: PluginEventTypes.THEME_SET,
@@ -59,8 +63,15 @@ export class MixedThemeManager extends ThemeManager {
     await browser.tabs.sendMessage(tabId, themeSetEvent);
   }
 
-  private getAssociatedTheme(tabId: number) {
-    return this.tabToTheme[tabId] || this.associateThemeWithTab(tabId);
+  private getAssociatedTheme(tabId: number): FireFoxDokiTheme {
+    const rememberedTheme = this.tabToTheme[tabId];
+    if(!rememberedTheme) {
+      const newlyAssociatedTab = this.associateThemeWithTab(tabId); // todo: could infinitely recurse.....
+      this.tellTabItsTheme(tabId);
+      return newlyAssociatedTab;
+    } else {
+      return rememberedTheme;
+    }
   }
 
   async handleTabCreation({ id }: any): Promise<void> {

@@ -3,39 +3,38 @@ import { ThemeContextContentScript } from "../../themes/DokiThemeProviderContent
 import { ThemeStuff } from "../../common/ThemeTools";
 import SearchWidget from "./SearchWidget";
 import { FeatureContextContentScript } from "../../themes/FeatureProviderContentScript";
-import { notifyTabAttached } from "../TabBackgroundListener";
 
 const Tab = () => {
-  useEffect(()=>{
-    notifyTabAttached()
-  },[]);
   return (
     <ThemeContextContentScript.Consumer>
-      {({ theme }) => (
-        <FeatureContextContentScript.Consumer>
-          {({ features, isInitialized }) => (
-            <>
-              <ThemeStuff theme={theme}></ThemeStuff>
-              <div
-                style={{
-                  color: theme.colors.foregroundColor,
-                  width: "100%",
-                  height: "100%",
-                  backgroundSize: "cover",
-                  backgroundPosition: theme.content.anchor,
-                  backgroundImage: `url(${browser.runtime.getURL(
-                    "backgrounds/" + theme.content.name 
-                  )})`,
-                }}
-              >
-                {isInitialized && features.showWidget && (
-                  <SearchWidget theme={theme} />
-                )}
-              </div>
-            </>
-          )}
-        </FeatureContextContentScript.Consumer>
-      )}
+      {({ theme, isInitialized }) => {
+        if (!isInitialized) return <></>;
+        return (
+          <FeatureContextContentScript.Consumer>
+            {({ features, isInitialized }) => (
+              <>
+                <ThemeStuff theme={theme}></ThemeStuff>
+                <div
+                  style={{
+                    color: theme.colors.foregroundColor,
+                    width: "100%",
+                    height: "100%",
+                    backgroundSize: "cover",
+                    backgroundPosition: theme.content.anchor,
+                    backgroundImage: `url(${browser.runtime.getURL(
+                      "backgrounds/" + theme.content.name
+                    )})`,
+                  }}
+                >
+                  {isInitialized && features.showWidget && (
+                    <SearchWidget theme={theme} />
+                  )}
+                </div>
+              </>
+            )}
+          </FeatureContextContentScript.Consumer>
+        );
+      }}
     </ThemeContextContentScript.Consumer>
   );
 };

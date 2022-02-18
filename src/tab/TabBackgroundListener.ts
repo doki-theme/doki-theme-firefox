@@ -37,11 +37,7 @@ export const notifyTabAttached = () => {
 }
 
 export const attachBackgroundListener = ()=> {
-  pluginSettings.getAll().then((setting) => {
-    const themeId = setting.currentTheme;
-    themeFavicon(themeId);
-  })
-  browser.runtime.onMessage.addListener((event: any) => {
+  browser.runtime.onMessage.addListener((event: PluginEvent<any>) => {
     if(event.type === PluginEventTypes.THEME_SET) {
       const themeSetPayload: ThemeSetEventPayload = event.payload;
       themeFavicon(themeSetPayload.themeId)

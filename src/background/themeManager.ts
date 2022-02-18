@@ -19,7 +19,7 @@ export abstract class ThemeManager {
   }
 
   async initializeFirefox() {
-    this.connect();
+    await this.initialize();
     await this.initializeTheme();
   }
 
