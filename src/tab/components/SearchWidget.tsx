@@ -1,14 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { DokiTheme } from "../../themes/DokiTheme";
 import { svgToPng } from "../../background/svgTools";
 
 
 function setThemedSearchInputIcon(currentTheme: DokiTheme) {
-  const searchOptions = {width: 24, height: 24};
-  svgToPng(currentTheme, searchOptions).then( (imgData) => {
-    const pngImage = document.createElement('img');
+  const searchOptions = { width: 24, height: 24 };
+  svgToPng(currentTheme, searchOptions).then((imgData) => {
+    const pngImage = document.createElement("img");
     pngImage.src = imgData;
-    const style = `input { background: white url(${pngImage.src}) 12px center no-repeat; }`
+    const style = `input { background: white url(${pngImage.src}) 12px center no-repeat; }`;
     const styleTag = document.createElement("style");
     styleTag.append(style);
     document.head.append(styleTag);
@@ -16,32 +16,54 @@ function setThemedSearchInputIcon(currentTheme: DokiTheme) {
 }
 
 function setThemedAboutIcon(currentTheme: DokiTheme) {
-  const aboutOptions = {width: 96, height: 96};
-  svgToPng(currentTheme, aboutOptions,).then( (imgData) => {
-    const logo = document.querySelector("div[class='logo']")
+  const aboutOptions = { width: 96, height: 96 };
+  svgToPng(currentTheme, aboutOptions).then((imgData) => {
+    const logo = document.querySelector("div[class='logo']");
     logo?.childNodes?.forEach(node => {
-      logo.removeChild(node)
+      logo.removeChild(node);
     });
-    const pngImage = document.createElement('img');
+    const pngImage = document.createElement("img");
     logo!!.appendChild(pngImage);
     pngImage.src = imgData;
   });
 }
 
-const SearchWidget = ({theme}:{theme: DokiTheme}) => {
+const SearchWidget = ({ theme }: { theme: DokiTheme }) => {
   const logoElement = useRef(null);
-  useEffect(()=> {
-    if(logoElement) {
+  useEffect(() => {
+    if (logoElement) {
       setThemedAboutIcon(theme);
     }
   }, [theme, logoElement]);
 
   const searchElement = useRef(null);
-  useEffect(()=> {
-    if(searchElement) {
+  useEffect(() => {
+    if (searchElement) {
       setThemedSearchInputIcon(theme);
     }
   }, [theme, searchElement]);
+
+  const [query, setQuery] = useState("");
+
+  const conductSearch = () => {
+    browser.tabs.getCurrent()
+      .then((tab) => {
+        return browser.search.search({
+          query,
+          tabId: tab.id
+        });
+      });
+  };
+
+  const confirmSearch = () => {
+    return browser.permissions.request({
+      permissions: ["search"]
+    }).then(searchGranted => {
+      if (searchGranted) {
+        conductSearch();
+      }
+    });
+  };
 
   return (
     <main>
@@ -53,9 +75,16 @@ const SearchWidget = ({theme}:{theme: DokiTheme}) => {
         <input aria-controls="searchSuggestionTable" aria-expanded="false" aria-label="Search the web"
                maxLength={256}
                ref={searchElement}
+               onKeyDown={e => {
+                 if (e.key === "Enter") {
+                   confirmSearch();
+                 }
+               }}
+               onChange={e => setQuery(e.target.value)}
                placeholder="Search the web" title="Search the web" type="search" autoFocus />
-        {/*todo: actually search*/}
-        <button className="search-button" aria-label="Search" title="Search"></button>
+        <button className="search-button"
+                onClick={confirmSearch}
+                aria-label="Search" title="Search"></button>
       </div>
     </main>
   );
