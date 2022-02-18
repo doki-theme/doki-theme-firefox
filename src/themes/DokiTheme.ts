@@ -103,9 +103,13 @@ export class CharacterTheme {
 }
 
 // RYUKO DARK
-export const DEFAULT_THEME_ID = "19b65ec8-133c-4655-a77b-13623d8e97d3"
+export const DEFAULT_THEME_ID = "19b65ec8-133c-4655-a77b-13623d8e97d3";
 
 export class DokiTheme {
+  equals(other: any): unknown {
+    return other instanceof DokiTheme && other.themeId === this.themeId;
+  }
+
   constructor(readonly dokiDefinition: DokiThemeDefinition) {
   }
 
@@ -133,13 +137,17 @@ export class DokiTheme {
     return this.dokiDefinition.fireFoxTheme;
   }
 
+  public get hasSecondaryContent(): boolean {
+    return !!this.dokiDefinition.information.stickers.secondary;
+  }
+
   protected get defaultContent(): any { // todo: typed
-   return this.dokiDefinition.information.stickers.default;
+    return this.dokiDefinition.information.stickers.default;
   }
 
   protected get secondaryContent(): any { // todo: typed
-   return this.dokiDefinition.information.stickers.secondary ||
-     this.defaultContent;
+    return this.dokiDefinition.information.stickers.secondary ||
+      this.defaultContent;
   }
 }
 
