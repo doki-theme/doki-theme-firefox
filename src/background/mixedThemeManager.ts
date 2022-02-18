@@ -60,7 +60,11 @@ export class MixedThemeManager extends ThemeManager {
         content: associatedTheme.activeContent
       }
     };
-    await browser.tabs.sendMessage(tabId, themeSetEvent);
+    try {
+      await browser.tabs.sendMessage(tabId, themeSetEvent);
+    } catch (e) {
+      console.warn(`Unable to tell tab ${tabId} it's theme ${associatedTheme.themeId}`, e);
+    }
   }
 
   private getAssociatedTheme(tabId: number): FireFoxDokiTheme {
