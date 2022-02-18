@@ -9,6 +9,7 @@ import { FeatureContext } from "../../themes/FeatureProvider";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import "./popup.css";
 import { ModeSetEventPayload, PluginEvent, PluginEventTypes } from "../../Events";
+import FeaturesSettings from "./FeaturesSettings";
 
 const options: { value: PluginMode; label: string }[] = [
   { value: PluginMode.SINGLE, label: "Individual" },
@@ -32,12 +33,7 @@ const Popup = () => {
         return (
           <FeatureContext.Consumer>
             {({ features, setFeatures }) => {
-              const handleWidgetChange = (isSet: boolean) => {
-                setFeatures({
-                  ...features,
-                  showWidget: isSet
-                });
-              };
+
               const handleModeChange = (thing: any) => {
                 setCurrentMode(thing!!.value);
                 const modeSetEvent: PluginEvent<ModeSetEventPayload> = {
@@ -85,10 +81,7 @@ const Popup = () => {
                           <OptionSwitch pluginMode={currentMode} />
                         </TabPanel>
                         <TabPanel>
-                          <Switch
-                            onChange={handleWidgetChange}
-                            checked={features.showWidget}
-                          />
+                          <FeaturesSettings/>
                         </TabPanel>
                       </Tabs>
                     </>

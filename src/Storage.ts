@@ -13,6 +13,8 @@ export interface PluginLocalStorage extends Options {
   currentContentType: ContentType;
   showWidget: boolean;
   themePool: ThemePools;
+  injectSelection: boolean;
+  injectScrollbars: boolean;
 }
 
 export const pluginSettings = new OptionsSync<PluginLocalStorage>({
@@ -22,6 +24,8 @@ export const pluginSettings = new OptionsSync<PluginLocalStorage>({
     currentTheme: DEFAULT_THEME_ID,
     currentContentType: ContentType.PRIMARY,
     showWidget: true,
-    themePool: ThemePools.DEFAULT
+    themePool: ThemePools.DEFAULT,
+    injectSelection: false,
+    injectScrollbars: false,
   }
 });

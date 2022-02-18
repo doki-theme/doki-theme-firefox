@@ -1,10 +1,11 @@
 import React, { FC, useEffect, useMemo, useState } from "react";
-import { DEFAULT_THEME_ID } from "./DokiTheme";
 import { pluginSettings } from "../Storage";
 import { FeatureSetEventPayload, PluginEvent, PluginEventTypes } from "../Events";
 
 export interface PluginFeatures {
   showWidget: boolean;
+  injectScrollbars: boolean;
+  injectSelection: boolean;
 }
 
 export interface PluginFeatureContext {
@@ -13,8 +14,10 @@ export interface PluginFeatureContext {
   features: PluginFeatures;
 }
 
-export const defaultFeatures = {
-  showWidget: true
+export const defaultFeatures: PluginFeatures = {
+  showWidget: true,
+  injectSelection: false,
+  injectScrollbars: false,
 };
 
 export const FeatureContext = React.createContext<PluginFeatureContext>({
@@ -35,6 +38,11 @@ const FeatureProvider: FC = ({ children }) => {
       }
     };
     setFeatures(context);
+    pluginSettings.set({
+      showWidget: context.showWidget,
+      injectSelection: context.injectSelection,
+      injectScrollbars: context.injectScrollbars,
+    });
 
     browser.runtime.sendMessage(themeSetEvent);
   };
@@ -42,7 +50,9 @@ const FeatureProvider: FC = ({ children }) => {
   useEffect(() => {
     pluginSettings.getAll().then((setting) => {
       setFeatures({
-        showWidget: setting.showWidget
+        showWidget: setting.showWidget,
+        injectScrollbars: setting.injectScrollbars,
+        injectSelection: setting.injectSelection,
       });
       setInitialized(true);
     });
