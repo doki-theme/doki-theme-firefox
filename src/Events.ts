@@ -3,12 +3,16 @@ import { ContentType } from "./themes/DokiTheme";
 import { PluginMode } from "./Storage";
 
 export enum PluginEventTypes {
-  THEME_SET, FEATURE_SET, MODE_SET, TAB_ATTACHED
+  THEME_SET,
+  FEATURE_SET,
+  MODE_SET,
+  TAB_ATTACHED,
+  MIXED_MODE_SETTINGS_CHANGED,
 }
 
 export interface PluginEvent<T> {
   type: PluginEventTypes;
-  payload: T
+  payload: T;
 }
 
 export interface ThemeSetEventPayload {
@@ -26,4 +30,15 @@ export interface ModeSetEventPayload {
 
 export interface TabAttachedEventPayload {
   tabId: number;
+}
+
+export enum ThemePools {
+  DEFAULT,
+  LIGHT,
+  DARK,
+  MATCH_DEVICE,
+}
+
+export interface MixedModeSettingsChangedPayload {
+  themePool: ThemePools;
 }

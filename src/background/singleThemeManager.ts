@@ -3,6 +3,7 @@ import { ContentType, DEFAULT_DOKI_THEME, DokiTheme } from "../themes/DokiTheme"
 import { pluginSettings } from "../Storage";
 import { PluginEvent, PluginEventTypes, ThemeSetEventPayload } from "../Events";
 
+// todo: listen to tab attachment...
 export class SingleThemeManager extends ThemeManager {
   async handleTabCreation({ tabId }: any): Promise<void> {
     if (!(this.currentTheme && this.currentContentType)) return;

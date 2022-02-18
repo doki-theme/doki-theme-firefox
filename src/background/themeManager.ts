@@ -29,6 +29,10 @@ export abstract class ThemeManager {
     await pluginSettings.set({ currentTheme: dokiTheme.themeId });
   }
 
+  async initialize() {
+    this.connect();
+  }
+
   connect() {
     browser.runtime.onMessage.addListener(this.handleContentScriptMessage.bind(this));
     browser.tabs.onCreated.addListener(this.handleTabCreation.bind(this));

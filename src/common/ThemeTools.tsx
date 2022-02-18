@@ -11,11 +11,14 @@ export const ThemeStuff: FC<{ theme: DokiTheme }> = ({ theme }) => {
   return <></>;
 };
 
-export function chooseRandomTheme(): {
+export function chooseRandomTheme(themePredicate: (dokiTheme: DokiTheme) => boolean = () => true): {
   dokiTheme: DokiTheme,
   contentType: ContentType,
 } {
-  const dokiTheme = sample(DokiThemes)!!;
+  const dokiTheme = sample(
+    Object.values(DokiThemes)
+      .filter(themePredicate)
+  )!!;
   const contentType = dokiTheme.hasSecondaryContent ?
     sample([ContentType.SECONDARY, ContentType.PRIMARY])!! : ContentType.PRIMARY
   return {

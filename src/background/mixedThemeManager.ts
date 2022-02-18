@@ -1,7 +1,16 @@
 import { ThemeManager } from "./themeManager";
 import { FireFoxDokiTheme } from "../themes/DokiThemeProvider";
-import { PluginEvent, PluginEventTypes, TabAttachedEventPayload, ThemeSetEventPayload } from "../Events";
+import {
+  MixedModeSettingsChangedPayload,
+  PluginEvent,
+  PluginEventTypes,
+  TabAttachedEventPayload,
+  ThemePools,
+  ThemeSetEventPayload
+} from "../Events";
 import { chooseRandomTheme } from "../common/ThemeTools";
+import { pluginSettings } from "../Storage";
+import { DokiTheme } from "../themes/DokiTheme";
 
 export const CollectAndDebounce = <T>(
   toDebounce: (t: T[]) => void,
@@ -30,6 +39,9 @@ export class MixedThemeManager extends ThemeManager {
   async handleMessage(message: PluginEvent<any>): Promise<void> {
     if (message.type === PluginEventTypes.TAB_ATTACHED) {
       await this.tellTabToSetItsThemePls(message);
+    } else if (message.type === PluginEventTypes.MIXED_MODE_SETTINGS_CHANGED) {
+      const settingChangedPayload: MixedModeSettingsChangedPayload = message.payload;
+      this.currentThemePool = settingChangedPayload.themePool;
     }
   }
 
@@ -56,7 +68,9 @@ export class MixedThemeManager extends ThemeManager {
   }
 
   private associateThemeWithTab(tabId: number): FireFoxDokiTheme {
-    const { dokiTheme, contentType } = chooseRandomTheme();
+    const { dokiTheme, contentType } = chooseRandomTheme(
+      this.isInCurrentPool.bind(this)
+    );
     this.tabToTheme[tabId] = new FireFoxDokiTheme(dokiTheme, contentType);
     return this.tabToTheme[tabId];
   }
@@ -75,6 +89,17 @@ export class MixedThemeManager extends ThemeManager {
     delete this.tabToTheme[tabId];
   }
 
+  private currentThemePool: ThemePools = ThemePools.DEFAULT;
+
+  async initialize() {
+    await super.initialize();
+    try {
+      const { themePool } = await pluginSettings.getAll();
+      this.currentThemePool = themePool;
+    } catch (e) {
+    }
+  }
+
   connect() {
     super.connect();
     browser.tabs.onActivated.addListener(this.handleTabActivation.bind(this));
@@ -85,5 +110,19 @@ export class MixedThemeManager extends ThemeManager {
     super.disconnect();
     browser.tabs.onActivated.removeListener(this.handleTabActivation.bind(this));
     browser.tabs.onRemoved.removeListener(this.handleTabRemoval.bind(this));
+  }
+
+  private isInCurrentPool(dokiTheme: DokiTheme): boolean {
+    switch (this.currentThemePool) {
+      case ThemePools.MATCH_DEVICE:
+        return true;// todo: match device.....
+      case ThemePools.LIGHT:
+        return !dokiTheme.dark;
+      case ThemePools.DARK:
+        return dokiTheme.dark;
+      case ThemePools.DEFAULT:
+      default:
+        return true;
+    }
   }
 }

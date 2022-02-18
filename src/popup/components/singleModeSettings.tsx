@@ -1,10 +1,9 @@
 import React, { useMemo } from "react";
-import { Field, Formik, FormikState, FormikValues } from "formik";
+import { Field, Formik } from "formik";
 import ThemedSelect from "./ThemedSelect";
 import { characterThemes } from "./Characters";
-import { CharacterTheme, ContentType, DokiTheme, DokiThemes } from "../../themes/DokiTheme";
-import { FireFoxDokiTheme, ThemeContext } from "../../themes/DokiThemeProvider";
-import { sample } from "lodash";
+import { CharacterTheme, ContentType, DokiTheme } from "../../themes/DokiTheme";
+import { ThemeContext } from "../../themes/DokiThemeProvider";
 import { chooseRandomTheme } from "../../common/ThemeTools";
 
 interface FormValues {
@@ -27,7 +26,7 @@ function getThemeSelector(
 ) {
   const options = values.character.themes.map((theme) => ({
     value: theme,
-    label: createThemeVariantName(theme),
+    label: createThemeVariantName(theme)
   }));
   return (
     <>
@@ -37,7 +36,7 @@ function getThemeSelector(
           options={options}
           value={{
             value: values.selectedTheme,
-            label: createThemeVariantName(values.selectedTheme),
+            label: createThemeVariantName(values.selectedTheme)
           }}
           onChange={(selectedCharacter) =>
             setFieldValue("selectedTheme", selectedCharacter!!.value)
@@ -53,7 +52,7 @@ const SingleModeSettings = () => {
   const options = useMemo(() => {
     const characterOptions = characterThemes.map((characterTheme) => ({
       value: characterTheme,
-      label: characterTheme.name,
+      label: characterTheme.name
     }));
     characterOptions.sort((a, b) => a.label.localeCompare(b.label));
     return characterOptions;
@@ -69,22 +68,22 @@ const SingleModeSettings = () => {
 
   const pickRandomTheme =
     (resetForm: (nextState?: any) => void, setTheme: (context: ThemeContext) => void) =>
-    () => {
-      const {dokiTheme, contentType} = chooseRandomTheme()
-      setTheme({
-        contentType,
-        selectedTheme: dokiTheme,
-      });
+      () => {
+        const { dokiTheme, contentType } = chooseRandomTheme();
+        setTheme({
+          contentType,
+          selectedTheme: dokiTheme
+        });
 
-      const nextFormState: FormValues = {
-        character: findCharacter(dokiTheme),
-        selectedTheme: dokiTheme,
-        contentType: contentType
-      }
-      resetForm({
-        values: nextFormState
-      })
-    };
+        const nextFormState: FormValues = {
+          character: findCharacter(dokiTheme),
+          selectedTheme: dokiTheme,
+          contentType: contentType
+        };
+        resetForm({
+          values: nextFormState
+        });
+      };
 
   return (
     <>
@@ -95,7 +94,7 @@ const SingleModeSettings = () => {
           const initialValues: FormValues = {
             character: findCharacter(theme),
             contentType: ContentType.PRIMARY,
-            selectedTheme: theme.dokiTheme,
+            selectedTheme: theme.dokiTheme
           };
           return (
             <>
@@ -105,22 +104,22 @@ const SingleModeSettings = () => {
                 onSubmit={(values, formikHelpers) => {
                   setTheme({
                     selectedTheme: values.selectedTheme,
-                    contentType: values.contentType,
+                    contentType: values.contentType
                   });
 
                   formikHelpers.resetForm({
-                    values: values,
+                    values: values
                   });
                 }}
               >
                 {({
-                  values,
-                  handleSubmit,
-                  isSubmitting,
-                  dirty,
-                  setFieldValue,
-                  resetForm,
-                }) => (
+                    values,
+                    handleSubmit,
+                    isSubmitting,
+                    dirty,
+                    setFieldValue,
+                    resetForm
+                  }) => (
                   <>
                     <button onClick={pickRandomTheme(resetForm, setTheme)}>
                       Choose Random Theme
@@ -130,7 +129,7 @@ const SingleModeSettings = () => {
                         options={options}
                         value={{
                           label: values.character.name,
-                          value: values.character,
+                          value: values.character
                         }}
                         onChange={(selectedCharacter) => {
                           const characterValue = selectedCharacter!!.value;
