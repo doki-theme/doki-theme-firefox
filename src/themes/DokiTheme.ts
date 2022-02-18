@@ -106,7 +106,7 @@ export class CharacterTheme {
 export const DEFAULT_THEME_ID = "19b65ec8-133c-4655-a77b-13623d8e97d3"
 
 export class DokiTheme {
-  constructor(private readonly dokiDefinition: DokiThemeDefinition) {
+  constructor(readonly dokiDefinition: DokiThemeDefinition) {
   }
 
   public get themeId(): string {
@@ -133,12 +133,13 @@ export class DokiTheme {
     return this.dokiDefinition.fireFoxTheme;
   }
 
-  public get stickerName(): string {
-    return this.dokiDefinition.information.stickers.default.name;
+  protected get defaultContent(): any { // todo: typed
+   return this.dokiDefinition.information.stickers.default;
   }
 
-  public get anchor(): string {
-    return this.dokiDefinition.information.stickers.default.anchor;
+  protected get secondaryContent(): any { // todo: typed
+   return this.dokiDefinition.information.stickers.secondary ||
+     this.defaultContent;
   }
 }
 

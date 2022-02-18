@@ -66,23 +66,26 @@ const SingleModeSettings = () => {
             )
           )!!,
           contentType: ContentType.PRIMARY,
-          selectedTheme: theme,
+          selectedTheme: theme.dokiTheme,
         };
         const defaultTheme = {
-          value: theme,
-          label: createThemeVariantName(theme),
+          value: theme.dokiTheme,
+          label: createThemeVariantName(theme.dokiTheme),
         };
         return (
           <>
             <h3>Choose a character</h3>
             <Formik
               initialValues={initialValues}
-              enableReinitialize={true}
-              onSubmit={(values) => {
+              onSubmit={(values, formikHelpers) => {
                 setTheme({
                   selectedTheme: values.selectedTheme,
                   contentType: values.contentType,
                 });
+
+                formikHelpers.resetForm({
+                  values: values
+                })
               }}
             >
               {({
@@ -118,6 +121,9 @@ const SingleModeSettings = () => {
                             type="radio"
                             name="contentType"
                             value={ContentType.PRIMARY}
+                            onChange={() => {
+                              setFieldValue("contentType", ContentType.PRIMARY)
+                            }}
                           />
                           Primary
                         </label>
@@ -126,6 +132,9 @@ const SingleModeSettings = () => {
                             type="radio"
                             name="contentType"
                             value={ContentType.SECONDARY}
+                            onChange={() => {
+                              setFieldValue("contentType", ContentType.SECONDARY)
+                            }}
                           />
                           Secondary
                         </label>

@@ -54,6 +54,7 @@ const SearchWidget = ({theme}:{theme: DokiTheme}) => {
                maxLength={256}
                ref={searchElement}
                placeholder="Search the web" title="Search the web" type="search" autoFocus />
+        {/*todo: actually search*/}
         <button className="search-button" aria-label="Search" title="Search"></button>
       </div>
     </main>

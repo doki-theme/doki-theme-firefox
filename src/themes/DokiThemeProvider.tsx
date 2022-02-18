@@ -3,6 +3,20 @@ import { ContentType, DEFAULT_DOKI_THEME, DEFAULT_THEME_ID, DokiTheme, DokiTheme
 import { pluginSettings } from "../Storage";
 import { PluginEvent, PluginEventTypes, ThemeSetEventPayload } from "../Events";
 
+export class FireFoxDokiTheme extends DokiTheme {
+
+  constructor(
+    readonly dokiTheme: DokiTheme,
+    private readonly activeContent: ContentType
+  ) {
+    super(dokiTheme.dokiDefinition);
+  }
+
+  public get content(): any { // todo: typed
+    return this.activeContent === ContentType.SECONDARY ?
+      this.secondaryContent : this.defaultContent;
+  }
+}
 
 export interface ThemeContext {
   selectedTheme: DokiTheme;
@@ -10,21 +24,21 @@ export interface ThemeContext {
 }
 
 export interface DokiThemeContext {
-  theme: DokiTheme;
+  theme: FireFoxDokiTheme;
   setTheme: (context: ThemeContext) => void;
   isInitialized: boolean;
 }
 
-
 export const ThemeContext = React.createContext<DokiThemeContext>({
-  theme: DEFAULT_DOKI_THEME,
+  theme: new FireFoxDokiTheme(DEFAULT_DOKI_THEME, ContentType.PRIMARY),
   setTheme: (context: ThemeContext) => {
   },
-  isInitialized: false,
+  isInitialized: false
 });
 
 const DokiThemeProvider: FC = ({ children }) => {
   const [themeId, setThemeId] = useState<string>(DEFAULT_THEME_ID);
+  const [currentContent, setCurrentContent] = useState<ContentType>(ContentType.PRIMARY);
   const [initialized, setInitialized] = useState<boolean>(false);
   const setTheme = (context: ThemeContext) => {
     const nextTheme = context.selectedTheme.themeId;
@@ -33,10 +47,11 @@ const DokiThemeProvider: FC = ({ children }) => {
       type: PluginEventTypes.THEME_SET,
       payload: {
         themeId: nextTheme,
+        content: context.contentType
       }
-    }
-
-    browser.runtime.sendMessage(themeSetEvent)
+    };
+    setCurrentContent(context.contentType);
+    browser.runtime.sendMessage(themeSetEvent);
   };
 
   useEffect(() => {
@@ -52,10 +67,13 @@ const DokiThemeProvider: FC = ({ children }) => {
   const themeContext = useMemo<DokiThemeContext>(
     () => ({
       setTheme,
-      theme: DokiThemes[themeId],
-      isInitialized: initialized,
+      theme: new FireFoxDokiTheme(
+        DokiThemes[themeId],
+        currentContent
+      ),
+      isInitialized: initialized
     }),
-    [themeId, initialized]
+    [themeId, initialized, currentContent]
   );
 
   return (
