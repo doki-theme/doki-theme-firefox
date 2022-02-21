@@ -2,9 +2,11 @@ import { CharacterTheme, DokiThemeDefinition } from "../../themes/DokiTheme";
 import DokiThemeDefinitions from "../../DokiThemeDefinitions";
 
 
-export const characterThemes: CharacterTheme[] =
-  Object.values(
-    Object.values(DokiThemeDefinitions)
+const values = Object.values(DokiThemeDefinitions);
+
+export function createCharacterThemes(dokiDefs: DokiThemeDefinition[]) {
+  return Object.values(
+    dokiDefs
       .reduce((accum, dokiDefinition: DokiThemeDefinition) => {
         const characterId = dokiDefinition.information.characterId;
         if (!accum[characterId]) {
@@ -15,3 +17,7 @@ export const characterThemes: CharacterTheme[] =
         return accum;
       }, {} as { [key: string]: DokiThemeDefinition[] }))
     .map(dokiDefs => new CharacterTheme(dokiDefs));
+}
+
+export const characterThemes: CharacterTheme[] =
+  createCharacterThemes(values);

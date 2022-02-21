@@ -27,11 +27,11 @@ function getThemeSelector(
         <ThemedSelect
           options={options}
           value={{
-            value: values.selectedTheme,
-            label: createThemeVariantName(values.selectedTheme)
+            value: values[prefix].selectedTheme,
+            label: createThemeVariantName(values[prefix].selectedTheme)
           }}
           onChange={(selectedCharacter) =>
-            setFieldValue(`selectedTheme`, selectedCharacter!!.value)
+            setFieldValue(`${prefix}.selectedTheme`, selectedCharacter!!.value)
           }
         />
       </label>
@@ -82,11 +82,11 @@ const DokiThemeComponent: FC<Props> = ({
             <label>
               <Field
                 type="radio"
-                name="contentType"
+                name={`${prefix}.contentType`}
                 value={ContentType.PRIMARY}
                 onChange={() => {
                   setFieldValue(
-                    `contentType`,
+                    `${prefix}.contentType`,
                     ContentType.PRIMARY
                   );
                 }}
@@ -96,11 +96,11 @@ const DokiThemeComponent: FC<Props> = ({
             <label>
               <Field
                 type="radio"
-                name="contentType"
+                name={`${prefix}.contentType`}
                 value={ContentType.SECONDARY}
                 onChange={() => {
                   setFieldValue(
-                    `contentType`,
+                    `${prefix}.contentType`,
                     ContentType.SECONDARY
                   );
                 }}

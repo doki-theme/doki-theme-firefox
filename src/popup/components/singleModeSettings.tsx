@@ -9,9 +9,9 @@ import DokiThemeComponent, { CharacterOption } from "./DokiThemeComponent";
 interface FormValues {
   selected: {
     character: CharacterTheme;
+    contentType: ContentType;
+    selectedTheme: DokiTheme;
   };
-  contentType: ContentType;
-  selectedTheme: DokiTheme;
 }
 
 const SingleModeSettings = () => {
@@ -45,9 +45,9 @@ const SingleModeSettings = () => {
       const nextFormState: FormValues = {
         selected: {
           character: findCharacter(dokiTheme),
+          selectedTheme: dokiTheme,
+          contentType: contentType,
         },
-        selectedTheme: dokiTheme,
-        contentType: contentType,
       };
       resetForm({
         values: nextFormState,
@@ -63,9 +63,9 @@ const SingleModeSettings = () => {
           const initialValues: FormValues = {
             selected: {
               character: findCharacter(theme),
+              contentType: ContentType.PRIMARY,
+              selectedTheme: theme.dokiTheme,
             },
-            contentType: ContentType.PRIMARY,
-            selectedTheme: theme.dokiTheme,
           };
           return (
             <>
@@ -74,8 +74,8 @@ const SingleModeSettings = () => {
                 initialValues={initialValues}
                 onSubmit={(values, formikHelpers) => {
                   setTheme({
-                    selectedTheme: values.selectedTheme,
-                    contentType: values.contentType,
+                    selectedTheme: values.selected.selectedTheme,
+                    contentType: values.selected.contentType,
                   });
 
                   formikHelpers.resetForm({
