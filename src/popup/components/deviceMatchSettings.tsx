@@ -1,5 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { ThemePools } from "../../Events";
+import {
+  DeviceMatchSettingsChangedEventPayload,
+  PluginEvent,
+  PluginEventTypes,
+  ThemePools,
+} from "../../Events";
 import { Field, Formik } from "formik";
 import { createCharacterThemes } from "./Characters";
 import DokiThemeDefinitions from "../../DokiThemeDefinitions";
@@ -11,18 +16,17 @@ import {
 } from "../../themes/DokiTheme";
 import DokiThemeComponent, { CharacterOption } from "./DokiThemeComponent";
 import OptionalPermission = browser._manifest.OptionalPermission;
+import { pluginSettings } from "../../Storage";
+
+type ThemeOption = {
+  character: CharacterTheme;
+  contentType: ContentType;
+  selectedTheme: DokiTheme;
+};
 
 interface FormValues {
-  dark: {
-    character: CharacterTheme;
-    contentType: ContentType;
-    selectedTheme: DokiTheme;
-  };
-  light: {
-    character: CharacterTheme;
-    contentType: ContentType;
-    selectedTheme: DokiTheme;
-  };
+  dark: ThemeOption;
+  light: ThemeOption;
 }
 
 const permissions: OptionalPermission[] = ["browserSettings"];
@@ -63,36 +67,78 @@ const DeviceMatchSettings = () => {
     };
   }, []);
 
+  const [darkOption, setDarkOption] = useState<ThemeOption>({
+    character: darkCharacterOptions[0]!!.value,
+    contentType: ContentType.PRIMARY,
+    selectedTheme: darkCharacterOptions[0]!!.value.themes[0],
+  });
+  const [lightOption, setLightOption] = useState<ThemeOption>({
+    character: lightCharacterOptions[0]!!.value,
+    contentType: ContentType.PRIMARY,
+    selectedTheme: lightCharacterOptions[0]!!.value.themes[0],
+  });
+
   const initialValues: FormValues = {
-    dark: {
-      character: darkCharacterOptions[0]!!.value,
-      contentType: ContentType.PRIMARY,
-      selectedTheme: darkCharacterOptions[0]!!.value.themes[0],
-    },
-    light: {
-      character: lightCharacterOptions[0]!!.value,
-      contentType: ContentType.PRIMARY,
-      selectedTheme: lightCharacterOptions[0]!!.value.themes[0],
-    },
+    dark: darkOption,
+    light: lightOption,
   };
 
   const dispatchDeviceMatchSettingsChanges = (formValues: FormValues) => {
-    // const mixedModesSettingsChanged: PluginEvent<MixedModeSettingsChangedPayload> =
-    //   {
-    //     type: PluginEventTypes.MIXED_MODE_SETTINGS_CHANGED,
-    //     payload: {
-    //       themePool: formValues.themePool,
-    //     },
-    //   };
-    // browser.runtime.sendMessage(mixedModesSettingsChanged);
+    const deviceMatchSettingsChanged: PluginEvent<DeviceMatchSettingsChangedEventPayload> =
+      {
+        type: PluginEventTypes.DEVICE_MATCH_SETTINGS_CHANGED,
+        payload: {
+          dark: {
+            themeId: formValues.dark.selectedTheme.themeId,
+            content: formValues.dark.contentType,
+          },
+          light: {
+            themeId: formValues.light.selectedTheme.themeId,
+            content: formValues.light.contentType,
+          },
+        },
+      };
+    browser.runtime.sendMessage(deviceMatchSettingsChanged);
   };
 
   const [initialized, setInitialized] = useState(false);
   const [hasSettingsPermission, setHasSettingsPermissions] = useState(false);
 
   useEffect(() => {
-    browser.permissions.contains(browserSettingsPermissions).then((granted) => {
-      setHasSettingsPermissions(granted);
+    const permissionPromise = browser.permissions
+      .contains(browserSettingsPermissions)
+      .then((granted) => {
+        setHasSettingsPermissions(granted);
+      });
+    const settingsPromise = pluginSettings.getAll().then((settings) => {
+      const darkThemeId = settings.darkThemeId;
+      const darkContentType = settings.darkContentType;
+      const darkCharacter = darkCharacterOptions.find((character) =>
+        character.value.themes.some((theme) => theme.themeId === darkThemeId)
+      )!!;
+      setDarkOption({
+        character: darkCharacter.value,
+        contentType: darkContentType,
+        selectedTheme: darkCharacter.value.themes.find(
+          (theme) => theme.themeId === darkThemeId
+        )!!,
+      });
+
+      const lightThemeId = settings.lightThemeId;
+      const lightContentType = settings.lightContentType;
+      const lightCharacter = lightCharacterOptions.find((character) =>
+        character.value.themes.some((theme) => theme.themeId === lightThemeId)
+      )!!;
+      setLightOption({
+        character: lightCharacter.value,
+        contentType: lightContentType,
+        selectedTheme: lightCharacter.value.themes.find(
+          (theme) => theme.themeId === lightThemeId
+        )!!,
+      });
+    });
+
+    Promise.all([permissionPromise, settingsPromise]).then(() => {
       setInitialized(true);
     });
   }, []);
@@ -126,7 +172,6 @@ const DeviceMatchSettings = () => {
         initialValues={initialValues}
         onSubmit={(values, formikHelpers) => {
           dispatchDeviceMatchSettingsChanges(values);
-
           formikHelpers.resetForm({
             values: values,
           });
@@ -150,7 +195,6 @@ const DeviceMatchSettings = () => {
                 prefix={"dark"}
                 setFieldValue={setFieldValue}
               />
-
 
               <button type="submit" disabled={isSubmitting || !dirty}>
                 Apply

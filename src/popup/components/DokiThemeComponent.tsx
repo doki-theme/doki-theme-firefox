@@ -65,7 +65,7 @@ const DokiThemeComponent: FC<Props> = ({
         onChange={(selectedCharacter) => {
           const characterValue = selectedCharacter!!.value;
           setFieldValue(
-            `selectedTheme`,
+            `${prefix}.selectedTheme`,
             characterValue.themes[0]
           );
           return setFieldValue(`${prefix}.character`, characterValue);

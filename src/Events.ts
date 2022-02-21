@@ -8,6 +8,7 @@ export enum PluginEventTypes {
   MODE_SET,
   TAB_ATTACHED,
   MIXED_MODE_SETTINGS_CHANGED,
+  DEVICE_MATCH_SETTINGS_CHANGED,
 }
 
 export interface PluginEvent<T> {
@@ -46,4 +47,9 @@ export enum ThemePools {
 
 export interface MixedModeSettingsChangedPayload {
   themePool: ThemePools;
+}
+
+export interface DeviceMatchSettingsChangedEventPayload {
+  dark: ThemeSetEventPayload;
+  light: ThemeSetEventPayload;
 }

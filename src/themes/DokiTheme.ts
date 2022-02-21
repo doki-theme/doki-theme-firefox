@@ -103,7 +103,9 @@ export class CharacterTheme {
 }
 
 // RYUKO DARK
-export const DEFAULT_THEME_ID = "19b65ec8-133c-4655-a77b-13623d8e97d3";
+export const DEFAULT_DARK_THEME_ID = "19b65ec8-133c-4655-a77b-13623d8e97d3";
+// RYUKO LIGHT
+export const DEFAULT_LIGHT_THEME_ID = "3fbd90c3-859d-4618-8e31-90461ac7a556";
 
 export class DokiTheme {
   equals(other: any): unknown {
@@ -151,7 +153,7 @@ export class DokiTheme {
   }
 }
 
-export const DEFAULT_DOKI_THEME = new DokiTheme(DokiThemeDefinitions[DEFAULT_THEME_ID]);
+export const DEFAULT_DOKI_THEME = new DokiTheme(DokiThemeDefinitions[DEFAULT_LIGHT_THEME_ID]);
 
 export const DokiThemes =
   Object.fromEntries(

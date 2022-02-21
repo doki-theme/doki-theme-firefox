@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useMemo, useState } from "react";
-import { ContentType, DEFAULT_DOKI_THEME, DEFAULT_THEME_ID, DokiTheme, DokiThemes } from "./DokiTheme";
+import { ContentType, DEFAULT_DOKI_THEME, DEFAULT_DARK_THEME_ID, DokiTheme, DokiThemes } from "./DokiTheme";
 import { pluginSettings } from "../Storage";
 import { PluginEvent, PluginEventTypes, ThemeSetEventPayload } from "../Events";
 
@@ -37,7 +37,7 @@ export const ThemeContext = React.createContext<DokiThemeContext>({
 });
 
 const DokiThemeProvider: FC = ({ children }) => {
-  const [themeId, setThemeId] = useState<string>(DEFAULT_THEME_ID);
+  const [themeId, setThemeId] = useState<string>(DEFAULT_DARK_THEME_ID);
   const [currentContent, setCurrentContent] = useState<ContentType>(ContentType.PRIMARY);
   const [initialized, setInitialized] = useState<boolean>(false);
   const setTheme = (context: ThemeContext) => {
