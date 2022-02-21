@@ -1,5 +1,5 @@
 import { ThemeManager } from "./themeManager";
-import { ContentType, DokiTheme } from "../themes/DokiTheme";
+import { ContentType, DEFAULT_DOKI_THEME, DokiTheme, DokiThemes } from "../themes/DokiTheme";
 import { pluginSettings } from "../Storage";
 import {
   PluginEvent,
@@ -8,6 +8,11 @@ import {
   ThemeSetEventPayload,
 } from "../Events";
 
+export type ThemeStuff = {
+  themeId: string | undefined;
+  content: ContentType | undefined;
+};
+
 export class SingleThemeManager extends ThemeManager {
   async initialize(): Promise<void> {
     await super.initialize();
@@ -15,22 +20,36 @@ export class SingleThemeManager extends ThemeManager {
     this.currentContentType = currentContentType;
   }
 
+  async initializeTheme(): Promise<void> {
+    try {
+      const { themeId } = this.getCurrentThemeAndContentType();
+      await this.setTheme(DokiThemes[themeId!!] || DEFAULT_DOKI_THEME);
+    } catch (e) {
+      console.error("unable to initialize theme", e);
+    }
+  }
+
   async handleTabCreation({ tabId }: any): Promise<void> {
     // todo: no-op
   }
 
+  protected getCurrentThemeAndContentType(): ThemeStuff {
+    return {
+      themeId: this.currentTheme?.themeId,
+      content: this.currentContentType,
+    };
+  }
+
   private async tellTabItsTheme(tabId: number) {
-    if (
-      this.currentTheme === undefined ||
-      this.currentContentType === undefined
-    ){
+    const { content, themeId } = this.getCurrentThemeAndContentType();
+    if (themeId === undefined || content === undefined) {
       return;
     }
     const themeSetEvent: PluginEvent<ThemeSetEventPayload> = {
       type: PluginEventTypes.THEME_SET,
       payload: {
-        themeId: this.currentTheme.themeId,
-        content: this.currentContentType,
+        content,
+        themeId: themeId,
       },
     };
     await browser.tabs.sendMessage(tabId, themeSetEvent);
@@ -45,7 +64,7 @@ export class SingleThemeManager extends ThemeManager {
     }
   }
 
-  private async tellAllTabsTheirNewTheme(message: PluginEvent<any>) {
+  private async tellAllTabsTheirNewTheme(message: PluginEvent<ThemeSetEventPayload>) {
     const messagePayload: ThemeSetEventPayload = message.payload;
     this.currentContentType = messagePayload.content;
     try {
