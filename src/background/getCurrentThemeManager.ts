@@ -1,13 +1,13 @@
 import { PluginMode, pluginSettings } from "../Storage";
-import { DayNightThemeManager } from "./dayNightThemeManager";
+import { DeviceThemeManager } from "./deviceThemeManager";
 import { MixedThemeManager } from "./mixedThemeManager";
 import { SingleThemeManager } from "./singleThemeManager";
 import { ThemeManager } from "./themeManager";
 
 export function getThemeManager(currentMode: PluginMode) {
   switch (currentMode) {
-    case PluginMode.DAY_NIGHT:
-      return new DayNightThemeManager();
+    case PluginMode.DEVICE_MATCH:
+      return new DeviceThemeManager();
     case PluginMode.MIXED:
       return new MixedThemeManager();
     case PluginMode.SINGLE:

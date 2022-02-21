@@ -24,6 +24,16 @@ const initializePlugin = async () => {
   currentThemeManager = await getCurrentThemeManager();
   await currentThemeManager.initializeFirefox();
   browser.runtime.onMessage.addListener(handleMessages);
+
+  try {
+    // @ts-ignore
+    browser.browserSettings.overrideContentColorScheme.set({ value: 'system' });
+  } catch (e) {
+    console.log('failed to get browser settings',e);
+  }
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    console.log('something changed!', e);
+  });
 };
 
 initializePlugin().then(() => {

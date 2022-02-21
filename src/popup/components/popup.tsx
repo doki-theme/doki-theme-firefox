@@ -13,7 +13,7 @@ import FeaturesSettings from "./FeaturesSettings";
 
 const options: { value: PluginMode; label: string }[] = [
   { value: PluginMode.SINGLE, label: "Individual" },
-  { value: PluginMode.DAY_NIGHT, label: "Day/Night" },
+  { value: PluginMode.DEVICE_MATCH, label: "Device Match" },
   { value: PluginMode.MIXED, label: "Mixed" }
 ];
 
@@ -25,7 +25,7 @@ const Popup = () => {
       setCurrentMode(currentMode);
       setInitialized(true);
     });
-  });
+  }, []);
   return (
     <ThemeContext.Consumer>
       {({ theme }) => {

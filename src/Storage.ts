@@ -3,7 +3,9 @@ import { ContentType, DEFAULT_THEME_ID } from "./themes/DokiTheme";
 import { ThemePools } from "./Events";
 
 export enum PluginMode {
-  SINGLE, MIXED, DAY_NIGHT
+  SINGLE = "single",
+  MIXED = "mixed",
+  DEVICE_MATCH = "device match",
 }
 
 export interface PluginLocalStorage extends Options {
@@ -27,5 +29,5 @@ export const pluginSettings = new OptionsSync<PluginLocalStorage>({
     themePool: ThemePools.DEFAULT,
     injectSelection: false,
     injectScrollbars: false,
-  }
+  },
 });

@@ -20,6 +20,11 @@ export interface ThemeSetEventPayload {
   content: ContentType;
 }
 
+export interface DeviceMatchSettingsChangedPayload {
+  lightTheme: ThemeSetEventPayload;
+  darkTheme: ThemeSetEventPayload;
+}
+
 export interface FeatureSetEventPayload {
   features: PluginFeatures;
 }

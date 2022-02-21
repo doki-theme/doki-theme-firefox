@@ -5,7 +5,7 @@ import { FeatureContext } from "../../themes/FeatureProvider";
 
 async function reloadTabs(obj: any) {
   const tabs: browser.tabs.Tab[] = await browser.tabs.query(obj);
-  Promise.all(tabs.map(tab => browser.tabs.reload(tab.id!!)));
+  Promise.all(tabs.map((tab) => browser.tabs.reload(tab.id!!)));
 }
 
 const FeaturesSettings = () => {
@@ -28,11 +28,12 @@ const FeaturesSettings = () => {
                 })
                 .then((granted) => {
                   if (granted && isSet) {
-                    browser.contentScripts.register({
-                      js: [{ file: "./js/styleInjection.js" }],
-                      matches: ["<all_urls>"],
-                    }).then(()=> reloadTabs({ url: "*://*/*" }));
-
+                    // browser.contentScripts
+                    //   .register({
+                    //     js: [{ file: "js/styleInjection.js" }],
+                    //     matches: ["<all_urls>"],
+                    //   })
+                    //   .then(() => reloadTabs({ url: "*://*/*" }));
                   }
                   setFeatures({ ...features, injectSelection: isSet });
                 });

@@ -1,6 +1,6 @@
 import { ThemeManager } from "./themeManager";
 
-export class DayNightThemeManager extends ThemeManager {
+export class DeviceThemeManager extends ThemeManager {
 
   async handleMessage(message: any): Promise<void> {
   }
