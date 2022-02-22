@@ -37,7 +37,7 @@ export class DeviceThemeManager extends SingleThemeManager {
         value: "system",
       });
     } catch (e) {
-      console.log("failed to get browser settings", e);
+      console.log("failed to set browser settings", e);
     }
   }
 
@@ -67,24 +67,24 @@ export class DeviceThemeManager extends SingleThemeManager {
 
   async handleMessage(message: PluginEvent<any>): Promise<void> {
     if (message.type === PluginEventTypes.DEVICE_MATCH_SETTINGS_CHANGED) {
-      const settings: DeviceMatchSettingsChangedEventPayload = message.payload;
-      const darkThemeId = settings.dark.themeId;
-      const darkContentType = settings.dark.content;
+      const newSettings: DeviceMatchSettingsChangedEventPayload = message.payload;
+      const darkThemeId = newSettings.dark.themeId;
+      const darkContentType = newSettings.dark.content;
       this.darkThemeStuff = {
         themeId: darkThemeId,
         content: darkContentType,
       };
-      const lightThemeId = settings.light.themeId;
-      const lightContentType = settings.light.content;
+      const lightThemeId = newSettings.light.themeId;
+      const lightContentType = newSettings.light.content;
       this.lightThemeStuff = {
         themeId: lightThemeId,
         content: lightContentType,
       };
       await pluginSettings.set({
-        darkThemeId: darkThemeId,
-        darkContentType: darkContentType,
-        lightThemeId: lightThemeId,
-        lightContentType: lightContentType,
+        darkThemeId,
+        darkContentType,
+        lightThemeId,
+        lightContentType,
       });
       this.dispatchNewThemeSet();
     } else {

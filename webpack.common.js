@@ -7,7 +7,8 @@ module.exports = {
     popup: path.join(__dirname, srcDir + '/popup/popup.tsx'),
     background: path.join(__dirname, srcDir + "/background/background.ts"),
     tab: path.join(__dirname, srcDir + "/tab/tab.tsx"),
-    styleInjection: path.join(__dirname, srcDir + "/styleInjection/styleInjection.ts"),
+    selectionStyleInjection: path.join(__dirname, srcDir + "/styleInjection/selectionStyleInjection.ts"),
+    scrollbarStyleInjection: path.join(__dirname, srcDir + "/styleInjection/scrollbarStyleInjection.ts"),
   },
   output: {
     path: path.join(__dirname, "./dist/js"),

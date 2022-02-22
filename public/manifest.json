@@ -10,7 +10,10 @@
   },
   "optional_permissions": [
     "search",
-    "browserSettings"
+    "browserSettings",
+    "tabs",
+    "activeTab",
+    "<all_urls>"
   ],
   "permissions": [
     "storage",

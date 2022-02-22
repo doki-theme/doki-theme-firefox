@@ -3,11 +3,6 @@ import { ThemeContext } from "../../themes/DokiThemeProvider";
 import Switch from "react-switch";
 import { FeatureContext } from "../../themes/FeatureProvider";
 
-async function reloadTabs(obj: any) {
-  const tabs: browser.tabs.Tab[] = await browser.tabs.query(obj);
-  Promise.all(tabs.map((tab) => browser.tabs.reload(tab.id!!)));
-}
-
 const FeaturesSettings = () => {
   return (
     <ThemeContext.Consumer>
@@ -27,15 +22,21 @@ const FeaturesSettings = () => {
                   origins: ["<all_urls>"],
                 })
                 .then((granted) => {
-                  if (granted && isSet) {
-                    // browser.contentScripts
-                    //   .register({
-                    //     js: [{ file: "js/styleInjection.js" }],
-                    //     matches: ["<all_urls>"],
-                    //   })
-                    //   .then(() => reloadTabs({ url: "*://*/*" }));
+                  if (granted) {
+                    setFeatures({ ...features, injectSelection: isSet });
                   }
-                  setFeatures({ ...features, injectSelection: isSet });
+                });
+            };
+            const handleScrollbarInjection = (isSet: boolean) => {
+              browser.permissions
+                .request({
+                  permissions: ["tabs", "activeTab"],
+                  origins: ["<all_urls>"],
+                })
+                .then((granted) => {
+                  if (granted) {
+                    setFeatures({ ...features, injectScrollbars: isSet });
+                  }
                 });
             };
             return (
@@ -47,6 +48,10 @@ const FeaturesSettings = () => {
                 <Switch
                   onChange={handleSelectionInjection}
                   checked={features.injectSelection}
+                />
+                <Switch
+                  onChange={handleScrollbarInjection}
+                  checked={features.injectScrollbars}
                 />
               </>
             );
