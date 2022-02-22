@@ -31,7 +31,7 @@ const FeatureProvider: FC = ({ children }) => {
   const [initialized, setInitialized] = useState<boolean>(false);
   const [features, setFeatures] = useState<PluginFeatures>(defaultFeatures);
   const setTheme = (context: PluginFeatures) => {
-    const themeSetEvent: PluginEvent<FeatureSetEventPayload> = {
+    const featureSetEvent: PluginEvent<FeatureSetEventPayload> = {
       type: PluginEventTypes.FEATURE_SET,
       payload: {
         features: context
@@ -44,7 +44,8 @@ const FeatureProvider: FC = ({ children }) => {
       injectScrollbars: context.injectScrollbars,
     });
 
-    browser.runtime.sendMessage(themeSetEvent);
+    console.log(featureSetEvent);
+    browser.runtime.sendMessage(featureSetEvent);
   };
 
   useEffect(() => {

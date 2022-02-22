@@ -8,7 +8,7 @@ import RegisteredContentScript = browser.contentScripts.RegisteredContentScript;
 
 async function reloadTabs(obj: any) {
   const tabs: browser.tabs.Tab[] = await browser.tabs.query(obj);
-  Promise.all(tabs.map((tab) => browser.tabs.reload(tab.id!!)));
+  await Promise.all(tabs.map((tab) => browser.tabs.reload(tab.id!!)));
 }
 
 export class StyleInjectionManager {
@@ -16,25 +16,52 @@ export class StyleInjectionManager {
 
   private async handleMessage(event: PluginEvent<any>) {
     if (event.type === PluginEventTypes.FEATURE_SET) {
-      const featureSet: FeatureSetEventPayload = event.payload;
-      // todo: un-register if unset & conditionals
-
-      await this.injectSelectionScript();
-      await this.injectScrollbarScript();
-
-      await reloadTabs({ url: "*://*/*" });
+      await this.updateFeatureSet(event);
     }
   }
 
-  private async injectSelectionScript() {
-    const contentKey = "selection";
-    const script = "js/selectionStyleInjection.js";
-    await this.injectScript(contentKey, script);
+  private async updateFeatureSet(event: PluginEvent<any>) {
+    const featureSet: FeatureSetEventPayload = event.payload;
+
+    if (featureSet.features.injectSelection) {
+      await this.injectSelectionScript();
+    } else {
+      await this.ejectSelectionScript();
+    }
+
+    if (featureSet.features.injectScrollbars) {
+      await this.injectScrollbarScript();
+    } else {
+      await this.ejectScrollbarScript();
+    }
+
+    await reloadTabs({ url: "*://*/*" });
   }
+
+  private async ejectSelectionScript() {
+    await this.ejectScript(this.selectionContentKey);
+  }
+  private async ejectScrollbarScript() {
+    await this.ejectScript(this.scrollBarContentKey);
+  }
+
+  private async ejectScript(contentKey: string) {
+    await this.savedScripts[contentKey]?.unregister();
+  }
+
+  private selectionContentKey = "selection";
+  private async injectSelectionScript() {
+    await this.injectScript(
+      this.selectionContentKey,
+      "js/selectionStyleInjection.js"
+    );
+  }
+  private scrollBarContentKey = "scrollbar";
   private async injectScrollbarScript() {
-    const contentKey = "scrollbar";
-    const script = "js/scrollbarStyleInjection.js";
-    await this.injectScript(contentKey, script);
+    await this.injectScript(
+      this.scrollBarContentKey,
+      "js/scrollbarStyleInjection.js"
+    );
   }
 
   private async injectScript(contentKey: string, script: string) {
@@ -42,8 +69,9 @@ export class StyleInjectionManager {
       try {
         await this.savedScripts[contentKey].unregister();
       } catch (e) {
-        console.error("unable to unregister style", e);
+        console.warn("unable to unregister style", e);
       }
+      delete this.savedScripts[contentKey];
     }
 
     try {
