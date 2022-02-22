@@ -11,6 +11,7 @@ import {
 import { chooseRandomTheme } from "../common/ThemeTools";
 import { pluginSettings } from "../Storage";
 import { DokiTheme } from "../themes/DokiTheme";
+import { DeviceThemeManager } from "./deviceThemeManager";
 
 export const CollectAndDebounce = <T>(
   toDebounce: (t: T[]) => void,
@@ -130,7 +131,7 @@ export class MixedThemeManager extends ThemeManager {
   private isInCurrentPool(dokiTheme: DokiTheme): boolean {
     switch (this.currentThemePool) {
       case ThemePools.MATCH_DEVICE:
-        return true;// todo: match device.....
+        return DeviceThemeManager.isDark() === dokiTheme.dark;
       case ThemePools.LIGHT:
         return !dokiTheme.dark;
       case ThemePools.DARK:

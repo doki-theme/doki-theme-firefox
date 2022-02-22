@@ -92,7 +92,7 @@ export class DeviceThemeManager extends SingleThemeManager {
     }
   }
 
-  private static isDark() {
+  public static isDark() {
     return window.matchMedia(mediaQuery).matches;
   }
 

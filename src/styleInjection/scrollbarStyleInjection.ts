@@ -1,3 +1,5 @@
+// todo notify attachment & get theme for tab...
+
 async function applyScrollbar() {
   console.log("hello I am also in your tab :)");
   const accentColor = 'red';
