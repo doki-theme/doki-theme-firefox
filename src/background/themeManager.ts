@@ -25,6 +25,7 @@ export abstract class ThemeManager {
   async initializeFirefox() {
     await this.initialize();
     await this.initializeTheme();
+    // todo: tell existing tabs their themes
   }
 
   async setTheme(dokiTheme: DokiTheme) {
@@ -45,7 +46,14 @@ export abstract class ThemeManager {
     try {
       await Promise.all(
         tabs.map((tab) =>
-          browser.tabs.sendMessage(tab.id!!, currentThemeSetEvent)
+          browser.tabs
+            .sendMessage(tab.id!!, currentThemeSetEvent)
+            .catch((e) =>
+              console.warn(
+                `Unable to broadcast to tab ${tab.id}, that current theme was updated.`,
+                e
+              )
+            )
         )
       );
     } catch (e) {

@@ -4,7 +4,6 @@ import ThemedSelect from "./ThemedSelect";
 import { PluginMode, pluginSettings } from "../../Storage";
 import { OptionSwitch } from "./optionSwitch";
 import { ThemeStuff } from "../../common/ThemeTools";
-import Switch from "react-switch";
 import { FeatureContext } from "../../themes/FeatureProvider";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import "./popup.css";

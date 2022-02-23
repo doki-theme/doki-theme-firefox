@@ -24,7 +24,6 @@ const DokiButton: FC<
           color: colors.buttonFont,
         };
   }
-  // todo: shadow
   return (
     <ThemeContext.Consumer>
       {({ theme }) => (
@@ -34,9 +33,11 @@ const DokiButton: FC<
             style={{
               ...props.style,
               padding: "0.5rem 1rem",
-              border: "none",
+              border: `solid ${theme.colors.borderColor} 1px`,
               borderRadius: 0,
               fontWeight: 500,
+              cursor: 'pointer',
+              ...(props.disabled ? {opacity: 0.5, cursor: 'not-allowed'}: {}),
               ...createStyles(theme),
             }}
           >

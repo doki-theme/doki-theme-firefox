@@ -83,6 +83,5 @@ export class SingleThemeManager extends ThemeManager {
   async setTheme(dokiTheme: DokiTheme) {
     await super.setTheme(dokiTheme);
     this.currentTheme = dokiTheme;
-    await pluginSettings.set({ singleModeTheme: dokiTheme.themeId });
   }
 }

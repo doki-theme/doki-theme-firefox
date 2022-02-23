@@ -77,30 +77,35 @@ const DokiThemeComponent: FC<Props> = ({
 
       {values[prefix].character.hasSecondaryContent && (
         <>
-          <div id="contentTypeGroup">Content Type</div>
-          <div role="group" aria-labelledby="contentTypeGroup">
-            <label>
-              <Field
-                type="radio"
-                name={`${prefix}.contentType`}
-                value={ContentType.PRIMARY}
-                onChange={() => {
-                  setFieldValue(`${prefix}.contentType`, ContentType.PRIMARY);
-                }}
-              />
-              Primary
-            </label>
-            <label>
-              <Field
-                type="radio"
-                name={`${prefix}.contentType`}
-                value={ContentType.SECONDARY}
-                onChange={() => {
-                  setFieldValue(`${prefix}.contentType`, ContentType.SECONDARY);
-                }}
-              />
-              Secondary
-            </label>
+          <div style={{ margin: "1rem 0 0.5rem 0" }} id="contentTypeGroup">
+            Content Type
+            <div role="group" aria-labelledby="contentTypeGroup">
+              <label>
+                <Field
+                  type="radio"
+                  name={`${prefix}.contentType`}
+                  value={ContentType.PRIMARY}
+                  onChange={() => {
+                    setFieldValue(`${prefix}.contentType`, ContentType.PRIMARY);
+                  }}
+                />
+                Primary
+              </label>
+              <label>
+                <Field
+                  type="radio"
+                  name={`${prefix}.contentType`}
+                  value={ContentType.SECONDARY}
+                  onChange={() => {
+                    setFieldValue(
+                      `${prefix}.contentType`,
+                      ContentType.SECONDARY
+                    );
+                  }}
+                />
+                Secondary
+              </label>
+            </div>
           </div>
         </>
       )}
