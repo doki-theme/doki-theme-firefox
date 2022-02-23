@@ -8,13 +8,18 @@ import Switch from "react-switch";
 import { FeatureContext } from "../../themes/FeatureProvider";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import "./popup.css";
-import { ModeSetEventPayload, PluginEvent, PluginEventTypes } from "../../Events";
+import {
+  ModeSetEventPayload,
+  PluginEvent,
+  PluginEventTypes,
+} from "../../Events";
 import FeaturesSettings from "./FeaturesSettings";
+import DokiIcon from "../../common/DokiIcon";
 
 const options: { value: PluginMode; label: string }[] = [
   { value: PluginMode.SINGLE, label: "Individual" },
   { value: PluginMode.DEVICE_MATCH, label: "Device Match" },
-  { value: PluginMode.MIXED, label: "Mixed" }
+  { value: PluginMode.MIXED, label: "Mixed" },
 ];
 
 const Popup = () => {
@@ -33,14 +38,13 @@ const Popup = () => {
         return (
           <FeatureContext.Consumer>
             {({ features, setFeatures }) => {
-
               const handleModeChange = (thing: any) => {
                 setCurrentMode(thing!!.value);
                 const modeSetEvent: PluginEvent<ModeSetEventPayload> = {
                   type: PluginEventTypes.MODE_SET,
                   payload: {
-                    mode: thing!!.value
-                  }
+                    mode: thing!!.value,
+                  },
                 };
                 browser.runtime.sendMessage(modeSetEvent);
               };
@@ -51,14 +55,23 @@ const Popup = () => {
                     color: colors.foregroundColor,
                     padding: "1rem",
                     minHeight: "500px",
-                    minWidth: "250px"
+                    minWidth: "250px",
                   }}
                 >
                   <ThemeStuff theme={theme}></ThemeStuff>
                   {initialized ? (
                     <>
-                      <header>
-                        <h1 style={{ margin: "0 0 1rem 0" }}>Doki Theme</h1>
+                      <header
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        <h1 style={{ margin: "0 0 1rem 0", flexGrow: 1 }}>
+                          Doki Theme
+                        </h1>
+                        <DokiIcon width={32} height={32} theme={theme} />
                       </header>
                       <Tabs>
                         <TabList className="doki-tabs__tab-list">
@@ -70,18 +83,36 @@ const Popup = () => {
                           </Tab>
                         </TabList>
                         <TabPanel>
-                          <label>Plugin Mode</label>
-                          <ThemedSelect
-                            options={options}
-                            onChange={handleModeChange}
-                            defaultValue={
-                              options.find(option => option.value === currentMode)!!
-                            }
+                          <label>
+                            <span
+                              style={{
+                                fontWeight: "bold",
+                                marginBottom: "1rem",
+                              }}
+                            >
+                              Plugin Mode
+                            </span>
+                            <ThemedSelect
+                              options={options}
+                              onChange={handleModeChange}
+                              defaultValue={
+                                options.find(
+                                  (option) => option.value === currentMode
+                                )!!
+                              }
+                            />
+                          </label>
+                          <hr
+                            style={{
+                              marginTop: '1rem',
+                              borderColor: colors.infoForeground,
+                              borderStyle: "dotted",
+                            }}
                           />
                           <OptionSwitch pluginMode={currentMode} />
                         </TabPanel>
                         <TabPanel>
-                          <FeaturesSettings/>
+                          <FeaturesSettings />
                         </TabPanel>
                       </Tabs>
                     </>

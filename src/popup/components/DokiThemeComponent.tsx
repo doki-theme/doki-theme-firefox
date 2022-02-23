@@ -14,28 +14,28 @@ function createThemeVariantName(theme: DokiTheme) {
 function getThemeSelector(
   values: any,
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void,
-  prefix: string,
+  prefix: string
 ) {
   const options = values[prefix].character.themes.map((theme: DokiTheme) => ({
     value: theme,
-    label: createThemeVariantName(theme)
+    label: createThemeVariantName(theme),
   }));
   return (
-    <>
+    <div style={{ marginTop: "1rem" }}>
       <label>
         Theme Variant
         <ThemedSelect
           options={options}
           value={{
             value: values[prefix].selectedTheme,
-            label: createThemeVariantName(values[prefix].selectedTheme)
+            label: createThemeVariantName(values[prefix].selectedTheme),
           }}
           onChange={(selectedCharacter) =>
             setFieldValue(`${prefix}.selectedTheme`, selectedCharacter!!.value)
           }
         />
       </label>
-    </>
+    </div>
   );
 }
 
@@ -45,7 +45,7 @@ interface Props {
   values: any;
   setFieldValue: any;
   prefix: string;
-  options: CharacterOption[]
+  options: CharacterOption[];
 }
 
 const DokiThemeComponent: FC<Props> = ({
@@ -53,24 +53,24 @@ const DokiThemeComponent: FC<Props> = ({
   setFieldValue,
   prefix,
   options,
-                            }) => {
+}) => {
   return (
     <div>
-      <ThemedSelect
-        options={options}
-        value={{
-          label: values[prefix].character.name,
-          value: values[prefix].character
-        }}
-        onChange={(selectedCharacter) => {
-          const characterValue = selectedCharacter!!.value;
-          setFieldValue(
-            `${prefix}.selectedTheme`,
-            characterValue.themes[0]
-          );
-          return setFieldValue(`${prefix}.character`, characterValue);
-        }}
-      />
+      <label>
+        Choose a character
+        <ThemedSelect
+          options={options}
+          value={{
+            label: values[prefix].character.name,
+            value: values[prefix].character,
+          }}
+          onChange={(selectedCharacter) => {
+            const characterValue = selectedCharacter!!.value;
+            setFieldValue(`${prefix}.selectedTheme`, characterValue.themes[0]);
+            return setFieldValue(`${prefix}.character`, characterValue);
+          }}
+        />
+      </label>
 
       {values[prefix].character.hasMultipleThemes &&
         getThemeSelector(values, setFieldValue, prefix)}
@@ -85,10 +85,7 @@ const DokiThemeComponent: FC<Props> = ({
                 name={`${prefix}.contentType`}
                 value={ContentType.PRIMARY}
                 onChange={() => {
-                  setFieldValue(
-                    `${prefix}.contentType`,
-                    ContentType.PRIMARY
-                  );
+                  setFieldValue(`${prefix}.contentType`, ContentType.PRIMARY);
                 }}
               />
               Primary
@@ -99,10 +96,7 @@ const DokiThemeComponent: FC<Props> = ({
                 name={`${prefix}.contentType`}
                 value={ContentType.SECONDARY}
                 onChange={() => {
-                  setFieldValue(
-                    `${prefix}.contentType`,
-                    ContentType.SECONDARY
-                  );
+                  setFieldValue(`${prefix}.contentType`, ContentType.SECONDARY);
                 }}
               />
               Secondary

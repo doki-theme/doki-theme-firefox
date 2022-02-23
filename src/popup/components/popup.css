@@ -6,7 +6,7 @@
 .doki-tabs__tab--selected {
   background-color: var(--highlight-color);
   border-color: var(--accent-color);
-  border-bottom: 1px solid var(--accent-color);
+  border-bottom: 2px solid var(--accent-color) !important;
 }
 
 .doki-tabs__tab-list {

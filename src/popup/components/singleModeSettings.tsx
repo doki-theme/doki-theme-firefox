@@ -5,6 +5,7 @@ import { CharacterTheme, ContentType, DokiTheme } from "../../themes/DokiTheme";
 import { ThemeContext } from "../../themes/DokiThemeProvider";
 import { chooseRandomTheme } from "../../common/ThemeTools";
 import DokiThemeComponent, { CharacterOption } from "./DokiThemeComponent";
+import DokiButton from "../../common/DokiButton";
 
 interface FormValues {
   selected: {
@@ -68,8 +69,7 @@ const SingleModeSettings = () => {
             },
           };
           return (
-            <>
-              <h3>Choose a character</h3>
+            <div>
               <Formik
                 initialValues={initialValues}
                 onSubmit={(values, formikHelpers) => {
@@ -92,9 +92,12 @@ const SingleModeSettings = () => {
                   resetForm,
                 }) => (
                   <>
-                    <button onClick={pickRandomTheme(resetForm, setTheme)}>
+                    <DokiButton
+                      style={{ margin: "1rem 0" }}
+                      onClick={pickRandomTheme(resetForm, setTheme)}
+                    >
                       Choose Random Theme
-                    </button>
+                    </DokiButton>
                     <DokiThemeComponent
                       values={values}
                       options={options}
@@ -102,14 +105,21 @@ const SingleModeSettings = () => {
                       setFieldValue={setFieldValue}
                     />
                     <form onSubmit={handleSubmit}>
-                      <button type="submit" disabled={isSubmitting || !dirty}>
+                      <DokiButton
+                        variant={"primary"}
+                        style={{
+                          marginTop: '1rem',
+                        }}
+                        type="submit"
+                        disabled={isSubmitting || !dirty}
+                      >
                         Apply
-                      </button>
+                      </DokiButton>
                     </form>
                   </>
                 )}
               </Formik>
-            </>
+            </div>
           );
         }}
       </ThemeContext.Consumer>
