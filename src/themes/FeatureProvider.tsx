@@ -43,8 +43,6 @@ const FeatureProvider: FC = ({ children }) => {
       injectSelection: context.injectSelection,
       injectScrollbars: context.injectScrollbars,
     });
-
-    console.log(featureSetEvent);
     browser.runtime.sendMessage(featureSetEvent);
   };
 

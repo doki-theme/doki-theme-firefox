@@ -1,19 +1,25 @@
-async function initialize() {
-  console.log("hello I am in your tab :)");
-  const style = `:root{
-  caret-color: red !important; 
+import { ContentInjector } from "./contentInjector";
+import { DokiThemeDefinition } from "../themes/DokiTheme";
+
+class SelectionStyleInjection extends ContentInjector {
+  constructor() {
+    super("doki_themed_selection");
+  }
+
+  createStyles(dokiTheme: DokiThemeDefinition): string {
+    const { selectionBackground, selectionForeground, accentColor } =
+      dokiTheme.colors;
+    return `:root{
+  caret-color: ${accentColor} !important; 
 }
 ::selection{
-  color: blue !important;
-  background-color: red !important;
+  color: ${selectionForeground} !important;
+  background-color: ${selectionBackground} !important;
 }
 `;
-  /*Add style to HTML document*/
-  const styleText = document.createTextNode(style);
-  const styleTag = document.createElement("style");
-  styleTag.id = "doki_selection";
-  styleTag.append(styleText);
-  document.head.append(styleTag);
+  }
 }
 
-initialize();
+const selectionStyleInjector = new SelectionStyleInjection();
+
+selectionStyleInjector.initialize();
