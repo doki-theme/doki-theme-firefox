@@ -1,4 +1,3 @@
-import { pluginSettings } from "../Storage";
 import { DokiTheme, DokiThemes } from "../themes/DokiTheme";
 import { svgToPng } from "../background/svgTools";
 import { PluginEvent, PluginEventTypes, TabAttachedEventPayload, ThemeSetEventPayload } from "../Events";

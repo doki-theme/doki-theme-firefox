@@ -1,5 +1,5 @@
 import { PluginFeatures } from "./themes/FeatureProvider";
-import { ContentType } from "./themes/DokiTheme";
+import { ContentType, DokiThemeDefinition } from "./themes/DokiTheme";
 import { PluginMode } from "./Storage";
 
 export enum PluginEventTypes {
@@ -9,6 +9,9 @@ export enum PluginEventTypes {
   TAB_ATTACHED,
   MIXED_MODE_SETTINGS_CHANGED,
   DEVICE_MATCH_SETTINGS_CHANGED,
+  CURRENT_THEME_UPDATED,
+  CONTENT_SCRIPT_INJECTED,
+  REPLIED_WITH_CURRENT_THEME,
 }
 
 export interface PluginEvent<T> {
@@ -19,6 +22,10 @@ export interface PluginEvent<T> {
 export interface ThemeSetEventPayload {
   themeId: string;
   content: ContentType;
+}
+
+export interface CurrentThemeSetEventPayload {
+  themeDefinition: DokiThemeDefinition,
 }
 
 export interface DeviceMatchSettingsChangedPayload {
@@ -49,7 +56,11 @@ export interface MixedModeSettingsChangedPayload {
   themePool: ThemePools;
 }
 
+export interface ContentScriptInjectedPayload {
+}
+
 export interface DeviceMatchSettingsChangedEventPayload {
   dark: ThemeSetEventPayload;
   light: ThemeSetEventPayload;
 }
+
