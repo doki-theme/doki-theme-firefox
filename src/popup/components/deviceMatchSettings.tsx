@@ -17,6 +17,7 @@ import {
 import DokiThemeComponent, { CharacterOption } from "./DokiThemeComponent";
 import OptionalPermission = browser._manifest.OptionalPermission;
 import { pluginSettings } from "../../Storage";
+import DokiButton from "../../common/DokiButton";
 
 type ThemeOption = {
   character: CharacterTheme;
@@ -179,16 +180,17 @@ const DeviceMatchSettings = () => {
       >
         {({ values, handleSubmit, isSubmitting, dirty, setFieldValue }) => (
           <form onSubmit={handleSubmit}>
-            <>
-              <div>Light Theme</div>
+            <div style={{ marginTop: "1rem" }}>
+              <h3>Light Theme</h3>
               <DokiThemeComponent
                 values={values}
                 options={lightCharacterOptions}
                 prefix={"light"}
                 setFieldValue={setFieldValue}
               />
+              <hr style={{ margin: "3rem 0", border: "none" }} />
 
-              <div>Dark Theme</div>
+              <h3>Dark Theme</h3>
               <DokiThemeComponent
                 values={values}
                 options={darkCharacterOptions}
@@ -196,10 +198,14 @@ const DeviceMatchSettings = () => {
                 setFieldValue={setFieldValue}
               />
 
-              <button type="submit" disabled={isSubmitting || !dirty}>
+              <DokiButton
+                style={{ marginTop: "1rem" }}
+                type="submit"
+                disabled={isSubmitting || !dirty}
+              >
                 Apply
-              </button>
-            </>
+              </DokiButton>
+            </div>
           </form>
         )}
       </Formik>

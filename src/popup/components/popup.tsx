@@ -82,12 +82,12 @@ const Popup = () => {
                     <label>
                       <span
                         style={{
-                          fontWeight: "bold",
-                          marginBottom: "1rem",
+                          fontWeight: "500",
+                          fontSize: '1.25',
                         }}
                       >
                         Plugin Mode
-                      </span>
+                      </span><br style={{marginBottom: '0.5rem'}}/>
                       <ThemedSelect
                         options={options}
                         onChange={handleModeChange}

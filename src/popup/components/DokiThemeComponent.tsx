@@ -57,7 +57,7 @@ const DokiThemeComponent: FC<Props> = ({
   return (
     <div>
       <label>
-        Choose a character
+        Choose a character <br style={{marginBottom: '0.5rem'}}/>
         <ThemedSelect
           options={options}
           value={{
