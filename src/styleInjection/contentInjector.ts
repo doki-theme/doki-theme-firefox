@@ -1,31 +1,35 @@
-import { ContentScriptInjectedPayload, CurrentThemeSetEventPayload, PluginEvent, PluginEventTypes } from "../Events";
+import {
+  ContentScriptInjectedPayload,
+  CurrentThemeSetEventPayload,
+  PluginEvent,
+  PluginEventTypes,
+} from "../Events";
 import { DokiThemeDefinition } from "../themes/DokiTheme";
 
 export abstract class ContentInjector {
-
-  constructor(private readonly styleId: string) {
-  }
+  constructor(private readonly styleId: string) {}
 
   initialize() {
     browser.runtime.onMessage.addListener(this.handleMessage.bind(this));
     const injectedEvent: PluginEvent<ContentScriptInjectedPayload> = {
       type: PluginEventTypes.CONTENT_SCRIPT_INJECTED,
-      payload: {}
+      payload: {},
     };
-    browser.runtime.sendMessage(injectedEvent);
+    browser.runtime
+      .sendMessage(injectedEvent)
   }
 
   private handleMessage(message: PluginEvent<any>) {
     if (message.type === PluginEventTypes.CURRENT_THEME_UPDATED) {
-      this.injectContent(message);
-    } else if (message.type === PluginEventTypes.REPLIED_WITH_CURRENT_THEME) {
       this.injectContent(message);
     }
   }
 
   private injectContent(message: PluginEvent<CurrentThemeSetEventPayload>) {
     const style = this.createStyles(message.payload.themeDefinition);
-    const previousStyle = document.head.querySelector(`style[id='${this.styleId}']`);
+    const previousStyle = document.head.querySelector(
+      `style[id='${this.styleId}']`
+    );
     if (previousStyle) {
       document.head.removeChild(previousStyle);
     }
@@ -36,5 +40,5 @@ export abstract class ContentInjector {
     document.head.append(styleTag);
   }
 
-  protected abstract createStyles(dokiTheme: DokiThemeDefinition): string
+  protected abstract createStyles(dokiTheme: DokiThemeDefinition): string;
 }
