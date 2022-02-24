@@ -153,7 +153,7 @@ export class DokiTheme {
   }
 }
 
-export const DEFAULT_DOKI_THEME = new DokiTheme(DokiThemeDefinitions[DEFAULT_LIGHT_THEME_ID]);
+export const DEFAULT_DOKI_THEME = new DokiTheme(DokiThemeDefinitions[DEFAULT_DARK_THEME_ID]);
 
 export const DokiThemes =
   Object.fromEntries(

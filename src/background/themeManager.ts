@@ -22,10 +22,32 @@ export abstract class ThemeManager {
     }
   }
 
+  abstract getThemeForTab(tabId: number): ThemeSetEventPayload;
+
+  protected async tellAllTabsTheirNewTheme(): Promise<void> {
+    try {
+      const tabs = await browser.tabs.query({ title: "New Tab" });
+      await Promise.all(
+        tabs.map((tab) => {
+          const tabId = tab.id!!;
+          const themeSetEvent: PluginEvent<ThemeSetEventPayload> = {
+            type: PluginEventTypes.THEME_SET,
+            payload: this.getThemeForTab(tabId),
+          };
+          return browser.tabs.sendMessage(tabId, themeSetEvent).catch((e) => {
+            console.warn(`to tell tab ${tab.id} to set its theme`, e);
+          });
+        })
+      );
+    } catch (e) {
+      console.error("unable to set theme", e);
+    }
+  }
+
   async initializeFirefox() {
     await this.initialize();
     await this.initializeTheme();
-    // todo: tell existing tabs their themes
+    await this.tellAllTabsTheirNewTheme();
   }
 
   async setTheme(dokiTheme: DokiTheme) {

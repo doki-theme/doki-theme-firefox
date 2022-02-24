@@ -146,4 +146,12 @@ export class MixedThemeManager extends ThemeManager {
         return true;
     }
   }
+
+  getThemeForTab(tabId: number): ThemeSetEventPayload {
+    const theme = this.associateThemeWithTab(tabId);
+    return {
+      themeId: theme.dokiTheme.themeId,
+      content: theme.activeContent
+    };
+  }
 }

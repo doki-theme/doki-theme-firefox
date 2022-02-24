@@ -65,27 +65,16 @@ export class SingleThemeManager extends ThemeManager {
       const tabAttachMentPayload: TabAttachedEventPayload = message.payload;
       await this.tellTabItsTheme(tabAttachMentPayload.tabId);
     } else if (message.type === PluginEventTypes.THEME_SET) {
-      await this.tellAllTabsTheirNewTheme(message);
+      await this.saveThemeAndTellAllTabs(message);
     }
   }
 
-  private async tellAllTabsTheirNewTheme(
+  private async saveThemeAndTellAllTabs(
     message: PluginEvent<ThemeSetEventPayload>
   ) {
     const messagePayload: ThemeSetEventPayload = message.payload;
     this.currentContentType = messagePayload.content;
-    try {
-      const tabs = await browser.tabs.query({ title: "New Tab" });
-      await Promise.all(
-        tabs.map((tab) =>
-          browser.tabs.sendMessage(tab.id!!, message).catch((e) => {
-            console.error("to tell tab ${tab.id} to set its theme", e);
-          })
-        )
-      );
-    } catch (e) {
-      console.error("unable to set theme", e);
-    }
+    await this.tellAllTabsTheirNewTheme()
   }
 
   private currentTheme: DokiTheme | undefined;
@@ -94,5 +83,12 @@ export class SingleThemeManager extends ThemeManager {
   async setTheme(dokiTheme: DokiTheme) {
     await super.setTheme(dokiTheme);
     this.currentTheme = dokiTheme;
+  }
+
+  getThemeForTab(tabId: number): ThemeSetEventPayload {
+    return {
+      content: this.currentContentType!!,
+      themeId: this.currentTheme!!.themeId,
+    };
   }
 }
