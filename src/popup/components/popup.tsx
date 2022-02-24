@@ -34,94 +34,88 @@ const Popup = () => {
     <ThemeContext.Consumer>
       {({ theme }) => {
         const colors = theme.colors;
+        const handleModeChange = (thing: any) => {
+          setCurrentMode(thing!!.value);
+          const modeSetEvent: PluginEvent<ModeSetEventPayload> = {
+            type: PluginEventTypes.MODE_SET,
+            payload: {
+              mode: thing!!.value,
+            },
+          };
+          browser.runtime.sendMessage(modeSetEvent);
+        };
         return (
-          <FeatureContext.Consumer>
-            {({ features, setFeatures }) => {
-              const handleModeChange = (thing: any) => {
-                setCurrentMode(thing!!.value);
-                const modeSetEvent: PluginEvent<ModeSetEventPayload> = {
-                  type: PluginEventTypes.MODE_SET,
-                  payload: {
-                    mode: thing!!.value,
-                  },
-                };
-                browser.runtime.sendMessage(modeSetEvent);
-              };
-              return (
-                <div
+          <div
+            style={{
+              backgroundColor: colors.baseBackground,
+              color: colors.foregroundColor,
+              padding: "1rem",
+              minHeight: "500px",
+              minWidth: "250px",
+            }}
+          >
+            <ThemeStuff theme={theme}></ThemeStuff>
+            {initialized ? (
+              <>
+                <header
                   style={{
-                    backgroundColor: colors.baseBackground,
-                    color: colors.foregroundColor,
-                    padding: "1rem",
-                    minHeight: "500px",
-                    minWidth: "250px",
+                    display: "flex",
+                    flexDirection: "row",
+                    marginBottom: "0.5rem",
                   }}
                 >
-                  <ThemeStuff theme={theme}></ThemeStuff>
-                  {initialized ? (
-                    <>
-                      <header
+                  <h1 style={{ margin: "0 0 1rem 0", flexGrow: 1 }}>
+                    Doki Theme
+                  </h1>
+                  <DokiIcon width={32} height={32} theme={theme} />
+                </header>
+                <Tabs>
+                  <TabList className="doki-tabs__tab-list">
+                    <Tab selectedClassName="doki-tabs__tab--selected">
+                      Theme Settings
+                    </Tab>
+                    <Tab selectedClassName="doki-tabs__tab--selected">
+                      Plugin Features
+                    </Tab>
+                  </TabList>
+                  <TabPanel>
+                    <label>
+                      <span
                         style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          marginBottom: "0.5rem",
+                          fontWeight: "bold",
+                          marginBottom: "1rem",
                         }}
                       >
-                        <h1 style={{ margin: "0 0 1rem 0", flexGrow: 1 }}>
-                          Doki Theme
-                        </h1>
-                        <DokiIcon width={32} height={32} theme={theme} />
-                      </header>
-                      <Tabs>
-                        <TabList className="doki-tabs__tab-list">
-                          <Tab selectedClassName="doki-tabs__tab--selected">
-                            Theme Settings
-                          </Tab>
-                          <Tab selectedClassName="doki-tabs__tab--selected">
-                            Plugin Features
-                          </Tab>
-                        </TabList>
-                        <TabPanel>
-                          <label>
-                            <span
-                              style={{
-                                fontWeight: "bold",
-                                marginBottom: "1rem",
-                              }}
-                            >
-                              Plugin Mode
-                            </span>
-                            <ThemedSelect
-                              options={options}
-                              onChange={handleModeChange}
-                              defaultValue={
-                                options.find(
-                                  (option) => option.value === currentMode
-                                )!!
-                              }
-                            />
-                          </label>
-                          <hr
-                            style={{
-                              marginTop: '1rem',
-                              borderColor: colors.infoForeground,
-                              borderStyle: "dotted",
-                            }}
-                          />
-                          <OptionSwitch pluginMode={currentMode} />
-                        </TabPanel>
-                        <TabPanel>
-                          <FeaturesSettings />
-                        </TabPanel>
-                      </Tabs>
-                    </>
-                  ) : (
-                    <></>
-                  )}
-                </div>
-              );
-            }}
-          </FeatureContext.Consumer>
+                        Plugin Mode
+                      </span>
+                      <ThemedSelect
+                        options={options}
+                        onChange={handleModeChange}
+                        defaultValue={
+                          options.find(
+                            (option) => option.value === currentMode
+                          )!!
+                        }
+                      />
+                    </label>
+                    <hr
+                      style={{
+                        marginTop: "1rem",
+                        borderColor: colors.infoForeground,
+                        borderStyle: "dotted",
+                      }}
+                    />
+                    <OptionSwitch pluginMode={currentMode} />
+                  </TabPanel>
+                  <TabPanel>
+                    <FeaturesSettings />
+                  </TabPanel>
+                </Tabs>
+              </>
+            ) : (
+              <></>
+            )}
+          </div>
         );
       }}
     </ThemeContext.Consumer>
