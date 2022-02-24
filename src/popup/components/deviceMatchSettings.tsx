@@ -188,7 +188,7 @@ const DeviceMatchSettings = () => {
                 prefix={"light"}
                 setFieldValue={setFieldValue}
               />
-              <hr style={{ margin: "3rem 0", border: "none" }} />
+              <hr style={{ margin: "2.5rem 0", border: "none" }} />
 
               <h3>Dark Theme</h3>
               <DokiThemeComponent

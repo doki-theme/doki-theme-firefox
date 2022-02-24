@@ -41,22 +41,31 @@ const FeaturesSettings = () => {
             };
             return (
               <div style={{ display: "block", flexDirection: "column" }}>
-                <label style={{ display: "block", marginBottom: '1rem' }}>
-                  <span>Show Search Widget</span><br style={{marginBottom: '0.5rem'}}/>
+                <label style={{ display: "block", marginBottom: "1rem" }}>
+                  <span style={{color: theme.colors.infoForeground}}>
+                    Show Search Widget
+                  </span>
+                  <br style={{ marginBottom: "0.5rem" }} />
                   <ThemedSwitch
                     onChange={handleWidgetChange}
                     checked={features.showWidget}
                   />
                 </label>
-                <label style={{ display: "block", marginBottom: '1rem' }}>
-                  <span>Inject Themed Text Selection</span><br style={{marginBottom: '0.5rem'}}/>
+                <label style={{ display: "block", marginBottom: "1rem" }}>
+                  <span style={{color: theme.colors.infoForeground}}>
+                    Inject Themed Text Selection
+                  </span>
+                  <br style={{ marginBottom: "0.5rem" }} />
                   <ThemedSwitch
                     onChange={handleSelectionInjection}
                     checked={features.injectSelection}
                   />
                 </label>
-                <label style={{ display: "block", marginBottom: '1rem' }}>
-                  <span>Inject Themed Scrollbars</span><br style={{marginBottom: '0.5rem'}}/>
+                <label style={{ display: "block", marginBottom: "1rem" }}>
+                  <span style={{color: theme.colors.infoForeground}}>
+                    Inject Themed Scrollbars
+                  </span>
+                  <br style={{ marginBottom: "0.5rem" }} />
                   <ThemedSwitch
                     onChange={handleScrollbarInjection}
                     checked={features.injectScrollbars}

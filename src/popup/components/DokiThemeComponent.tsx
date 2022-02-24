@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import ThemedSelect from "./ThemedSelect";
 import { Field } from "formik";
 import { CharacterTheme, ContentType, DokiTheme } from "../../themes/DokiTheme";
+import { ThemeContext } from "../../themes/DokiThemeProvider";
 
 function createThemeVariantName(theme: DokiTheme) {
   const trimmedVariant = theme.name
@@ -14,7 +15,8 @@ function createThemeVariantName(theme: DokiTheme) {
 function getThemeSelector(
   values: any,
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void,
-  prefix: string
+  prefix: string,
+  theme: DokiTheme
 ) {
   const options = values[prefix].character.themes.map((theme: DokiTheme) => ({
     value: theme,
@@ -23,7 +25,10 @@ function getThemeSelector(
   return (
     <div style={{ marginTop: "1rem" }}>
       <label>
-        Theme Variant
+        <span style={{ color: theme.colors.infoForeground }}>
+          Theme Variant
+        </span>
+        <br style={{ marginBottom: "0.5rem" }} />
         <ThemedSelect
           options={options}
           value={{
@@ -55,61 +60,77 @@ const DokiThemeComponent: FC<Props> = ({
   options,
 }) => {
   return (
-    <div>
-      <label>
-        Choose a character <br style={{marginBottom: '0.5rem'}}/>
-        <ThemedSelect
-          options={options}
-          value={{
-            label: values[prefix].character.name,
-            value: values[prefix].character,
-          }}
-          onChange={(selectedCharacter) => {
-            const characterValue = selectedCharacter!!.value;
-            setFieldValue(`${prefix}.selectedTheme`, characterValue.themes[0]);
-            return setFieldValue(`${prefix}.character`, characterValue);
-          }}
-        />
-      </label>
+    <ThemeContext.Consumer>
+      {({ theme }) => (
+        <div>
+          <label>
+            <span style={{ color: theme.colors.infoForeground }}>
+              Choose a character
+            </span>{" "}
+            <br style={{ marginBottom: "0.5rem" }} />
+            <ThemedSelect
+              options={options}
+              value={{
+                label: values[prefix].character.name,
+                value: values[prefix].character,
+              }}
+              onChange={(selectedCharacter) => {
+                const characterValue = selectedCharacter!!.value;
+                setFieldValue(
+                  `${prefix}.selectedTheme`,
+                  characterValue.themes[0]
+                );
+                return setFieldValue(`${prefix}.character`, characterValue);
+              }}
+            />
+          </label>
 
-      {values[prefix].character.hasMultipleThemes &&
-        getThemeSelector(values, setFieldValue, prefix)}
+          {values[prefix].character.hasMultipleThemes &&
+            getThemeSelector(values, setFieldValue, prefix, theme)}
 
-      {values[prefix].character.hasSecondaryContent && (
-        <>
-          <div style={{ margin: "1rem 0 0.5rem 0" }} id="contentTypeGroup">
-            Content Type
-            <div role="group" aria-labelledby="contentTypeGroup">
-              <label>
-                <Field
-                  type="radio"
-                  name={`${prefix}.contentType`}
-                  value={ContentType.PRIMARY}
-                  onChange={() => {
-                    setFieldValue(`${prefix}.contentType`, ContentType.PRIMARY);
-                  }}
-                />
-                Primary
-              </label>
-              <label>
-                <Field
-                  type="radio"
-                  name={`${prefix}.contentType`}
-                  value={ContentType.SECONDARY}
-                  onChange={() => {
-                    setFieldValue(
-                      `${prefix}.contentType`,
-                      ContentType.SECONDARY
-                    );
-                  }}
-                />
-                Secondary
-              </label>
-            </div>
-          </div>
-        </>
+          {values[prefix].character.hasSecondaryContent && (
+            <>
+              <div style={{ margin: "1rem 0 0.5rem 0" }} id="contentTypeGroup">
+                <span style={{ color: theme.colors.infoForeground }}>
+                  Content Type
+                </span>
+                <br style={{ marginBottom: "0.5rem" }} />
+                <div role="group" aria-labelledby="contentTypeGroup">
+                  <label>
+                    <Field
+                      type="radio"
+                      name={`${prefix}.contentType`}
+                      value={ContentType.PRIMARY}
+                      onChange={() => {
+                        setFieldValue(
+                          `${prefix}.contentType`,
+                          ContentType.PRIMARY
+                        );
+                      }}
+                    />
+                    Primary
+                  </label>
+                  <label>
+                    <Field
+                      type="radio"
+                      name={`${prefix}.contentType`}
+                      value={ContentType.SECONDARY}
+                      onChange={() => {
+                        setFieldValue(
+                          `${prefix}.contentType`,
+                          ContentType.SECONDARY
+                        );
+                      }}
+                    />
+                    Secondary
+                  </label>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       )}
-    </div>
+    </ThemeContext.Consumer>
   );
 };
 

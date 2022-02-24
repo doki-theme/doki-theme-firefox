@@ -6,6 +6,7 @@ import {
   PluginEventTypes,
   ThemePools,
 } from "../../Events";
+import DokiButton from "../../common/DokiButton";
 
 interface FormValues {
   themePool: ThemePools;
@@ -42,13 +43,16 @@ const MixedModeSettings = () => {
         {({ handleSubmit, isSubmitting, dirty, setFieldValue }) => (
           <form onSubmit={handleSubmit}>
             <>
-              <div id="themePoolGroup">Theme Pool</div>
+              <h3 style={{ marginTop: "1rem" }} id="themePoolGroup">
+                Theme Pool
+              </h3>
               <div
                 role="group"
                 aria-labelledby="themePoolGroup"
                 style={{
                   display: "flex",
                   flexDirection: "column",
+                  marginBottom: "1rem",
                 }}
               >
                 <label>
@@ -96,9 +100,9 @@ const MixedModeSettings = () => {
                   Match Device
                 </label>
               </div>
-              <button type="submit" disabled={isSubmitting || !dirty}>
+              <DokiButton type="submit" disabled={isSubmitting || !dirty}>
                 Apply
-              </button>
+              </DokiButton>
             </>
           </form>
         )}
