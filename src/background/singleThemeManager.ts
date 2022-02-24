@@ -1,5 +1,10 @@
 import { ThemeManager } from "./themeManager";
-import { ContentType, DEFAULT_DOKI_THEME, DokiTheme, DokiThemes } from "../themes/DokiTheme";
+import {
+  ContentType,
+  DEFAULT_DOKI_THEME,
+  DokiTheme,
+  DokiThemes,
+} from "../themes/DokiTheme";
 import { pluginSettings } from "../Storage";
 import {
   PluginEvent,
@@ -64,13 +69,19 @@ export class SingleThemeManager extends ThemeManager {
     }
   }
 
-  private async tellAllTabsTheirNewTheme(message: PluginEvent<ThemeSetEventPayload>) {
+  private async tellAllTabsTheirNewTheme(
+    message: PluginEvent<ThemeSetEventPayload>
+  ) {
     const messagePayload: ThemeSetEventPayload = message.payload;
     this.currentContentType = messagePayload.content;
     try {
       const tabs = await browser.tabs.query({ title: "New Tab" });
       await Promise.all(
-        tabs.map((tab) => browser.tabs.sendMessage(tab.id!!, message))
+        tabs.map((tab) =>
+          browser.tabs.sendMessage(tab.id!!, message).catch((e) => {
+            console.error("to tell tab ${tab.id} to set its theme", e);
+          })
+        )
       );
     } catch (e) {
       console.error("unable to set theme", e);

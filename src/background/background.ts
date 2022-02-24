@@ -9,13 +9,14 @@ import { StyleInjectionManager } from "./StyleInjectionManager";
 
 console.log("早上好中國。現在我有冰淇淋。");
 
-var currentThemeManager: ThemeManager;
+let currentThemeManager: ThemeManager;
 
 async function setMode(payload: ModeSetEventPayload) {
   currentThemeManager.disconnect();
   const newManager = getThemeManager(payload.mode);
   await newManager.initialize();
   await pluginSettings.set({ currentMode: payload.mode });
+  currentThemeManager = newManager;
 }
 
 const handleMessages = (message: PluginEvent<any>) => {

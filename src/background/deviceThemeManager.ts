@@ -67,7 +67,8 @@ export class DeviceThemeManager extends SingleThemeManager {
 
   async handleMessage(message: PluginEvent<any>): Promise<void> {
     if (message.type === PluginEventTypes.DEVICE_MATCH_SETTINGS_CHANGED) {
-      const newSettings: DeviceMatchSettingsChangedEventPayload = message.payload;
+      const newSettings: DeviceMatchSettingsChangedEventPayload =
+        message.payload;
       const darkThemeId = newSettings.dark.themeId;
       const darkContentType = newSettings.dark.content;
       this.darkThemeStuff = {
@@ -96,17 +97,19 @@ export class DeviceThemeManager extends SingleThemeManager {
     return window.matchMedia(mediaQuery).matches;
   }
 
+  private mediaChangeListener = this.handleMediaChange.bind(this);
+  
   connect() {
     super.connect();
     window
       .matchMedia(mediaQuery)
-      .addEventListener("change", this.handleMediaChange.bind(this));
+      .addEventListener("change", this.mediaChangeListener);
   }
 
   disconnect() {
     super.disconnect();
     window
       .matchMedia(mediaQuery)
-      .removeEventListener("change", this.handleMediaChange.bind(this));
+      .removeEventListener("change", this.mediaChangeListener);
   }
 }

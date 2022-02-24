@@ -42,7 +42,9 @@ const Popup = () => {
               mode: thing!!.value,
             },
           };
-          browser.runtime.sendMessage(modeSetEvent);
+          browser.runtime.sendMessage(modeSetEvent).catch(e => {
+            console.warn('Unable to send mode set message', e);
+          });
         };
         return (
           <div

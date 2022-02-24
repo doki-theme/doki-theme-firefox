@@ -6,7 +6,7 @@ import {
   PluginEventTypes,
   TabAttachedEventPayload,
   ThemePools,
-  ThemeSetEventPayload
+  ThemeSetEventPayload,
 } from "../Events";
 import { chooseRandomTheme } from "../common/ThemeTools";
 import { pluginSettings } from "../Storage";
@@ -41,7 +41,8 @@ export class MixedThemeManager extends ThemeManager {
     if (message.type === PluginEventTypes.TAB_ATTACHED) {
       await this.tellTabToSetItsThemePls(message);
     } else if (message.type === PluginEventTypes.MIXED_MODE_SETTINGS_CHANGED) {
-      const settingChangedPayload: MixedModeSettingsChangedPayload = message.payload;
+      const settingChangedPayload: MixedModeSettingsChangedPayload =
+        message.payload;
       this.currentThemePool = settingChangedPayload.themePool;
     }
   }
@@ -58,19 +59,22 @@ export class MixedThemeManager extends ThemeManager {
       type: PluginEventTypes.THEME_SET,
       payload: {
         themeId: associatedTheme.themeId,
-        content: associatedTheme.activeContent
-      }
+        content: associatedTheme.activeContent,
+      },
     };
     try {
       await browser.tabs.sendMessage(tabId, themeSetEvent);
     } catch (e) {
-      console.warn(`Unable to tell tab ${tabId} it's theme ${associatedTheme.themeId}`, e);
+      console.warn(
+        `Unable to tell tab ${tabId} it's theme ${associatedTheme.themeId}`,
+        e
+      );
     }
   }
 
   private getAssociatedTheme(tabId: number): FireFoxDokiTheme {
     const rememberedTheme = this.tabToTheme[tabId];
-    if(!rememberedTheme) {
+    if (!rememberedTheme) {
       const newlyAssociatedTab = this.associateThemeWithTab(tabId); // todo: could infinitely recurse.....
       this.tellTabItsTheme(tabId);
       return newlyAssociatedTab;
@@ -112,20 +116,21 @@ export class MixedThemeManager extends ThemeManager {
     try {
       const { themePool } = await pluginSettings.getAll();
       this.currentThemePool = themePool;
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
+  private tabActivationListener = this.handleTabActivation.bind(this);
+  private tabRemovalListener = this.handleTabRemoval.bind(this);
   connect() {
     super.connect();
-    browser.tabs.onActivated.addListener(this.handleTabActivation.bind(this));
-    browser.tabs.onRemoved.addListener(this.handleTabRemoval.bind(this));
+    browser.tabs.onActivated.addListener(this.tabActivationListener);
+    browser.tabs.onRemoved.addListener(this.tabRemovalListener);
   }
 
   disconnect() {
     super.disconnect();
-    browser.tabs.onActivated.removeListener(this.handleTabActivation.bind(this));
-    browser.tabs.onRemoved.removeListener(this.handleTabRemoval.bind(this));
+    browser.tabs.onActivated.removeListener(this.tabActivationListener);
+    browser.tabs.onRemoved.removeListener(this.tabRemovalListener);
   }
 
   private isInCurrentPool(dokiTheme: DokiTheme): boolean {

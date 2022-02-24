@@ -11,7 +11,7 @@ export enum PluginEventTypes {
   DEVICE_MATCH_SETTINGS_CHANGED,
   CURRENT_THEME_UPDATED,
   CONTENT_SCRIPT_INJECTED,
-  REPLIED_WITH_CURRENT_THEME,
+  REPLIED_WITH_CURRENT_THEME, // todo: probably not needed, just send response, I guess
 }
 
 export interface PluginEvent<T> {

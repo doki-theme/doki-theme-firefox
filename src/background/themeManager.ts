@@ -68,11 +68,11 @@ export abstract class ThemeManager {
     this.connect();
   }
 
+  private _messageListener = this.handleContentScriptMessage.bind(this);
+  private _tabCreationListener = this.handleTabCreation.bind(this);
   connect() {
-    browser.runtime.onMessage.addListener(
-      this.handleContentScriptMessage.bind(this)
-    );
-    browser.tabs.onCreated.addListener(this.handleTabCreation.bind(this));
+    browser.runtime.onMessage.addListener(this._messageListener);
+    browser.tabs.onCreated.addListener(this._tabCreationListener);
   }
 
   async handleContentScriptMessage(event: PluginEvent<any>) {
@@ -87,7 +87,7 @@ export abstract class ThemeManager {
   }
 
   disconnect() {
-    browser.runtime.onMessage.removeListener(this.handleContentScriptMessage);
-    browser.tabs.onCreated.removeListener(this.handleTabCreation.bind(this));
+    browser.runtime.onMessage.removeListener(this._messageListener);
+    browser.tabs.onCreated.removeListener(this._tabCreationListener);
   }
 }
