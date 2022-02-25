@@ -26,6 +26,7 @@ export interface PluginLocalStorage extends Options {
   injectScrollbars: boolean;
 }
 
+// todo: figure out why this blows up without an ID in manifest.
 export const pluginSettings = new OptionsSync<PluginLocalStorage>({
   defaults: {
     currentMode: PluginMode.SINGLE,

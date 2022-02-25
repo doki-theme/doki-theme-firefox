@@ -49,6 +49,11 @@ export class DeviceThemeManager extends SingleThemeManager {
     this.dispatchNewThemeSet();
   }
 
+
+  async getCurrentThemeId(): Promise<string> {
+    return this.getCurrentThemeAndContentType().themeId!!
+  }
+
   private dispatchNewThemeSet() {
     const { themeId, content } = this.getCurrentThemeAndContentType();
     const themeSetMessage: PluginEvent<ThemeSetEventPayload> = {

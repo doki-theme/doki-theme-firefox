@@ -19,20 +19,20 @@ export type ThemeStuff = {
 };
 
 export class SingleThemeManager extends ThemeManager {
+
+  async getCurrentThemeId(): Promise<string> {
+    const currentTheme = this.currentTheme;
+    if(!!currentTheme) {
+      return currentTheme.themeId;
+    } else {
+      return pluginSettings.getAll().then((settings) => settings.currentTheme);
+    }
+  }
   async initialize(): Promise<void> {
     await super.initialize();
     const { currentContentType, currentTheme } = await pluginSettings.getAll();
     this.currentContentType = currentContentType;
     this.currentTheme = DokiThemes[currentTheme] || DEFAULT_DOKI_THEME
-  }
-
-  async initializeTheme(): Promise<void> {
-    try {
-      const { themeId } = this.getCurrentThemeAndContentType();
-      await this.setTheme(DokiThemes[themeId!!] || DEFAULT_DOKI_THEME);
-    } catch (e) {
-      console.error("unable to initialize theme", e);
-    }
   }
 
   protected getCurrentThemeAndContentType(): ThemeStuff {
@@ -77,8 +77,8 @@ export class SingleThemeManager extends ThemeManager {
   private currentTheme: DokiTheme | undefined;
   private currentContentType: ContentType | undefined;
 
-  async setTheme(dokiTheme: DokiTheme) {
-    await super.setTheme(dokiTheme);
+  async applyBrowserTheme(dokiTheme: DokiTheme) {
+    await super.applyBrowserTheme(dokiTheme);
     this.currentTheme = dokiTheme;
   }
 

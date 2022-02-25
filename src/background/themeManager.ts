@@ -11,10 +11,12 @@ import {
 export abstract class ThemeManager {
   abstract handleMessage(message: any): Promise<void>;
 
+  abstract getCurrentThemeId(): Promise<string>
+
   async initializeTheme(): Promise<void> {
     try {
-      const { currentTheme } = await pluginSettings.getAll();
-      await this.setTheme(DokiThemes[currentTheme] || DEFAULT_DOKI_THEME);
+      const currentTheme = await this.getCurrentThemeId()
+      await this.applyBrowserTheme(DokiThemes[currentTheme] || DEFAULT_DOKI_THEME);
     } catch (e) {
       console.error("unable to initialize theme", e);
     }
@@ -43,17 +45,16 @@ export abstract class ThemeManager {
   }
 
   async initializeFirefox() {
-    await this.initialize();
-    await this.initializeTheme();
-    await this.tellAllTabsTheirNewTheme();
+    await this.assumeCommand();
   }
 
   async assumeCommand() {
     await this.initialize();
+    await this.initializeTheme()
     await this.tellAllTabsTheirNewTheme();
   }
 
-  async setTheme(dokiTheme: DokiTheme) {
+  async applyBrowserTheme(dokiTheme: DokiTheme) {
     themeExtensionIconInToolBar(dokiTheme);
     browser.theme.update(dokiTheme.browserTheme);
     await pluginSettings.set({ currentTheme: dokiTheme.themeId });
@@ -107,7 +108,7 @@ export abstract class ThemeManager {
   async handleContentScriptMessage(event: PluginEvent<any>) {
     if (event.type === PluginEventTypes.THEME_SET) {
       const payload = event.payload as ThemeSetEventPayload;
-      await this.setTheme(DokiThemes[payload.themeId]);
+      await this.applyBrowserTheme(DokiThemes[payload.themeId]);
     } else if (event.type === PluginEventTypes.CONTENT_SCRIPT_INJECTED) {
       const { currentTheme } = await pluginSettings.getAll();
       await this.dispatchCurrentThemeSet(DokiThemes[currentTheme]);

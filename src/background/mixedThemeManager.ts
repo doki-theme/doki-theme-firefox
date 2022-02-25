@@ -1,5 +1,5 @@
-import {ThemeManager} from "./themeManager";
-import {FireFoxDokiTheme} from "../themes/DokiThemeProvider";
+import { ThemeManager } from "./themeManager";
+import { FireFoxDokiTheme } from "../themes/DokiThemeProvider";
 import {
   MixedModeSettingsChangedPayload,
   PluginEvent,
@@ -8,13 +8,12 @@ import {
   ThemePools,
   ThemeSetEventPayload,
 } from "../Events";
-import {chooseRandomTheme} from "../common/ThemeTools";
-import {pluginSettings} from "../Storage";
-import {DokiTheme} from "../themes/DokiTheme";
-import {DeviceThemeManager} from "./deviceThemeManager";
-import {CollectAndDebounce} from "./collectAndDebounce";
+import { chooseRandomTheme } from "../common/ThemeTools";
+import { pluginSettings } from "../Storage";
+import { DokiTheme } from "../themes/DokiTheme";
+import { DeviceThemeManager } from "./deviceThemeManager";
+import { CollectAndDebounce } from "./collectAndDebounce";
 
-// todo: apply new current theme to tab on switch
 export class MixedThemeManager extends ThemeManager {
   private tabToTheme: { [tabId: string]: FireFoxDokiTheme } = {};
 
@@ -56,19 +55,19 @@ export class MixedThemeManager extends ThemeManager {
   private getAssociatedTheme(tabId: number): FireFoxDokiTheme {
     const rememberedTheme = this.tabToTheme[tabId];
     if (!rememberedTheme) {
-      const newlyAssociatedTab = this.associateThemeWithTab(tabId); // todo: could infinitely recurse because this is called on an event.....
+      const newlyAssociatedTheme = this.createAndAssociateThemeWithTab(tabId); // todo: could infinitely recurse because this is called on an event.....
       this.tellTabItsTheme(tabId);
-      return newlyAssociatedTab;
+      return newlyAssociatedTheme;
     } else {
       return rememberedTheme;
     }
   }
 
   async handleTabCreation({ id }: any): Promise<void> {
-    this.associateThemeWithTab(id);
+    this.createAndAssociateThemeWithTab(id);
   }
 
-  private associateThemeWithTab(tabId: number): FireFoxDokiTheme {
+  private createAndAssociateThemeWithTab(tabId: number): FireFoxDokiTheme {
     const { dokiTheme, contentType } = chooseRandomTheme(
       this.isInCurrentPool.bind(this)
     );
@@ -79,7 +78,7 @@ export class MixedThemeManager extends ThemeManager {
   private debouncedSetTheme = CollectAndDebounce((tabIds: number[]) => {
     const lastActiveTab = tabIds[tabIds.length - 1];
     const dokiTheme = this.getAssociatedTheme(lastActiveTab);
-    this.setTheme(dokiTheme);
+    this.applyBrowserTheme(dokiTheme);
   }, 100);
 
   async handleTabActivation({ tabId }: any): Promise<void> {
@@ -98,13 +97,14 @@ export class MixedThemeManager extends ThemeManager {
       const { themePool } = await pluginSettings.getAll();
       this.currentThemePool = themePool;
     } catch (e) {
-      console.warn('Unable to initialize mixed theme settings', e)
+      console.warn("Unable to initialize mixed theme settings", e);
     }
   }
 
   private _tabCreationListener = this.handleTabCreation.bind(this);
   private tabActivationListener = this.handleTabActivation.bind(this);
   private tabRemovalListener = this.handleTabRemoval.bind(this);
+
   connect() {
     super.connect();
     browser.tabs.onActivated.addListener(this.tabActivationListener);
@@ -134,10 +134,20 @@ export class MixedThemeManager extends ThemeManager {
   }
 
   getThemeForTab(tabId: number): ThemeSetEventPayload {
-    const theme = this.associateThemeWithTab(tabId);
+    const theme = this.getAssociatedTheme(tabId);
     return {
       themeId: theme.dokiTheme.themeId,
-      content: theme.activeContent
+      content: theme.activeContent,
     };
+  }
+
+  async getCurrentThemeId(): Promise<string> {
+    const [currentTab] = await browser.tabs.query({
+      currentWindow: true,
+      active: true,
+    });
+    const tabId = currentTab?.id || -69420;
+    const currentTheme = await this.getAssociatedTheme(tabId);
+    return currentTheme.dokiTheme.themeId;
   }
 }
