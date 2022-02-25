@@ -35,10 +35,6 @@ export class SingleThemeManager extends ThemeManager {
     }
   }
 
-  async handleTabCreation({ tabId }: any): Promise<void> {
-    // todo: no-op
-  }
-
   protected getCurrentThemeAndContentType(): ThemeStuff {
     return {
       themeId: this.currentTheme?.themeId,

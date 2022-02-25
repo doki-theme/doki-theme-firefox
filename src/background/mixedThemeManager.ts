@@ -75,7 +75,7 @@ export class MixedThemeManager extends ThemeManager {
   private getAssociatedTheme(tabId: number): FireFoxDokiTheme {
     const rememberedTheme = this.tabToTheme[tabId];
     if (!rememberedTheme) {
-      const newlyAssociatedTab = this.associateThemeWithTab(tabId); // todo: could infinitely recurse.....
+      const newlyAssociatedTab = this.associateThemeWithTab(tabId); // todo: could infinitely recurse because this is called on an event.....
       this.tellTabItsTheme(tabId);
       return newlyAssociatedTab;
     } else {
@@ -116,21 +116,26 @@ export class MixedThemeManager extends ThemeManager {
     try {
       const { themePool } = await pluginSettings.getAll();
       this.currentThemePool = themePool;
-    } catch (e) {}
+    } catch (e) {
+      console.warn('Unable to initialize mixed theme settings', e)
+    }
   }
 
+  private _tabCreationListener = this.handleTabCreation.bind(this);
   private tabActivationListener = this.handleTabActivation.bind(this);
   private tabRemovalListener = this.handleTabRemoval.bind(this);
   connect() {
     super.connect();
     browser.tabs.onActivated.addListener(this.tabActivationListener);
     browser.tabs.onRemoved.addListener(this.tabRemovalListener);
+    browser.tabs.onCreated.addListener(this._tabCreationListener);
   }
 
   disconnect() {
     super.disconnect();
     browser.tabs.onActivated.removeListener(this.tabActivationListener);
     browser.tabs.onRemoved.removeListener(this.tabRemovalListener);
+    browser.tabs.onCreated.removeListener(this._tabCreationListener);
   }
 
   private isInCurrentPool(dokiTheme: DokiTheme): boolean {

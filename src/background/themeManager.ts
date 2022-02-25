@@ -11,8 +11,6 @@ import {
 export abstract class ThemeManager {
   abstract handleMessage(message: any): Promise<void>;
 
-  abstract handleTabCreation(message: any): Promise<void>;
-
   async initializeTheme(): Promise<void> {
     try {
       const { currentTheme } = await pluginSettings.getAll();
@@ -96,10 +94,9 @@ export abstract class ThemeManager {
   }
 
   private _messageListener = this.handleContentScriptMessage.bind(this);
-  private _tabCreationListener = this.handleTabCreation.bind(this);
+
   connect() {
     browser.runtime.onMessage.addListener(this._messageListener);
-    browser.tabs.onCreated.addListener(this._tabCreationListener);
   }
 
   async handleContentScriptMessage(event: PluginEvent<any>) {
@@ -115,6 +112,5 @@ export abstract class ThemeManager {
 
   disconnect() {
     browser.runtime.onMessage.removeListener(this._messageListener);
-    browser.tabs.onCreated.removeListener(this._tabCreationListener);
   }
 }
