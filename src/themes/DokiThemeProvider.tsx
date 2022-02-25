@@ -2,6 +2,7 @@ import React, { FC, useEffect, useMemo, useState } from "react";
 import { ContentType, DEFAULT_DOKI_THEME, DEFAULT_DARK_THEME_ID, DokiTheme, DokiThemes } from "./DokiTheme";
 import { pluginSettings } from "../Storage";
 import { CurrentThemeSetEventPayload, PluginEvent, PluginEventTypes, ThemeSetEventPayload } from "../Events";
+import {Sticker} from "doki-build-source";
 
 export class FireFoxDokiTheme extends DokiTheme {
 
@@ -12,7 +13,7 @@ export class FireFoxDokiTheme extends DokiTheme {
     super(dokiTheme.dokiDefinition);
   }
 
-  public get content(): any { // todo: typed
+  public get content(): Sticker {
     return this.activeContent === ContentType.SECONDARY ?
       this.secondaryContent : this.defaultContent;
   }

@@ -1,5 +1,6 @@
 import ThemeType = browser._manifest.ThemeType;
 import DokiThemeDefinitions from "../DokiThemeDefinitions";
+import {MasterDokiThemeDefinition, Sticker} from "doki-build-source";
 
 export interface Colors {
   caretRow: string;
@@ -64,7 +65,7 @@ export interface Colors {
 }
 
 export interface DokiThemeDefinition {
-  information: any; // todo: not any
+  information: Omit<MasterDokiThemeDefinition, "colors" | "overrides" | "ui" | 'icons'>;
   fireFoxTheme: any;
   colors: Colors;
 }
@@ -84,11 +85,11 @@ export class CharacterTheme {
   public get name(): string {
     return this.dokiDefinitions
       .map((def) => def.information.conflictName || def.information.displayName)
-      .find(Boolean);
+      .find(Boolean)!!;
   }
 
-  public get hasSecondaryContent(): string {
-    return this.dokiDefinitions
+  public get hasSecondaryContent(): boolean {
+    return !!this.dokiDefinitions
       .map((def) => def.information.stickers.secondary)
       .find(Boolean);
   }
@@ -143,11 +144,11 @@ export class DokiTheme {
     return !!this.dokiDefinition.information.stickers.secondary;
   }
 
-  protected get defaultContent(): any { // todo: typed
+  protected get defaultContent(): Sticker {
     return this.dokiDefinition.information.stickers.default;
   }
 
-  protected get secondaryContent(): any { // todo: typed
+  protected get secondaryContent(): Sticker {
     return this.dokiDefinition.information.stickers.secondary ||
       this.defaultContent;
   }
