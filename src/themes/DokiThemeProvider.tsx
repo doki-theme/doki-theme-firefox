@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useMemo, useState } from "react";
 import { ContentType, DEFAULT_DOKI_THEME, DEFAULT_DARK_THEME_ID, DokiTheme, DokiThemes } from "./DokiTheme";
 import { pluginSettings } from "../Storage";
-import { PluginEvent, PluginEventTypes, ThemeSetEventPayload } from "../Events";
+import { CurrentThemeSetEventPayload, PluginEvent, PluginEventTypes, ThemeSetEventPayload } from "../Events";
 
 export class FireFoxDokiTheme extends DokiTheme {
 
@@ -61,6 +61,17 @@ const DokiThemeProvider: FC = ({ children }) => {
         setThemeId(currentTheme);
       }
       setInitialized(true);
+
+      const themeSetListener = (message: PluginEvent<any>) => {
+        if (message.type === PluginEventTypes.CURRENT_THEME_UPDATED) {
+          const payload: CurrentThemeSetEventPayload = message.payload;
+          setThemeId(payload.themeDefinition.information.id);
+        }
+      };
+      browser.runtime.onMessage.addListener(themeSetListener);
+      return () => {
+        browser.runtime.onMessage.removeListener(themeSetListener);
+      };
     });
   }, []);
 

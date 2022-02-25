@@ -64,6 +64,11 @@ export abstract class ThemeManager {
         themeDefinition: dokiTheme.dokiDefinition,
       },
     };
+    try {
+      await browser.runtime.sendMessage(currentThemeSetEvent);
+    } catch (e) {
+      console.warn('Unable to send current theme set message', e);
+    }
     const tabs = await browser.tabs.query({});
     try {
       await Promise.all(
