@@ -1,5 +1,5 @@
-import { ThemeManager } from "./themeManager";
-import { FireFoxDokiTheme } from "../themes/DokiThemeProvider";
+import {ThemeManager} from "./themeManager";
+import {FireFoxDokiTheme} from "../themes/DokiThemeProvider";
 import {
   MixedModeSettingsChangedPayload,
   PluginEvent,
@@ -8,32 +8,13 @@ import {
   ThemePools,
   ThemeSetEventPayload,
 } from "../Events";
-import { chooseRandomTheme } from "../common/ThemeTools";
-import { pluginSettings } from "../Storage";
-import { DokiTheme } from "../themes/DokiTheme";
-import { DeviceThemeManager } from "./deviceThemeManager";
+import {chooseRandomTheme} from "../common/ThemeTools";
+import {pluginSettings} from "../Storage";
+import {DokiTheme} from "../themes/DokiTheme";
+import {DeviceThemeManager} from "./deviceThemeManager";
+import {CollectAndDebounce} from "./collectAndDebounce";
 
-export const CollectAndDebounce = <T>(
-  toDebounce: (t: T[]) => void,
-  interval: number
-): ((t: T) => void) => {
-  let lastTimeout: NodeJS.Timeout | undefined = undefined;
-  let collection: T[] = [];
-  return (t: T) => {
-    if (lastTimeout) {
-      clearTimeout(lastTimeout);
-    }
-
-    collection.push(t);
-
-    lastTimeout = setTimeout(() => {
-      lastTimeout = undefined;
-      toDebounce(collection);
-      collection = [];
-    }, interval);
-  };
-};
-
+// todo: apply new current theme to tab on switch
 export class MixedThemeManager extends ThemeManager {
   private tabToTheme: { [tabId: string]: FireFoxDokiTheme } = {};
 

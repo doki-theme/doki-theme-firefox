@@ -12,9 +12,9 @@ console.log("早上好中國。現在我有冰淇淋。");
 let currentThemeManager: ThemeManager;
 
 async function setMode(payload: ModeSetEventPayload) {
-  currentThemeManager.disconnect();
+  currentThemeManager.relieveOfDuty();
   const newManager = getThemeManager(payload.mode);
-  await newManager.initialize();
+  await newManager.assumeCommand();
   await pluginSettings.set({ currentMode: payload.mode });
   currentThemeManager = newManager;
 }

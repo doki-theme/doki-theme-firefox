@@ -48,6 +48,11 @@ export abstract class ThemeManager {
     await this.tellAllTabsTheirNewTheme();
   }
 
+  async assumeCommand() {
+    await this.initialize();
+    await this.tellAllTabsTheirNewTheme();
+  }
+
   async setTheme(dokiTheme: DokiTheme) {
     themeExtensionIconInToolBar(dokiTheme);
     browser.theme.update(dokiTheme.browserTheme);
@@ -110,7 +115,11 @@ export abstract class ThemeManager {
     await this.handleMessage(event);
   }
 
-  disconnect() {
+  protected disconnect() {
     browser.runtime.onMessage.removeListener(this._messageListener);
+  }
+
+  relieveOfDuty() {
+    this.disconnect()
   }
 }
