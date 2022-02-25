@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
+  BrowserSettingsGrantedPayload,
   DeviceMatchSettingsChangedEventPayload,
   PluginEvent,
   PluginEventTypes,
-  ThemePools,
 } from "../../Events";
-import { Field, Formik } from "formik";
+import { Formik } from "formik";
 import { createCharacterThemes } from "./Characters";
 import DokiThemeDefinitions from "../../DokiThemeDefinitions";
 import {
@@ -15,9 +15,9 @@ import {
   DokiThemeDefinition,
 } from "../../themes/DokiTheme";
 import DokiThemeComponent, { CharacterOption } from "./DokiThemeComponent";
-import OptionalPermission = browser._manifest.OptionalPermission;
 import { pluginSettings } from "../../Storage";
 import DokiButton from "../../common/DokiButton";
+import OptionalPermission = browser._manifest.OptionalPermission;
 
 type ThemeOption = {
   character: CharacterTheme;
@@ -149,9 +149,16 @@ const DeviceMatchSettings = () => {
   }
 
   const grantPermission = () => {
-    browser.permissions
-      .request(browserSettingsPermissions)
-      .then((granted) => setHasSettingsPermissions(granted));
+    browser.permissions.request(browserSettingsPermissions).then((granted) => {
+      setHasSettingsPermissions(granted);
+      if (granted) {
+        const event: PluginEvent<BrowserSettingsGrantedPayload> = {
+          payload: {},
+          type: PluginEventTypes.BROWSER_SETTINGS_GRANTED,
+        };
+        browser.runtime.sendMessage(event);
+      }
+    });
   };
 
   if (initialized && !hasSettingsPermission) {
@@ -160,7 +167,7 @@ const DeviceMatchSettings = () => {
         <p>
           The Doki Theme needs your permission to <br />
           modify your browser settings to <br />
-          match the "System" setting, for this feature to work.
+          match the "System" setting for this feature to work.
         </p>
         <button onClick={grantPermission}>Allow Access</button>
       </div>

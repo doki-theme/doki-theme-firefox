@@ -21,8 +21,9 @@ export type ThemeStuff = {
 export class SingleThemeManager extends ThemeManager {
   async initialize(): Promise<void> {
     await super.initialize();
-    const { currentContentType } = await pluginSettings.getAll();
+    const { currentContentType, currentTheme } = await pluginSettings.getAll();
     this.currentContentType = currentContentType;
+    this.currentTheme = DokiThemes[currentTheme] || DEFAULT_DOKI_THEME
   }
 
   async initializeTheme(): Promise<void> {

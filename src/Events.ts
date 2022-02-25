@@ -11,6 +11,7 @@ export enum PluginEventTypes {
   DEVICE_MATCH_SETTINGS_CHANGED,
   CURRENT_THEME_UPDATED,
   CONTENT_SCRIPT_INJECTED,
+  BROWSER_SETTINGS_GRANTED,
 }
 
 export interface PluginEvent<T> {
@@ -51,6 +52,9 @@ export interface MixedModeSettingsChangedPayload {
 }
 
 export interface ContentScriptInjectedPayload {
+}
+
+export interface BrowserSettingsGrantedPayload {
 }
 
 export interface DeviceMatchSettingsChangedEventPayload {

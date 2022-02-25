@@ -31,6 +31,10 @@ export class DeviceThemeManager extends SingleThemeManager {
       content: lightContentType,
       themeId: lightThemeId,
     };
+    DeviceThemeManager.attemptToModifyBrowserSettings();
+  }
+
+  private static attemptToModifyBrowserSettings() {
     try {
       // @ts-ignore
       browser.browserSettings.overrideContentColorScheme.set({
@@ -67,30 +71,35 @@ export class DeviceThemeManager extends SingleThemeManager {
 
   async handleMessage(message: PluginEvent<any>): Promise<void> {
     if (message.type === PluginEventTypes.DEVICE_MATCH_SETTINGS_CHANGED) {
-      const newSettings: DeviceMatchSettingsChangedEventPayload =
-        message.payload;
-      const darkThemeId = newSettings.dark.themeId;
-      const darkContentType = newSettings.dark.content;
-      this.darkThemeStuff = {
-        themeId: darkThemeId,
-        content: darkContentType,
-      };
-      const lightThemeId = newSettings.light.themeId;
-      const lightContentType = newSettings.light.content;
-      this.lightThemeStuff = {
-        themeId: lightThemeId,
-        content: lightContentType,
-      };
-      await pluginSettings.set({
-        darkThemeId,
-        darkContentType,
-        lightThemeId,
-        lightContentType,
-      });
-      this.dispatchNewThemeSet();
+      await this.consumeNewSettings(message);
+    } else if (message.type === PluginEventTypes.BROWSER_SETTINGS_GRANTED) {
+      DeviceThemeManager.attemptToModifyBrowserSettings();
     } else {
       await super.handleMessage(message);
     }
+  }
+
+  private async consumeNewSettings(message: PluginEvent<any>) {
+    const newSettings: DeviceMatchSettingsChangedEventPayload = message.payload;
+    const darkThemeId = newSettings.dark.themeId;
+    const darkContentType = newSettings.dark.content;
+    this.darkThemeStuff = {
+      themeId: darkThemeId,
+      content: darkContentType,
+    };
+    const lightThemeId = newSettings.light.themeId;
+    const lightContentType = newSettings.light.content;
+    this.lightThemeStuff = {
+      themeId: lightThemeId,
+      content: lightContentType,
+    };
+    await pluginSettings.set({
+      darkThemeId,
+      darkContentType,
+      lightThemeId,
+      lightContentType,
+    });
+    this.dispatchNewThemeSet();
   }
 
   public static isDark() {
@@ -98,7 +107,7 @@ export class DeviceThemeManager extends SingleThemeManager {
   }
 
   private mediaChangeListener = this.handleMediaChange.bind(this);
-  
+
   connect() {
     super.connect();
     window
