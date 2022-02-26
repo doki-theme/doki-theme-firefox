@@ -27,6 +27,7 @@ export interface PluginLocalStorage extends Options {
   themePool: ThemePools;
   injectSelection: boolean;
   injectScrollbars: boolean;
+  hasMigrated: boolean;
 }
 
 class LocalOptions<T extends Options> {
@@ -53,7 +54,6 @@ class LocalOptions<T extends Options> {
   }
 }
 
-// todo: legacy migration....
 export const pluginSettings = new LocalOptions<PluginLocalStorage>({
   defaults: {
     currentMode: PluginMode.SINGLE,
@@ -67,5 +67,6 @@ export const pluginSettings = new LocalOptions<PluginLocalStorage>({
     themePool: ThemePools.DEFAULT,
     injectSelection: false,
     injectScrollbars: false,
+    hasMigrated: false,
   },
 });

@@ -6,6 +6,7 @@ import {
 import { ModeSetEventPayload, PluginEvent, PluginEventTypes } from "../Events";
 import { pluginSettings } from "../Storage";
 import { StyleInjectionManager } from "./StyleInjectionManager";
+import { migrateLegacyPreferencesIfNecessary } from "./LegacyMigration";
 
 let currentThemeManager: ThemeManager;
 
@@ -26,6 +27,7 @@ const handleMessages = (message: PluginEvent<any>) => {
 const stylInjectionManager = new StyleInjectionManager();
 
 const initializePlugin = async () => {
+  await migrateLegacyPreferencesIfNecessary();
   currentThemeManager = await getCurrentThemeManager();
   await currentThemeManager.initializeFirefox();
   browser.runtime.onMessage.addListener(handleMessages);

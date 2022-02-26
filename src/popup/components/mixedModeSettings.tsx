@@ -56,6 +56,7 @@ const MixedModeSettings = () => {
                 }}
               >
                 <label>
+                  {/*todo: themed radio buttons*/}
                   <Field
                     type="radio"
                     name="themePool"
