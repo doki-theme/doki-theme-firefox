@@ -7,8 +7,6 @@ import { ModeSetEventPayload, PluginEvent, PluginEventTypes } from "../Events";
 import { pluginSettings } from "../Storage";
 import { StyleInjectionManager } from "./StyleInjectionManager";
 
-console.log("早上好中國。現在我有冰淇淋。");
-
 let currentThemeManager: ThemeManager;
 
 async function setMode(payload: ModeSetEventPayload) {

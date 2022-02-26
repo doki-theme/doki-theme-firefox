@@ -1,10 +1,13 @@
-import OptionsSync, { Options } from "webext-options-sync";
 import {
   ContentType,
   DEFAULT_DARK_THEME_ID,
   DEFAULT_LIGHT_THEME_ID,
 } from "./themes/DokiTheme";
 import { ThemePools } from "./Events";
+
+export interface Options {
+  [key: string]: string | number | boolean;
+}
 
 export enum PluginMode {
   SINGLE = "single",
@@ -26,8 +29,32 @@ export interface PluginLocalStorage extends Options {
   injectScrollbars: boolean;
 }
 
-// todo: figure out why this blows up without an ID in manifest.
-export const pluginSettings = new OptionsSync<PluginLocalStorage>({
+class LocalOptions<T extends Options> {
+  constructor(protected readonly options: { defaults: T }) {}
+
+  async getAll(): Promise<T> {
+    const captainKeyes = Object.keys(this.options.defaults);
+    const storedOptions = await browser.storage.local.get(captainKeyes);
+
+    const fromEntries = Object.fromEntries(
+      captainKeyes.map((key) => {
+        const option = storedOptions[key];
+        return [
+          key,
+          option === undefined ? this.options.defaults[key] : option,
+        ];
+      })
+    );
+    return fromEntries as T;
+  }
+
+  async set(newOption: Partial<T>): Promise<void> {
+    await browser.storage.local.set(newOption);
+  }
+}
+
+// todo: legacy migration....
+export const pluginSettings = new LocalOptions<PluginLocalStorage>({
   defaults: {
     currentMode: PluginMode.SINGLE,
     currentTheme: DEFAULT_DARK_THEME_ID,
