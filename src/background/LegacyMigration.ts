@@ -36,7 +36,10 @@ export async function migrateLegacyPreferencesIfNecessary(): Promise<void> {
       hasMigrated: true,
     };
 
-    if (mode === PluginMode.SINGLE && !!legacyOptions.currentThemeId) {
+    if (
+      (mode === PluginMode.SINGLE || mode === PluginMode.DEVICE_MATCH) &&
+      !!legacyOptions.currentThemeId
+    ) {
       migratedOptions.currentTheme = legacyOptions.currentThemeId;
     }
 
