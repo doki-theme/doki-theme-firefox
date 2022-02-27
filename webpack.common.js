@@ -4,11 +4,17 @@ const srcDir = "./src/";
 
 module.exports = {
   entry: {
-    popup: path.join(__dirname, srcDir + '/popup/popup.tsx'),
+    popup: path.join(__dirname, srcDir + "/popup/popup.tsx"),
     background: path.join(__dirname, srcDir + "/background/background.ts"),
     tab: path.join(__dirname, srcDir + "/tab/tab.tsx"),
-    selectionStyleInjection: path.join(__dirname, srcDir + "/styleInjection/selectionStyleInjection.ts"),
-    scrollbarStyleInjection: path.join(__dirname, srcDir + "/styleInjection/scrollbarStyleInjection.ts"),
+    selectionStyleInjection: path.join(
+      __dirname,
+      srcDir + "/styleInjection/selectionStyleInjection.ts"
+    ),
+    scrollbarStyleInjection: path.join(
+      __dirname,
+      srcDir + "/styleInjection/scrollbarStyleInjection.ts"
+    ),
   },
   output: {
     path: path.join(__dirname, "./dist/js"),
@@ -29,10 +35,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader'
-        ],
+        use: ["style-loader", "css-loader"],
       },
     ],
   },

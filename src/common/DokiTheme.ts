@@ -1,6 +1,6 @@
 import ThemeType = browser._manifest.ThemeType;
 import DokiThemeDefinitions from "../DokiThemeDefinitions";
-import {MasterDokiThemeDefinition, Sticker} from "doki-build-source";
+import { MasterDokiThemeDefinition, Sticker } from "doki-build-source";
 
 export interface Colors {
   caretRow: string;
@@ -65,7 +65,10 @@ export interface Colors {
 }
 
 export interface DokiThemeDefinition {
-  information: Omit<MasterDokiThemeDefinition, "colors" | "overrides" | "ui" | 'icons'>;
+  information: Omit<
+    MasterDokiThemeDefinition,
+    "colors" | "overrides" | "ui" | "icons"
+  >;
   fireFoxTheme: any;
   colors: Colors;
 }
@@ -85,7 +88,7 @@ export class CharacterTheme {
   public get name(): string {
     return this.dokiDefinitions
       .map((def) => def.information.conflictName || def.information.displayName)
-      .find(Boolean)!!;
+      .find(Boolean)!;
   }
 
   public get hasSecondaryContent(): boolean {
@@ -113,8 +116,7 @@ export class DokiTheme {
     return other instanceof DokiTheme && other.themeId === this.themeId;
   }
 
-  constructor(readonly dokiDefinition: DokiThemeDefinition) {
-  }
+  constructor(readonly dokiDefinition: DokiThemeDefinition) {}
 
   public get themeId(): string {
     return this.dokiDefinition.information.id;
@@ -149,15 +151,19 @@ export class DokiTheme {
   }
 
   protected get secondaryContent(): Sticker {
-    return this.dokiDefinition.information.stickers.secondary ||
-      this.defaultContent;
+    return (
+      this.dokiDefinition.information.stickers.secondary || this.defaultContent
+    );
   }
 }
 
-export const DEFAULT_DOKI_THEME = new DokiTheme(DokiThemeDefinitions[DEFAULT_DARK_THEME_ID]);
+export const DEFAULT_DOKI_THEME = new DokiTheme(
+  DokiThemeDefinitions[DEFAULT_DARK_THEME_ID]
+);
 
-export const DokiThemes =
-  Object.fromEntries(
-    Object.entries(DokiThemeDefinitions)
-      .map(([key, value]) => ([key, new DokiTheme(value)]))
-  );
+export const DokiThemes = Object.fromEntries(
+  Object.entries(DokiThemeDefinitions).map(([key, value]) => [
+    key,
+    new DokiTheme(value),
+  ])
+);

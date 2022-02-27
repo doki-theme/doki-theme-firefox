@@ -36,7 +36,7 @@ function getThemeSelector(
             label: createThemeVariantName(values[prefix].selectedTheme),
           }}
           onChange={(selectedCharacter) =>
-            setFieldValue(`${prefix}.selectedTheme`, selectedCharacter!!.value)
+            setFieldValue(`${prefix}.selectedTheme`, selectedCharacter!.value)
           }
         />
       </label>
@@ -75,7 +75,7 @@ const DokiThemeComponent: FC<Props> = ({
                 value: values[prefix].character,
               }}
               onChange={(selectedCharacter) => {
-                const characterValue = selectedCharacter!!.value;
+                const characterValue = selectedCharacter!.value;
                 setFieldValue(
                   `${prefix}.selectedTheme`,
                   characterValue.themes[0]

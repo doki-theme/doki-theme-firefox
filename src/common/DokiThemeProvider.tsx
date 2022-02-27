@@ -1,11 +1,21 @@
 import React, { FC, useEffect, useMemo, useState } from "react";
-import { ContentType, DEFAULT_DOKI_THEME, DEFAULT_DARK_THEME_ID, DokiTheme, DokiThemes } from "./DokiTheme";
+import {
+  ContentType,
+  DEFAULT_DOKI_THEME,
+  DEFAULT_DARK_THEME_ID,
+  DokiTheme,
+  DokiThemes,
+} from "./DokiTheme";
 import { pluginSettings } from "../Storage";
-import { CurrentThemeSetEventPayload, PluginEvent, PluginEventTypes, ThemeSetEventPayload } from "../Events";
-import {Sticker} from "doki-build-source";
+import {
+  CurrentThemeSetEventPayload,
+  PluginEvent,
+  PluginEventTypes,
+  ThemeSetEventPayload,
+} from "../Events";
+import { Sticker } from "doki-build-source";
 
 export class FireFoxDokiTheme extends DokiTheme {
-
   constructor(
     readonly dokiTheme: DokiTheme,
     readonly activeContent: ContentType
@@ -14,8 +24,9 @@ export class FireFoxDokiTheme extends DokiTheme {
   }
 
   public get content(): Sticker {
-    return this.activeContent === ContentType.SECONDARY ?
-      this.secondaryContent : this.defaultContent;
+    return this.activeContent === ContentType.SECONDARY
+      ? this.secondaryContent
+      : this.defaultContent;
   }
 }
 
@@ -32,14 +43,16 @@ export interface DokiThemeContext {
 
 export const ThemeContext = React.createContext<DokiThemeContext>({
   theme: new FireFoxDokiTheme(DEFAULT_DOKI_THEME, ContentType.PRIMARY),
-  setTheme: (context: ThemeContext) => {
-  },
-  isInitialized: false
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  setTheme: (context: ThemeContext) => {},
+  isInitialized: false,
 });
 
 const DokiThemeProvider: FC = ({ children }) => {
   const [themeId, setThemeId] = useState<string>(DEFAULT_DARK_THEME_ID);
-  const [currentContent, setCurrentContent] = useState<ContentType>(ContentType.PRIMARY);
+  const [currentContent, setCurrentContent] = useState<ContentType>(
+    ContentType.PRIMARY
+  );
   const [initialized, setInitialized] = useState<boolean>(false);
   const setTheme = (context: ThemeContext) => {
     const nextTheme = context.selectedTheme.themeId;
@@ -48,8 +61,8 @@ const DokiThemeProvider: FC = ({ children }) => {
       type: PluginEventTypes.THEME_SET,
       payload: {
         themeId: nextTheme,
-        content: context.contentType
-      }
+        content: context.contentType,
+      },
     };
     setCurrentContent(context.contentType);
     browser.runtime.sendMessage(themeSetEvent);
@@ -79,11 +92,8 @@ const DokiThemeProvider: FC = ({ children }) => {
   const themeContext = useMemo<DokiThemeContext>(
     () => ({
       setTheme,
-      theme: new FireFoxDokiTheme(
-        DokiThemes[themeId],
-        currentContent
-      ),
-      isInitialized: initialized
+      theme: new FireFoxDokiTheme(DokiThemes[themeId], currentContent),
+      isInitialized: initialized,
     }),
     [themeId, initialized, currentContent]
   );

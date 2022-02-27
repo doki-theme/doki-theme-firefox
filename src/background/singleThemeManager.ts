@@ -19,10 +19,9 @@ export type ThemeStuff = {
 };
 
 export class SingleThemeManager extends ThemeManager {
-
   async getCurrentThemeId(): Promise<string> {
     const currentTheme = this.currentTheme;
-    if(!!currentTheme) {
+    if (currentTheme) {
       return currentTheme.themeId;
     } else {
       return pluginSettings.getAll().then((settings) => settings.currentTheme);
@@ -32,7 +31,7 @@ export class SingleThemeManager extends ThemeManager {
     await super.initialize();
     const { currentContentType, currentTheme } = await pluginSettings.getAll();
     this.currentContentType = currentContentType;
-    this.currentTheme = DokiThemes[currentTheme] || DEFAULT_DOKI_THEME
+    this.currentTheme = DokiThemes[currentTheme] || DEFAULT_DOKI_THEME;
   }
 
   protected getCurrentThemeAndContentType(): ThemeStuff {
@@ -71,7 +70,7 @@ export class SingleThemeManager extends ThemeManager {
   ) {
     const messagePayload: ThemeSetEventPayload = message.payload;
     this.currentContentType = messagePayload.content;
-    await this.tellAllTabsTheirNewTheme()
+    await this.tellAllTabsTheirNewTheme();
   }
 
   private currentTheme: DokiTheme | undefined;
@@ -84,8 +83,8 @@ export class SingleThemeManager extends ThemeManager {
 
   getThemeForTab(tabId: number): ThemeSetEventPayload {
     return {
-      content: this.currentContentType!!,
-      themeId: this.currentTheme!!.themeId,
+      content: this.currentContentType!,
+      themeId: this.currentTheme!.themeId,
     };
   }
 }

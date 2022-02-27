@@ -1,11 +1,17 @@
 import { DokiTheme, DokiThemes } from "../common/DokiTheme";
 import { svgToPng } from "../background/svgTools";
-import { PluginEvent, PluginEventTypes, TabAttachedEventPayload, ThemeSetEventPayload } from "../Events";
+import {
+  PluginEvent,
+  PluginEventTypes,
+  TabAttachedEventPayload,
+  ThemeSetEventPayload,
+} from "../Events";
 
 export function setThemedFavicon(dokiTheme: DokiTheme) {
   const faviconOptions = { width: 32, height: 32 };
   svgToPng(dokiTheme, faviconOptions).then((imgData: any) => {
-    let link: HTMLLinkElement | null = document.querySelector("link[rel~='icon']");
+    let link: HTMLLinkElement | null =
+      document.querySelector("link[rel~='icon']");
     if (!link) {
       link = document.createElement("link");
       link.rel = "icon";
@@ -15,7 +21,6 @@ export function setThemedFavicon(dokiTheme: DokiTheme) {
   });
 }
 
-
 function themeFavicon(themeId: string) {
   const currentTheme = DokiThemes[themeId];
   if (currentTheme) {
@@ -24,22 +29,22 @@ function themeFavicon(themeId: string) {
 }
 
 export const notifyTabAttached = () => {
-  browser.tabs.getCurrent().then(tab => {
+  browser.tabs.getCurrent().then((tab) => {
     const tabAttachedEvent: PluginEvent<TabAttachedEventPayload> = {
       type: PluginEventTypes.TAB_ATTACHED,
       payload: {
-        tabId: tab.id!!
-      }
-    }
+        tabId: tab.id!,
+      },
+    };
     return browser.runtime.sendMessage(tabAttachedEvent);
-  })
-}
+  });
+};
 
-export const attachBackgroundListener = ()=> {
+export const attachBackgroundListener = () => {
   browser.runtime.onMessage.addListener((event: PluginEvent<any>) => {
-    if(event.type === PluginEventTypes.THEME_SET) {
+    if (event.type === PluginEventTypes.THEME_SET) {
       const themeSetPayload: ThemeSetEventPayload = event.payload;
-      themeFavicon(themeSetPayload.themeId)
+      themeFavicon(themeSetPayload.themeId);
     }
   });
-}
+};

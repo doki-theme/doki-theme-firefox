@@ -4,14 +4,16 @@ import SingleModeSettings from "./singleModeSettings";
 import MixedModeSettings from "./mixedModeSettings";
 import DeviceMatchSettings from "./deviceMatchSettings";
 
-export const OptionSwitch: FC<{ pluginMode: PluginMode }> = ({ pluginMode }) => {
+export const OptionSwitch: FC<{ pluginMode: PluginMode }> = ({
+  pluginMode,
+}) => {
   switch (pluginMode) {
     case PluginMode.DEVICE_MATCH:
-      return <DeviceMatchSettings/>;
+      return <DeviceMatchSettings />;
     case PluginMode.MIXED:
-      return <MixedModeSettings/>;
+      return <MixedModeSettings />;
     case PluginMode.SINGLE:
     default:
-      return <SingleModeSettings/>;
+      return <SingleModeSettings />;
   }
 };

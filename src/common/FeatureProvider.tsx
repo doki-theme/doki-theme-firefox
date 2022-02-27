@@ -1,6 +1,10 @@
 import React, { FC, useEffect, useMemo, useState } from "react";
 import { pluginSettings } from "../Storage";
-import { FeatureSetEventPayload, PluginEvent, PluginEventTypes } from "../Events";
+import {
+  FeatureSetEventPayload,
+  PluginEvent,
+  PluginEventTypes,
+} from "../Events";
 
 export interface PluginFeatures {
   showWidget: boolean;
@@ -21,10 +25,10 @@ export const defaultFeatures: PluginFeatures = {
 };
 
 export const FeatureContext = React.createContext<PluginFeatureContext>({
-  setFeatures: (context: PluginFeatures) => {
-  },
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  setFeatures: (context: PluginFeatures) => {},
   isInitialized: false,
-  features: defaultFeatures
+  features: defaultFeatures,
 });
 
 const FeatureProvider: FC = ({ children }) => {
@@ -34,8 +38,8 @@ const FeatureProvider: FC = ({ children }) => {
     const featureSetEvent: PluginEvent<FeatureSetEventPayload> = {
       type: PluginEventTypes.FEATURE_SET,
       payload: {
-        features: context
-      }
+        features: context,
+      },
     };
     setFeatures(context);
     pluginSettings.set({
@@ -61,7 +65,7 @@ const FeatureProvider: FC = ({ children }) => {
     () => ({
       setFeatures: setTheme,
       isInitialized: initialized,
-      features
+      features,
     }),
     [initialized, features]
   );

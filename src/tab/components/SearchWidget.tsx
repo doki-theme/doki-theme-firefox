@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { DokiTheme } from "../../common/DokiTheme";
 import { svgToPng } from "../../background/svgTools";
 
-
 function setThemedSearchInputIcon(currentTheme: DokiTheme) {
   const searchOptions = { width: 24, height: 24 };
   svgToPng(currentTheme, searchOptions).then((imgData) => {
@@ -19,11 +18,11 @@ function setThemedAboutIcon(currentTheme: DokiTheme) {
   const aboutOptions = { width: 96, height: 96 };
   svgToPng(currentTheme, aboutOptions).then((imgData) => {
     const logo = document.querySelector("div[class='logo']");
-    logo?.childNodes?.forEach(node => {
+    logo?.childNodes?.forEach((node) => {
       logo.removeChild(node);
     });
     const pngImage = document.createElement("img");
-    logo!!.appendChild(pngImage);
+    logo!.appendChild(pngImage);
     pngImage.src = imgData;
   });
 }
@@ -46,23 +45,24 @@ const SearchWidget = ({ theme }: { theme: DokiTheme }) => {
   const [query, setQuery] = useState("");
 
   const conductSearch = () => {
-    browser.tabs.getCurrent()
-      .then((tab) => {
-        return browser.search.search({
-          query,
-          tabId: tab.id
-        });
+    browser.tabs.getCurrent().then((tab) => {
+      return browser.search.search({
+        query,
+        tabId: tab.id,
       });
+    });
   };
 
   const confirmSearch = () => {
-    return browser.permissions.request({
-      permissions: ["search"]
-    }).then(searchGranted => {
-      if (searchGranted) {
-        conductSearch();
-      }
-    });
+    return browser.permissions
+      .request({
+        permissions: ["search"],
+      })
+      .then((searchGranted) => {
+        if (searchGranted) {
+          conductSearch();
+        }
+      });
   };
 
   return (
@@ -72,19 +72,29 @@ const SearchWidget = ({ theme }: { theme: DokiTheme }) => {
         <div className="wordmark">Doki Theme</div>
       </div>
       <div className="search-inner-wrapper">
-        <input aria-controls="searchSuggestionTable" aria-expanded="false" aria-label="Search the web"
-               maxLength={256}
-               ref={searchElement}
-               onKeyDown={e => {
-                 if (e.key === "Enter") {
-                   confirmSearch();
-                 }
-               }}
-               onChange={e => setQuery(e.target.value)}
-               placeholder="Search the web" title="Search the web" type="search" autoFocus />
-        <button className="search-button"
-                onClick={confirmSearch}
-                aria-label="Search" title="Search"></button>
+        <input
+          aria-controls="searchSuggestionTable"
+          aria-expanded="false"
+          aria-label="Search the web"
+          maxLength={256}
+          ref={searchElement}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              confirmSearch();
+            }
+          }}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search the web"
+          title="Search the web"
+          type="search"
+          autoFocus
+        />
+        <button
+          className="search-button"
+          onClick={confirmSearch}
+          aria-label="Search"
+          title="Search"
+        ></button>
       </div>
     </main>
   );

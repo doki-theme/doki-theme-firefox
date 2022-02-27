@@ -6,16 +6,13 @@ import {
   DokiThemes,
 } from "./DokiTheme";
 import { PluginEvent, PluginEventTypes, ThemeSetEventPayload } from "../Events";
-import {
-  DokiThemeContext,
-  FireFoxDokiTheme,
-  ThemeContext,
-} from "./DokiThemeProvider";
+import { DokiThemeContext, FireFoxDokiTheme } from "./DokiThemeProvider";
 import { notifyTabAttached } from "../tab/TabBackgroundListener";
 
 export const ThemeContextContentScript = React.createContext<DokiThemeContext>({
   theme: new FireFoxDokiTheme(DEFAULT_DOKI_THEME, ContentType.PRIMARY),
-  setTheme: (context: ThemeContext) => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  setTheme: () => {},
   isInitialized: false,
 });
 
@@ -25,7 +22,7 @@ const DokiThemeProviderContentScript: FC = ({ children }) => {
   const [currentContent, setCurrentContent] = useState<ContentType>(
     ContentType.PRIMARY
   );
-  const setTheme = (context: ThemeContext) => {
+  const setTheme = () => {
     // no-op
   };
 

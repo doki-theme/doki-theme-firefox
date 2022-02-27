@@ -5,16 +5,18 @@ import DokiThemeProviderContentScript from "../common/DokiThemeProviderContentSc
 import FeatureProviderContentScripts from "../common/FeatureProviderContentScript";
 import { attachBackgroundListener } from "./TabBackgroundListener";
 
-
-document.addEventListener('DOMContentLoaded',  ()=> {
-attachBackgroundListener();
-  ReactDOM.render(
-    <DokiThemeProviderContentScript>
-      <FeatureProviderContentScripts>
-        <Tab />
-      </FeatureProviderContentScripts>
-    </DokiThemeProviderContentScript>
-    ,
-    document.getElementById("tab")
-  );
-}, false);
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+    attachBackgroundListener();
+    ReactDOM.render(
+      <DokiThemeProviderContentScript>
+        <FeatureProviderContentScripts>
+          <Tab />
+        </FeatureProviderContentScripts>
+      </DokiThemeProviderContentScript>,
+      document.getElementById("tab")
+    );
+  },
+  false
+);

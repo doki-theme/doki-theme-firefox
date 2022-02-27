@@ -36,6 +36,7 @@ export class DeviceThemeManager extends SingleThemeManager {
 
   private static attemptToModifyBrowserSettings() {
     try {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       browser.browserSettings.overrideContentColorScheme.set({
         value: "system",
@@ -49,9 +50,8 @@ export class DeviceThemeManager extends SingleThemeManager {
     this.dispatchNewThemeSet();
   }
 
-
   async getCurrentThemeId(): Promise<string> {
-    return this.getCurrentThemeAndContentType().themeId!!
+    return this.getCurrentThemeAndContentType().themeId!;
   }
 
   private dispatchNewThemeSet() {
@@ -59,8 +59,8 @@ export class DeviceThemeManager extends SingleThemeManager {
     const themeSetMessage: PluginEvent<ThemeSetEventPayload> = {
       type: PluginEventTypes.THEME_SET,
       payload: {
-        themeId: themeId!!,
-        content: content!!,
+        themeId: themeId!,
+        content: content!,
       },
     };
     this.handleContentScriptMessage(themeSetMessage);

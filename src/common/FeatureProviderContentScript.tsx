@@ -13,15 +13,16 @@ export interface PluginFeatureContext {
 }
 
 export const defaultFeatures = {
-  showWidget: true
+  showWidget: true,
 };
 
-export const FeatureContextContentScript = React.createContext<PluginFeatureContext>({
-  setFeatures: (context: PluginFeatures) => {
-  },
-  isInitialized: false,
-  features: defaultFeatures
-});
+export const FeatureContextContentScript =
+  React.createContext<PluginFeatureContext>({
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    setFeatures: () => {},
+    isInitialized: false,
+    features: defaultFeatures,
+  });
 
 const FeatureProvider: FC = ({ children }) => {
   const [initialized, setInitialized] = useState<boolean>(false);
@@ -33,7 +34,7 @@ const FeatureProvider: FC = ({ children }) => {
   useEffect(() => {
     pluginSettings.getAll().then((setting) => {
       setFeatures({
-        showWidget: setting.showWidget
+        showWidget: setting.showWidget,
       });
       setInitialized(true);
 
@@ -54,7 +55,7 @@ const FeatureProvider: FC = ({ children }) => {
     () => ({
       setFeatures: setTheme,
       isInitialized: initialized,
-      features
+      features,
     }),
     [initialized, features]
   );

@@ -1,5 +1,4 @@
-Contributing
----
+## Contributing
 
 # Outline
 
@@ -70,7 +69,6 @@ build script can copy the correct assets so they can be bundled with the plugin.
 ```shell
 git clone https://github.com/doki-theme/doki-theme-assets.git
 ```
-
 
 Your directory structure should have at least these directories, (there will probably be more, but these are the
 important ones to know).
@@ -176,7 +174,7 @@ Be prepared, there's a ton of changes!
 
 ### Developing
 
-In the root of this repository run a: 
+In the root of this repository run a:
 
 `npm install`
 
@@ -237,4 +235,3 @@ This script does all the annoying tedious stuff such as:
 
 [Here is an example pull request that captures all the artifacts from the development process of imported themes](https://github.com/doki-theme/doki-theme-web/pull/46)
 .
-

@@ -69,14 +69,14 @@ const DeviceMatchSettings = () => {
   }, []);
 
   const [darkOption, setDarkOption] = useState<ThemeOption>({
-    character: darkCharacterOptions[0]!!.value,
+    character: darkCharacterOptions[0]!.value,
     contentType: ContentType.PRIMARY,
-    selectedTheme: darkCharacterOptions[0]!!.value.themes[0],
+    selectedTheme: darkCharacterOptions[0]!.value.themes[0],
   });
   const [lightOption, setLightOption] = useState<ThemeOption>({
-    character: lightCharacterOptions[0]!!.value,
+    character: lightCharacterOptions[0]!.value,
     contentType: ContentType.PRIMARY,
-    selectedTheme: lightCharacterOptions[0]!!.value.themes[0],
+    selectedTheme: lightCharacterOptions[0]!.value.themes[0],
   });
 
   const initialValues: FormValues = {
@@ -116,26 +116,26 @@ const DeviceMatchSettings = () => {
       const darkContentType = settings.darkContentType;
       const darkCharacter = darkCharacterOptions.find((character) =>
         character.value.themes.some((theme) => theme.themeId === darkThemeId)
-      )!!;
+      )!;
       setDarkOption({
         character: darkCharacter.value,
         contentType: darkContentType,
         selectedTheme: darkCharacter.value.themes.find(
           (theme) => theme.themeId === darkThemeId
-        )!!,
+        )!,
       });
 
       const lightThemeId = settings.lightThemeId;
       const lightContentType = settings.lightContentType;
       const lightCharacter = lightCharacterOptions.find((character) =>
         character.value.themes.some((theme) => theme.themeId === lightThemeId)
-      )!!;
+      )!;
       setLightOption({
         character: lightCharacter.value,
         contentType: lightContentType,
         selectedTheme: lightCharacter.value.themes.find(
           (theme) => theme.themeId === lightThemeId
-        )!!,
+        )!,
       });
     });
 

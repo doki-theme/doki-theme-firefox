@@ -14,7 +14,6 @@ interface FormValues {
   themePool: ThemePools;
 }
 
-
 const MixedModeSettings = () => {
   const [initialValues, setInitialValues] = useState<FormValues | undefined>();
 

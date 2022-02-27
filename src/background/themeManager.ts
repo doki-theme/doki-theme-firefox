@@ -11,12 +11,14 @@ import {
 export abstract class ThemeManager {
   abstract handleMessage(message: any): Promise<void>;
 
-  abstract getCurrentThemeId(): Promise<string>
+  abstract getCurrentThemeId(): Promise<string>;
 
   async initializeTheme(): Promise<void> {
     try {
-      const currentTheme = await this.getCurrentThemeId()
-      await this.applyBrowserTheme(DokiThemes[currentTheme] || DEFAULT_DOKI_THEME);
+      const currentTheme = await this.getCurrentThemeId();
+      await this.applyBrowserTheme(
+        DokiThemes[currentTheme] || DEFAULT_DOKI_THEME
+      );
     } catch (e) {
       console.error("unable to initialize theme", e);
     }
@@ -29,7 +31,7 @@ export abstract class ThemeManager {
       const tabs = await browser.tabs.query({ title: "New Tab" });
       await Promise.all(
         tabs.map((tab) => {
-          const tabId = tab.id!!;
+          const tabId = tab.id!;
           const themeSetEvent: PluginEvent<ThemeSetEventPayload> = {
             type: PluginEventTypes.THEME_SET,
             payload: this.getThemeForTab(tabId),
@@ -50,7 +52,7 @@ export abstract class ThemeManager {
 
   async assumeCommand() {
     await this.initialize();
-    await this.initializeTheme()
+    await this.initializeTheme();
     await this.tellAllTabsTheirNewTheme();
   }
 
@@ -71,14 +73,14 @@ export abstract class ThemeManager {
     try {
       await browser.runtime.sendMessage(currentThemeSetEvent);
     } catch (e) {
-      console.warn('Unable to send current theme set message', e);
+      console.warn("Unable to send current theme set message", e);
     }
     const tabs = await browser.tabs.query({});
     try {
       await Promise.all(
         tabs.map((tab) =>
           browser.tabs
-            .sendMessage(tab.id!!, currentThemeSetEvent)
+            .sendMessage(tab.id!, currentThemeSetEvent)
             .catch((e) =>
               console.warn(
                 `Unable to broadcast to tab ${tab.id}, that current theme was updated.`,
@@ -121,6 +123,6 @@ export abstract class ThemeManager {
   }
 
   relieveOfDuty() {
-    this.disconnect()
+    this.disconnect();
   }
 }

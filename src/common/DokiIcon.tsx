@@ -21,7 +21,7 @@ function styleComponent(
         divGuy.removeChild(node);
       });
       const pngImage = document.createElement("img");
-      divGuy!!.appendChild(pngImage);
+      divGuy!.appendChild(pngImage);
       pngImage.src = imgData;
     });
   }

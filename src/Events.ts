@@ -25,7 +25,7 @@ export interface ThemeSetEventPayload {
 }
 
 export interface CurrentThemeSetEventPayload {
-  themeDefinition: DokiThemeDefinition,
+  themeDefinition: DokiThemeDefinition;
 }
 
 export interface FeatureSetEventPayload {
@@ -51,14 +51,13 @@ export interface MixedModeSettingsChangedPayload {
   themePool: ThemePools;
 }
 
-export interface ContentScriptInjectedPayload {
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface ContentScriptInjectedPayload {}
 
-export interface BrowserSettingsGrantedPayload {
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface BrowserSettingsGrantedPayload {}
 
 export interface DeviceMatchSettingsChangedEventPayload {
   dark: ThemeSetEventPayload;
   light: ThemeSetEventPayload;
 }
-

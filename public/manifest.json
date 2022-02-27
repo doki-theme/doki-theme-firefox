@@ -15,10 +15,7 @@
     "activeTab",
     "<all_urls>"
   ],
-  "permissions": [
-    "storage",
-    "theme"
-  ],
+  "permissions": ["storage", "theme"],
   "background": {
     "scripts": ["js/background.js"]
   },

@@ -19,5 +19,4 @@
   - You will need to probably reset your previous settings from the previous version, sorry!
 - Smoother `Mixed Mode` speedy tab creation handling, [re-visited fix in #72](https://github.com/doki-theme/doki-theme-web/pull/72).
 
-
 ## [See this changelog for more history](https://github.com/doki-theme/doki-theme-web/blob/master/CHANGELOG.md#1810-opt-in-firefox-features)

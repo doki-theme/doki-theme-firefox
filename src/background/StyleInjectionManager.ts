@@ -8,7 +8,7 @@ import RegisteredContentScript = browser.contentScripts.RegisteredContentScript;
 
 async function reloadTabs(obj: any) {
   const tabs: browser.tabs.Tab[] = await browser.tabs.query(obj);
-  await Promise.all(tabs.map((tab) => browser.tabs.reload(tab.id!!)));
+  await Promise.all(tabs.map((tab) => browser.tabs.reload(tab.id!)));
 }
 
 export class StyleInjectionManager {

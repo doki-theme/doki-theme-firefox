@@ -15,8 +15,7 @@ export abstract class ContentInjector {
       type: PluginEventTypes.CONTENT_SCRIPT_INJECTED,
       payload: {},
     };
-    browser.runtime
-      .sendMessage(injectedEvent)
+    browser.runtime.sendMessage(injectedEvent);
   }
 
   private handleMessage(message: PluginEvent<any>) {

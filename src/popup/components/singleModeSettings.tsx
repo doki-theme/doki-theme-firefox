@@ -28,7 +28,7 @@ const SingleModeSettings = () => {
   function findCharacter(theme: DokiTheme) {
     return characterThemes.find((character) =>
       character.themes.some((dokiTheme) => dokiTheme.equals(theme))
-    )!!;
+    )!;
   }
 
   const pickRandomTheme =
@@ -108,7 +108,7 @@ const SingleModeSettings = () => {
                       <DokiButton
                         variant={"primary"}
                         style={{
-                          marginTop: '1rem',
+                          marginTop: "1rem",
                         }}
                         type="submit"
                         disabled={isSubmitting || !dirty}

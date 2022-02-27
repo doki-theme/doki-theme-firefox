@@ -35,15 +35,15 @@ const Popup = () => {
       {({ theme }) => {
         const colors = theme.colors;
         const handleModeChange = (thing: any) => {
-          setCurrentMode(thing!!.value);
+          setCurrentMode(thing!.value);
           const modeSetEvent: PluginEvent<ModeSetEventPayload> = {
             type: PluginEventTypes.MODE_SET,
             payload: {
-              mode: thing!!.value,
+              mode: thing!.value,
             },
           };
-          browser.runtime.sendMessage(modeSetEvent).catch(e => {
-            console.warn('Unable to send mode set message', e);
+          browser.runtime.sendMessage(modeSetEvent).catch((e) => {
+            console.warn("Unable to send mode set message", e);
           });
         };
         return (
@@ -85,18 +85,19 @@ const Popup = () => {
                       <span
                         style={{
                           fontWeight: "500",
-                          fontSize: '1.25',
+                          fontSize: "1.25",
                         }}
                       >
                         Plugin Mode
-                      </span><br style={{marginBottom: '0.5rem'}}/>
+                      </span>
+                      <br style={{ marginBottom: "0.5rem" }} />
                       <ThemedSelect
                         options={options}
                         onChange={handleModeChange}
                         defaultValue={
                           options.find(
                             (option) => option.value === currentMode
-                          )!!
+                          )!
                         }
                       />
                     </label>

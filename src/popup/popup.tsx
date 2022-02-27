@@ -11,8 +11,7 @@ browser.tabs.query({ active: true, currentWindow: true }).then(() => {
       <FeatureProvider>
         <Popup />
       </FeatureProvider>
-    </DokiThemeProvider>
-    ,
+    </DokiThemeProvider>,
     document.getElementById("popup")
   );
 });

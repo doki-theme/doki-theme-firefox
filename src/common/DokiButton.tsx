@@ -36,8 +36,10 @@ const DokiButton: FC<
               border: `solid ${theme.colors.borderColor} 1px`,
               borderRadius: 0,
               fontWeight: 500,
-              cursor: 'pointer',
-              ...(props.disabled ? {opacity: 0.5, cursor: 'not-allowed'}: {}),
+              cursor: "pointer",
+              ...(props.disabled
+                ? { opacity: 0.5, cursor: "not-allowed" }
+                : {}),
               ...createStyles(theme),
             }}
           >
