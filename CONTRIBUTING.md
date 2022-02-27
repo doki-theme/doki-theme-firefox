@@ -1,4 +1,5 @@
-## Contributing
+Contributing
+---
 
 # Outline
 
@@ -18,10 +19,9 @@ that are not captured by the global shared style.
 
 # Getting Started
 
-If this is your first time working on a Hyper plugin, then it's a good idea to complete
-the [hyper plugin development setup](https://github.com/vercel/hyper/blob/canary/PLUGINS.md#plugin-development). This
-should give you a good introduction as what to expect, when developing for this plugin. The `localPlugins` is going to
-be `doki-theme-hyper`.
+If you haven't built a Python package before, then I would recommend going
+through [this extension tutorial](https://developer.chrome.com/docs/extensions/mv3/getstarted/). This way you can become
+more familiar with the process as a whole.
 
 # Editing Themes
 
@@ -29,8 +29,9 @@ be `doki-theme-hyper`.
 
 - Yarn package manager
 - Node 14
+- Firefox 95+
 
-## Setup
+## Initial Setup
 
 **Set up Yarn Globals**
 
@@ -61,12 +62,23 @@ on Windows, have you considered Linux? Just kidding (mostly), you'll need to run
 git clone https://github.com/doki-theme/doki-master-theme.git masterThemes
 ```
 
+**Get the Assets**
+
+In the same parent folder as `doki-theme-firefox` you'll need to clone the `doki-theme-assets` repository, that way the
+build script can copy the correct assets so they can be bundled with the plugin.
+
+```shell
+git clone https://github.com/doki-theme/doki-theme-assets.git
+```
+
+
 Your directory structure should have at least these directories, (there will probably be more, but these are the
 important ones to know).
 
 ```
 your-workspace/
-├─ doki-theme-hyper/
+├─ doki-theme-assets/
+├─ doki-theme-firefox/
 │  ├─ masterThemes/
 │  ├─ buildSrc/
 ```
@@ -80,7 +92,7 @@ yarn
 
 ### Set up build source
 
-Navigate to the root of the `buildSource` directory and run the following command.
+Navigate to the `buildSource` directory and run the following command.
 
 ```shell
 yarn
@@ -89,24 +101,6 @@ yarn
 This will install all the required dependencies to run the theme build process.
 
 You should be good to edit and add themes after that!
-
-## Editing Themes Setup
-
-### Running Plugin
-
-Fire up the code watch process that builds the plugin's code and watches for typescript file changes and re-builds the
-plugin. In the root of this repository run this command:
-
-```shell
-yarn watch
-```
-
-Once that is up and running, you can fire
-up [hyper as described here](https://github.com/vercel/hyper/blob/canary/PLUGINS.md#running-your-plugin).
-
-After that, you are free to make changes to the Typescript code and you can re-run the hyper instance to pick up the
-changes automagically. However, you will not see changes if you make changes to the theme build process,
-see [next section for more details](#theme-editing-process)
 
 ## Theme Editing Process
 
@@ -126,32 +120,76 @@ Inside the `buildSrc` directory, there will be 2 directories:
     values. Some cases, they also contain templates for evaluating things such as look and feel, colors, and other
     things.
 
-The `buildSrc` directory houses a `buildThemes` script that generates the application specific files necessary for apply
-the Doki Theme Suite.
+The `buildSrc` directory houses a `buildDefinitions` script that generates the application specific files necessary for
+apply
+the Doki Theme Suite. (**NOTE** you can't run `buildThemes` only I can, sorry!)
 
-### Hyper Theme specifics
+### Web specifics
 
-There is one important piece that composes a theme:
-
-- `DokiThemeDefinition.ts` which is a generated typescript file that houses all of the information necessary to:
-  - Color the application & syntax highlighting
-  - Download remote content assets.
-
-You can generate these artifacts by running this command in the `buildSrc` directory:
+When you run this command in the `buildSrc`
+directory:
 
 ```shell
 yarn buildThemes
 ```
 
-When you are running your instance of Hyper, to see your changes to the theme, you are working on, run the `buildThemes`
-command. However, if you are just making changes to the typescript code, that should just automatically be picked up and
-reloaded. If not, just restart the development instance of hyper again.
+This will:
+
+- Copy all the correct background assets for the tabs provided by the plugin.
+- Build the `DokiThemeDefinitions.ts` for use in the extension.
+
+Sometimes a particular theme has something that is just a bit off. Thankfully, there is a way to fix small one-off
+issues.
+
+In the `buildAssets/themes/definitions` directory lives all the chrome definitions. These are used to override the
+defaults provided by the `masterThemes`
+
+Here is an example that overrides the following:
+
+- The background placement
+- Search bar text color
+
+```json
+{
+  "id": "35422aa4-1396-4e76-8ec6-c5560884df22",
+  "overrides": {
+    "theme": {
+      "colors": {
+        "omnibox_text": "&accentColorDarker&"
+      }
+    }
+  },
+  "laf": {},
+  "syntax": {},
+  "colors": {}
+}
+```
+
+Once changes are made, you can run the command below inside the `buildSrc` directory.
+
+```shell
+yarn buildThemes
+```
+
+Here is an example [of a pull request that makes some edits](https://github.com/doki-theme/doki-theme-web/pull/27).
+Be prepared, there's a ton of changes!
+
+### Developing
+
+In the root of this repository run a: 
+
+`npm install`
+
+This process is accomplished in a two-step process:
+
+- Running the webpack command to watch for changes and re-build the extension. Run `npm run watch` in the root of this repository.
+- In another terminal run `npm run start` to spin up a new Firefox Browser with the temporary extension installed. If this command doesn't work, you'll need to run `npm i -g web-ext` to globally install the binary that supports the Firefox Browser window feature.
 
 # Creating New Themes
 
-**IMPORTANT**! Do _not_ create brand new Doki-Themes using Hyper.js. New themes should be created from the original
-JetBrains plugin which uses all the colors defined. There is also Doki Theme creation assistance provided by the IDE as
-well.
+**IMPORTANT**! Do _not_ create brand new Doki-Themes using the Web Plugin. New themes should be created from the
+original JetBrains plugin which uses all the colors defined. There is also Doki Theme creation assistance provided by
+the IDE as well.
 
 Please follow
 the [theme creation contributions in the JetBrains Plugin repository](https://github.com/doki-theme/doki-theme-jetbrains/blob/master/CONTRIBUTING.md#creating-new-themes)
@@ -161,13 +199,9 @@ for more details on how to build new themes.
 
 - [Editing Themes required software](#editing-themes-required-software)
 
-## Setup
+## Creating Setup
 
-- Follow the [editing themes setup](#editing-themes-setup)
-- Set up the [doki-build-source](https://github.com/doki-theme/doki-build-source)
-- You'll also probably want to have completed
-  the [Doki Theme VS-Code](https://github.com/doki-theme/doki-theme-vscode/blob/master/CONTRIBUTING.md#creating-new-themes)
-  process. As this plugin uses the sticker assets of the VS-Code plugin. So it helps to have those in place!
+- Follow the [initial setup](#initial-setup)
 
 ## Theme Creation Process
 
@@ -176,44 +210,31 @@ This part is mostly automated, for the most part. There is only one script you'l
 ### Application specific templates
 
 Once you have a new master theme definitions merged into the default branch, it's now time to generate the application
-specific templates, which allow us to control individual theme specific settings.
+specific templates, which allows us to control individual theme specific settings.
 
 You'll want to edit the function used by `buildApplicationTemplate`
 and `appName` [defined here](https://github.com/doki-theme/doki-master-theme/blob/596bbe7b258c65e485257a14887ee9b4e0e8b659/buildSrc/AppThemeTemplateGenerator.ts#L79)
 in your `masterThemes` directory.
 
-In the case of this plugin the `buildApplicationsTemplate` should use the `hyperTemplate` and `appName` should
-be `hyper`.
+In the case of this plugin, the `buildApplicationsTemplate` should use the `chromeTemplate` and `appName` should
+be `chrome`.
 
 We need run the `generateTemplates` script. Which will walk the master theme definitions and create the new templates in
 the `<repo-root>/buildSrc/assets/themes` directory (and update existing ones). In
-the `<your-workspace>/doki-theme-hyper/masterThemes` run this command:
+the `<your-workspace>/doki-theme-web/masterThemes` run this command:
 
 ```shell
 yarn generateTemplates
 ```
 
-If you added a new anime, you'll need to add
-a [new group mapping](https://github.com/doki-theme/doki-build-source/blob/ee91f334588714473486a9a4b6092e10f0ce4cc1/src/GroupToNameMapping.ts#L3)
-to the Doki Build source. Please see
-the [handy development setup for more details on what to do](https://github.com/doki-theme/doki-build-source#doki-theme-build-source)
-. You'll need to link `doki-build-source` in this plugin's build source.
-
-For clarity, you'll have to run this command in this directory `<your-workspace>/doki-theme-hyper/buildSrc`:
-
-```shell
-yarn link doki-build-source
-```
-
 The code defined in the `buildSrc/src` directory is part of the common Doki Theme construction suite. All other plugins
-work the same way, just some details change for each plugin, looking at
-you [doki-theme-web](https://github.com/doki-theme/doki-theme-web). This group of code exposes a `buildThemes` node
-script.
+work the same way, just some details change for each plugin (especially for this plugin)
 
 This script does all the annoying tedious stuff such as:
 
-- Evaluating the `DokiThemeDefinitions` from the templates. See [Hyper.js Specifics](#hyper-theme-specifics) for more
-  details.
+- Evaluating the `buildSrc/assets/templates` from the templates and putting the `manifiest.json` files in the right
+  place. See [Web Specifics](#web-specifics) for more details.
 
-[Here is an example pull request that captures all the artifacts from the development process of imported themes](https://github.com/doki-theme/doki-theme-hyper/pull/46)
+[Here is an example pull request that captures all the artifacts from the development process of imported themes](https://github.com/doki-theme/doki-theme-web/pull/46)
 .
+
