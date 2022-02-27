@@ -12,7 +12,9 @@
     "start": "web-ext run --source-dir ./dist/",
     "watch": "webpack --config webpack.dev.js --watch",
     "build": "webpack --config webpack.prod.js",
-    "lint": "npx prettier --write . && npx eslint ./src --ext .js,.jsx,.ts,.tsx"
+    "check:prettier": "npx prettier --check .",
+    "check:eslint": "npx eslint ./src --ext .js,.jsx,.ts,.tsx",
+    "lint": "npx prettier --write . && npx eslint ./src --ext .js,.jsx,.ts,.tsx --fix"
   },
   "devDependencies": {
     "@types/firefox-webext-browser": "^94.0.1",

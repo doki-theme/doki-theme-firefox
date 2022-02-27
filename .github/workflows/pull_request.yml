@@ -1,0 +1,28 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  prettier:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+          # Make sure the value of GITHUB_TOKEN will not be persisted in repo's config
+          persist-credentials: false
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Check Prettier
+        run: npm run check:prettier
+
+      - name: Check ESLint
+        run: npm run check:eslint

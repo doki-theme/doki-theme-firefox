@@ -1,5 +1,5 @@
-import { Field, FieldAttributes, Formik } from "formik";
-import React, { FC, useEffect, useState } from "react";
+import { Formik } from "formik";
+import React, { useEffect, useState } from "react";
 import {
   MixedModeSettingsChangedPayload,
   PluginEvent,
