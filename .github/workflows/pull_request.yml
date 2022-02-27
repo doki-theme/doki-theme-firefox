@@ -1,11 +1,11 @@
-name: Continuous Integration
+name: Pre Merge
 
 on:
   pull_request:
     branches: [main]
 
 jobs:
-  prettier:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,7 +19,10 @@ jobs:
 
       - uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: "14"
+
+      - name: Install Junk
+        run: npm install
 
       - name: Check Prettier
         run: npm run check:prettier
