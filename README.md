@@ -18,6 +18,7 @@
   - [Plugin Features](#plugin-features)
 - [Miscellaneous](#miscellaneous)
   - [Contributing](#contributing)
+  - [Reviewing](#reviewing)
   - [Theme Requests](#theme-requests)
   - [Helping the community](#enjoying-the-themes)
   - [Feature Requests](#contributions)
@@ -98,7 +99,8 @@ feature.
 
 This way the plugin can manually inject styles to match your active tab's theme. For that extra immersive experience.
 
-**Inject Themed Text Selection**: injects styles to change the text selection colors & caret to match the active tab's theme.
+**Inject Themed Text Selection**: injects styles to change the text selection colors & caret to match the active tab's
+theme.
 
 **Inject Themed Scrollbar**: injects styles to change the scrollbar to match the active tab's theme.
 
@@ -108,6 +110,11 @@ This way the plugin can manually inject styles to match your active tab's theme.
 
 If you want to get your workstation set up to work on the plugin,
 then you'll want to check out the [CONTRIBUTING.md](./CONTRIBUTING.md) for instructions on what is needed.
+
+## Reviewing
+
+If you are currently reviewing this plugin then you'll want to check out the [REVIEWER_README.md](./REVIEWER_README.md)
+for instructions on what is needed complete the review.
 
 ## Theme Requests
 
