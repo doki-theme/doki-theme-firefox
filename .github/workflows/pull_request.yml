@@ -1,11 +1,11 @@
-name: Continuous Integration
+name: Pre Merge
 
 on:
   pull_request:
     branches: [main]
 
 jobs:
-  prettier:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
