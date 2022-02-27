@@ -72,7 +72,7 @@ device is in dark mode.
 ### Mixed
 
 This mode is for weebs who savor the variety of life.
-Every new tab will be themed randomly chosen theme from your selected theme pool.
+Every new tab will be themed randomly by a chosen theme from your selected theme pool.
 
 **Theme Pools**:
 
