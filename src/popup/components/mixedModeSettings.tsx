@@ -1,5 +1,5 @@
-import { Field, Formik } from "formik";
-import React from "react";
+import { Field, FieldAttributes, Formik } from "formik";
+import React, { FC, useEffect, useState } from "react";
 import {
   MixedModeSettingsChangedPayload,
   PluginEvent,
@@ -7,15 +7,24 @@ import {
   ThemePools,
 } from "../../Events";
 import DokiButton from "../../common/DokiButton";
+import { pluginSettings } from "../../Storage";
+import DokiRadioButton from "./DokiRadioButton";
 
 interface FormValues {
   themePool: ThemePools;
 }
 
+
 const MixedModeSettings = () => {
-  const initialValues: FormValues = {
-    themePool: ThemePools.DEFAULT,
-  };
+  const [initialValues, setInitialValues] = useState<FormValues | undefined>();
+
+  useEffect(() => {
+    pluginSettings.getAll().then((settings) => {
+      setInitialValues({
+        themePool: settings.themePool,
+      });
+    });
+  }, []);
 
   const dispatchMixedModeSettingsChanges = (formValues: FormValues) => {
     const mixedModesSettingsChanged: PluginEvent<MixedModeSettingsChangedPayload> =
@@ -27,6 +36,10 @@ const MixedModeSettings = () => {
       };
     browser.runtime.sendMessage(mixedModesSettingsChanged);
   };
+
+  if (!initialValues) {
+    return <></>;
+  }
 
   return (
     <>
@@ -55,51 +68,46 @@ const MixedModeSettings = () => {
                   marginBottom: "1rem",
                 }}
               >
-                <label>
-                  {/*todo: themed radio buttons*/}
-                  <Field
-                    type="radio"
-                    name="themePool"
-                    value={ThemePools.DEFAULT}
-                    onChange={() => {
-                      setFieldValue("themePool", ThemePools.DEFAULT);
-                    }}
-                  />
+                <DokiRadioButton
+                  type="radio"
+                  name="themePool"
+                  value={ThemePools.DEFAULT}
+                  onChange={() => {
+                    setFieldValue("themePool", ThemePools.DEFAULT);
+                  }}
+                >
                   All Themes
-                </label>
-                <label>
-                  <Field
-                    type="radio"
-                    name="themePool"
-                    value={ThemePools.DARK}
-                    onChange={() => {
-                      setFieldValue("themePool", ThemePools.DARK);
-                    }}
-                  />
+                </DokiRadioButton>
+                <DokiRadioButton
+                  type="radio"
+                  name="themePool"
+                  value={ThemePools.DARK}
+                  onChange={() => {
+                    setFieldValue("themePool", ThemePools.DARK);
+                  }}
+                >
                   Dark Only
-                </label>
-                <label>
-                  <Field
-                    type="radio"
-                    name="themePool"
-                    value={ThemePools.LIGHT}
-                    onChange={() => {
-                      setFieldValue("themePool", ThemePools.LIGHT);
-                    }}
-                  />
+                </DokiRadioButton>
+                <DokiRadioButton
+                  type="radio"
+                  name="themePool"
+                  value={ThemePools.LIGHT}
+                  onChange={() => {
+                    setFieldValue("themePool", ThemePools.LIGHT);
+                  }}
+                >
                   Light Only
-                </label>
-                <label>
-                  <Field
-                    type="radio"
-                    name="themePool"
-                    value={ThemePools.MATCH_DEVICE}
-                    onChange={() => {
-                      setFieldValue("themePool", ThemePools.MATCH_DEVICE);
-                    }}
-                  />
+                </DokiRadioButton>
+                <DokiRadioButton
+                  type="radio"
+                  name="themePool"
+                  value={ThemePools.MATCH_DEVICE}
+                  onChange={() => {
+                    setFieldValue("themePool", ThemePools.MATCH_DEVICE);
+                  }}
+                >
                   Match Device
-                </label>
+                </DokiRadioButton>
               </div>
               <DokiButton type="submit" disabled={isSubmitting || !dirty}>
                 Apply

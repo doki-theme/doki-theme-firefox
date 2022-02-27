@@ -24,6 +24,7 @@ export class MixedThemeManager extends ThemeManager {
       const settingChangedPayload: MixedModeSettingsChangedPayload =
         message.payload;
       this.currentThemePool = settingChangedPayload.themePool;
+      await pluginSettings.set({themePool: this.currentThemePool})
     }
   }
 

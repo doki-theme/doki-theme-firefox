@@ -1,8 +1,8 @@
 import React, { FC } from "react";
 import ThemedSelect from "./ThemedSelect";
-import { Field } from "formik";
 import { CharacterTheme, ContentType, DokiTheme } from "../../themes/DokiTheme";
 import { ThemeContext } from "../../themes/DokiThemeProvider";
+import DokiRadioButton from "./DokiRadioButton";
 
 function createThemeVariantName(theme: DokiTheme) {
   const trimmedVariant = theme.name
@@ -96,34 +96,32 @@ const DokiThemeComponent: FC<Props> = ({
                 </span>
                 <br style={{ marginBottom: "0.5rem" }} />
                 <div role="group" aria-labelledby="contentTypeGroup">
-                  <label>
-                    <Field
-                      type="radio"
-                      name={`${prefix}.contentType`}
-                      value={ContentType.PRIMARY}
-                      onChange={() => {
-                        setFieldValue(
-                          `${prefix}.contentType`,
-                          ContentType.PRIMARY
-                        );
-                      }}
-                    />
+                  <DokiRadioButton
+                    type="radio"
+                    name={`${prefix}.contentType`}
+                    value={ContentType.PRIMARY}
+                    onChange={() => {
+                      setFieldValue(
+                        `${prefix}.contentType`,
+                        ContentType.PRIMARY
+                      );
+                    }}
+                  >
                     Primary
-                  </label>
-                  <label>
-                    <Field
-                      type="radio"
-                      name={`${prefix}.contentType`}
-                      value={ContentType.SECONDARY}
-                      onChange={() => {
-                        setFieldValue(
-                          `${prefix}.contentType`,
-                          ContentType.SECONDARY
-                        );
-                      }}
-                    />
+                  </DokiRadioButton>
+                  <DokiRadioButton
+                    type="radio"
+                    name={`${prefix}.contentType`}
+                    value={ContentType.SECONDARY}
+                    onChange={() => {
+                      setFieldValue(
+                        `${prefix}.contentType`,
+                        ContentType.SECONDARY
+                      );
+                    }}
+                  >
                     Secondary
-                  </label>
+                  </DokiRadioButton>
                 </div>
               </div>
             </>
