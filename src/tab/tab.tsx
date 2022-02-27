@@ -1,8 +1,8 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import Tab from "./components/tab";
-import DokiThemeProviderContentScript from "../themes/DokiThemeProviderContentScript";
-import FeatureProviderContentScripts from "../themes/FeatureProviderContentScript";
+import DokiThemeProviderContentScript from "../common/DokiThemeProviderContentScript";
+import FeatureProviderContentScripts from "../common/FeatureProviderContentScript";
 import { attachBackgroundListener } from "./TabBackgroundListener";
 
 

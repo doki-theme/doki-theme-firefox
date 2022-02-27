@@ -1,4 +1,4 @@
-import { CharacterTheme, DokiThemeDefinition } from "../../themes/DokiTheme";
+import { CharacterTheme, DokiThemeDefinition } from "../../common/DokiTheme";
 import DokiThemeDefinitions from "../../DokiThemeDefinitions";
 
 

@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import Switch, { ReactSwitchProps } from "react-switch";
-import { ThemeContext } from "../../themes/DokiThemeProvider";
+import { ThemeContext } from "../../common/DokiThemeProvider";
 
 type htmlInputProps = React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLInputElement>,

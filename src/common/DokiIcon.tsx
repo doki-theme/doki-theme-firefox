@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef } from "react";
-import { DokiTheme } from "../themes/DokiTheme";
+import { DokiTheme } from "./DokiTheme";
 import { svgToPng } from "../background/svgTools";
 
 interface Props {

@@ -1,4 +1,4 @@
-import { DokiTheme, DokiThemes } from "../themes/DokiTheme";
+import { DokiTheme, DokiThemes } from "../common/DokiTheme";
 import { svgToPng } from "../background/svgTools";
 import { PluginEvent, PluginEventTypes, TabAttachedEventPayload, ThemeSetEventPayload } from "../Events";
 

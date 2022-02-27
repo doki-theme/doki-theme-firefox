@@ -1,5 +1,5 @@
 import React from "react";
-import { ThemeContext } from "../../themes/DokiThemeProvider";
+import { ThemeContext } from "../../common/DokiThemeProvider";
 import Select, { GroupBase } from "react-select";
 import { StateManagerProps } from "react-select/dist/declarations/src/useStateManager";
 

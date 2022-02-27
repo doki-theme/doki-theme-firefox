@@ -1,4 +1,4 @@
-import { DokiTheme } from "../themes/DokiTheme";
+import { DokiTheme } from "../common/DokiTheme";
 import { svgToPng } from "./svgTools";
 
 

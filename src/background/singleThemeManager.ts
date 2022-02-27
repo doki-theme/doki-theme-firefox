@@ -4,7 +4,7 @@ import {
   DEFAULT_DOKI_THEME,
   DokiTheme,
   DokiThemes,
-} from "../themes/DokiTheme";
+} from "../common/DokiTheme";
 import { pluginSettings } from "../Storage";
 import {
   PluginEvent,

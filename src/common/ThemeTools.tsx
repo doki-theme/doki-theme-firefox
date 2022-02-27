@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from "react";
-import { ContentType, DokiTheme, DokiThemes } from "../themes/DokiTheme";
+import { ContentType, DokiTheme, DokiThemes } from "./DokiTheme";
 import sample from "lodash/sample";
 
 export const ThemeStuff: FC<{ theme: DokiTheme }> = ({ theme }) => {

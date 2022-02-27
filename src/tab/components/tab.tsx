@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { ThemeContextContentScript } from "../../themes/DokiThemeProviderContentScript";
+import { ThemeContextContentScript } from "../../common/DokiThemeProviderContentScript";
 import { ThemeStuff } from "../../common/ThemeTools";
 import SearchWidget from "./SearchWidget";
-import { FeatureContextContentScript } from "../../themes/FeatureProviderContentScript";
+import { FeatureContextContentScript } from "../../common/FeatureProviderContentScript";
 
 const Tab = () => {
   return (

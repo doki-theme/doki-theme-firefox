@@ -1,4 +1,4 @@
-import { DokiTheme } from "../themes/DokiTheme";
+import { DokiTheme } from "../common/DokiTheme";
 
 export function shadeHexColor(color: string, percent: number) {
   const f = parseInt(color.slice(1), 16),

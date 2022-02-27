@@ -1,8 +1,8 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import Popup from "./components/popup";
-import DokiThemeProvider from "../themes/DokiThemeProvider";
-import FeatureProvider from "../themes/FeatureProvider";
+import DokiThemeProvider from "../common/DokiThemeProvider";
+import FeatureProvider from "../common/FeatureProvider";
 import "react-tabs/style/react-tabs.css";
 
 browser.tabs.query({ active: true, currentWindow: true }).then(() => {

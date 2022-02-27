@@ -2,7 +2,7 @@ import {
   ContentType,
   DEFAULT_DARK_THEME_ID,
   DEFAULT_LIGHT_THEME_ID,
-} from "./themes/DokiTheme";
+} from "./common/DokiTheme";
 import { ThemePools } from "./Events";
 
 export interface Options {

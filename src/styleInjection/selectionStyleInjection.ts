@@ -1,5 +1,5 @@
 import { ContentInjector } from "./contentInjector";
-import { DokiThemeDefinition } from "../themes/DokiTheme";
+import { DokiThemeDefinition } from "../common/DokiTheme";
 
 class SelectionStyleInjection extends ContentInjector {
   constructor() {

@@ -4,7 +4,7 @@ import {
   PluginEvent,
   PluginEventTypes,
 } from "../Events";
-import { DokiThemeDefinition } from "../themes/DokiTheme";
+import { DokiThemeDefinition } from "../common/DokiTheme";
 
 export abstract class ContentInjector {
   constructor(private readonly styleId: string) {}

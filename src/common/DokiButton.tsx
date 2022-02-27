@@ -1,5 +1,5 @@
 import React, { CSSProperties, FC } from "react";
-import { FireFoxDokiTheme, ThemeContext } from "../themes/DokiThemeProvider";
+import { FireFoxDokiTheme, ThemeContext } from "./DokiThemeProvider";
 
 interface Props {
   variant?: "primary" | "default";

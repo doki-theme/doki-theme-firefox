@@ -1,5 +1,5 @@
-import { PluginFeatures } from "./themes/FeatureProvider";
-import { ContentType, DokiThemeDefinition } from "./themes/DokiTheme";
+import { PluginFeatures } from "./common/FeatureProvider";
+import { ContentType, DokiThemeDefinition } from "./common/DokiTheme";
 import { PluginMode } from "./Storage";
 
 export enum PluginEventTypes {

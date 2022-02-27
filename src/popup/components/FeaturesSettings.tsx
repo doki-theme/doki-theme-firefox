@@ -1,6 +1,6 @@
 import React from "react";
-import { ThemeContext } from "../../themes/DokiThemeProvider";
-import { FeatureContext } from "../../themes/FeatureProvider";
+import { ThemeContext } from "../../common/DokiThemeProvider";
+import { FeatureContext } from "../../common/FeatureProvider";
 import ThemedSwitch from "./ThemedSwitch";
 
 const FeaturesSettings = () => {

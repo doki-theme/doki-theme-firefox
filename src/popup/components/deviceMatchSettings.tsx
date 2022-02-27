@@ -13,7 +13,7 @@ import {
   ContentType,
   DokiTheme,
   DokiThemeDefinition,
-} from "../../themes/DokiTheme";
+} from "../../common/DokiTheme";
 import DokiThemeComponent, { CharacterOption } from "./DokiThemeComponent";
 import { pluginSettings } from "../../Storage";
 import DokiButton from "../../common/DokiButton";

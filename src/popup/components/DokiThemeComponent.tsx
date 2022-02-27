@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import ThemedSelect from "./ThemedSelect";
-import { CharacterTheme, ContentType, DokiTheme } from "../../themes/DokiTheme";
-import { ThemeContext } from "../../themes/DokiThemeProvider";
+import { CharacterTheme, ContentType, DokiTheme } from "../../common/DokiTheme";
+import { ThemeContext } from "../../common/DokiThemeProvider";
 import DokiRadioButton from "./DokiRadioButton";
 
 function createThemeVariantName(theme: DokiTheme) {

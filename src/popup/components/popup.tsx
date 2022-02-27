@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { ThemeContext } from "../../themes/DokiThemeProvider";
+import { ThemeContext } from "../../common/DokiThemeProvider";
 import ThemedSelect from "./ThemedSelect";
 import { PluginMode, pluginSettings } from "../../Storage";
 import { OptionSwitch } from "./optionSwitch";
 import { ThemeStuff } from "../../common/ThemeTools";
-import { FeatureContext } from "../../themes/FeatureProvider";
+import { FeatureContext } from "../../common/FeatureProvider";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import "./popup.css";
 import {

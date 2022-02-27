@@ -1,5 +1,5 @@
 import { ThemeManager } from "./themeManager";
-import { FireFoxDokiTheme } from "../themes/DokiThemeProvider";
+import { FireFoxDokiTheme } from "../common/DokiThemeProvider";
 import {
   MixedModeSettingsChangedPayload,
   PluginEvent,
@@ -10,7 +10,7 @@ import {
 } from "../Events";
 import { chooseRandomTheme } from "../common/ThemeTools";
 import { pluginSettings } from "../Storage";
-import { DokiTheme } from "../themes/DokiTheme";
+import { DokiTheme } from "../common/DokiTheme";
 import { DeviceThemeManager } from "./deviceThemeManager";
 import { CollectAndDebounce } from "./collectAndDebounce";
 
