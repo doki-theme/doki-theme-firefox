@@ -8,6 +8,7 @@ import {
   readJson,
   resolveColor,
   resolvePaths,
+  Stickers,
   StringDictionary,
   toRGBArray,
   walkDir
@@ -15,7 +16,7 @@ import {
 import omit from "lodash/omit";
 import fs from "fs";
 import path from "path";
-import { FireFoxTheme } from "./types";
+import {FireFoxTheme} from "./types";
 
 type AppDokiThemeDefinition = BaseAppDokiThemeDefinition;
 
@@ -116,6 +117,24 @@ interface FireFoxDokiThemeBuild {
   fireFoxTheme: FireFoxTheme,
 }
 
+const excludedSecondaryContentThemes = new Set([
+  'b93ab4ea-ff96-4459-8fa2-0caae5bc7116', // Kanna's are the same
+  'ea9a13f6-fa7f-46a4-ba6e-6cefe1f55160' // I lack culture...
+]);
+
+function hasExcludedSecondaryContent(masterThemeDefinition: MasterDokiThemeDefinition) {
+  return excludedSecondaryContentThemes.has(masterThemeDefinition.id);
+}
+
+function sanitizeStickers(masterThemeDefinition: MasterDokiThemeDefinition): Stickers {
+  if (hasExcludedSecondaryContent(masterThemeDefinition)) {
+    return {
+      default: masterThemeDefinition.stickers.default
+    }
+  }
+  return masterThemeDefinition.stickers;
+}
+
 function createDokiTheme(
   masterThemeDefinitionPath: string,
   masterThemeDefinition: MasterDokiThemeDefinition,
@@ -133,7 +152,8 @@ function createDokiTheme(
           masterThemeDefinition,
           masterTemplateDefinitions,
           appThemeDefinition
-        )
+        ),
+        stickers: sanitizeStickers(masterThemeDefinition),
       },
       templateVariables: buildTemplateVariables(
         masterThemeDefinition,
@@ -164,8 +184,6 @@ function resolveStickerPath(themeDefinitionPath: string, sticker: string) {
     masterThemeDefinitionDirectoryPath.length + "/definitions".length
   );
 }
-
-type Stickers = { default: { path: string; name: string } };
 
 console.log("Preparing to generate themes.");
 const fireFoxTemplate = readJson<FireFoxTheme>(path.resolve(appTemplatesDirectoryPath, "firefox.theme.template.json"));
