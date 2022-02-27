@@ -21,6 +21,9 @@ jobs:
         with:
           node-version: "14"
 
+      - name: Install Junk
+        run: npm install
+
       - name: Check Prettier
         run: npm run check:prettier
 
