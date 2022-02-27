@@ -169,7 +169,7 @@ const DeviceMatchSettings = () => {
           modify your browser settings to <br />
           match the "System" setting for this feature to work.
         </p>
-        <button onClick={grantPermission}>Allow Access</button>
+        <DokiButton onClick={grantPermission}>Allow Access</DokiButton>
       </div>
     );
   }
