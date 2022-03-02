@@ -64,10 +64,11 @@ const SingleModeSettings = () => {
           const initialValues: FormValues = {
             selected: {
               character: findCharacter(theme),
-              contentType: ContentType.PRIMARY,
+              contentType: theme.activeContent,
               selectedTheme: theme.dokiTheme,
             },
           };
+          console.log(theme.activeContent)
           return (
             <div>
               <Formik
