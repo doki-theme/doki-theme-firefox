@@ -1,5 +1,12 @@
 ## Changelog
 
+# v74.2-2.0.1 [Bug Fixes]
+
+### Fixed
+
+- Secondary content not persisting after restart or when opening the popup form again.
+- The handling of Sayori's Z̸̤̋a̸̟̘̦̞̳̲̔͂̊̃̈́͛l̴̹̦̋̽̂́͘g̷͉̪̠͈̠̈́̈́̉́͘ö̷̡̀̾͜ͅ ̴͕̳̊͊̎̉̒̀T̴̯̳̖̏̏͒͘e̸̡̲̲̠͖͌̄̄̚͝x̵̝̃͑̎́ṯ̸̲̃́̑̃͘, in the theme selection dropdown.
+
 # v74.1-2.0.0 [Synapse break. Vanishment, this world!]
 
 **4 New Dark Themes!**

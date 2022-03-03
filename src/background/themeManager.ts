@@ -111,6 +111,7 @@ export abstract class ThemeManager {
     if (event.type === PluginEventTypes.THEME_SET) {
       const payload = event.payload as ThemeSetEventPayload;
       await this.applyBrowserTheme(DokiThemes[payload.themeId]);
+      await pluginSettings.set({ currentContentType: payload.content });
     } else if (event.type === PluginEventTypes.CONTENT_SCRIPT_INJECTED) {
       const { currentTheme } = await pluginSettings.getAll();
       await this.dispatchCurrentThemeSet(DokiThemes[currentTheme]);

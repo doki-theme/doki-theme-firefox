@@ -210,6 +210,13 @@ async function walkAndCopyAssets(): Promise<void> {
     });
 }
 
+function scrubDefinition(masterThemeDefinition: MasterDokiThemeDefinition) {
+  if(masterThemeDefinition.id === "b0340303-0a5a-4a20-9b9c-fc8ce9880078") {
+    masterThemeDefinition.displayName = "Sayori";
+  }
+  return masterThemeDefinition;
+}
+
 walkAndCopyAssets().then(() =>
   evaluateTemplates(
     {
@@ -225,7 +232,7 @@ walkAndCopyAssets().then(() =>
     ) =>
       createDokiTheme(
         masterThemeDefinitionPath,
-        masterThemeDefinition,
+        scrubDefinition(masterThemeDefinition),
         appTemplateDefinitions,
         appThemeDefinition,
         masterTemplateDefinitions,

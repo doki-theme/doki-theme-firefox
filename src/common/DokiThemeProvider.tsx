@@ -69,10 +69,14 @@ const DokiThemeProvider: FC = ({ children }) => {
   };
 
   useEffect(() => {
-    pluginSettings.getAll().then((setting) => {
-      const currentTheme = setting.currentTheme;
+    pluginSettings.getAll().then((settings) => {
+      const currentTheme = settings.currentTheme;
       if (currentTheme) {
         setThemeId(currentTheme);
+      }
+      const activeContent = settings.currentContentType;
+      if (activeContent) {
+        setCurrentContent(activeContent);
       }
       setInitialized(true);
 
