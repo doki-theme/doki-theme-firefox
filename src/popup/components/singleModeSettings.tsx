@@ -68,7 +68,7 @@ const SingleModeSettings = () => {
               selectedTheme: theme.dokiTheme,
             },
           };
-          console.log(theme.activeContent)
+
           return (
             <div>
               <Formik

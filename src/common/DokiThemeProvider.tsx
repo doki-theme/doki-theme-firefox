@@ -74,9 +74,9 @@ const DokiThemeProvider: FC = ({ children }) => {
       if (currentTheme) {
         setThemeId(currentTheme);
       }
-      const activeContent = settings.currentContentType
-      if(activeContent) {
-        setCurrentContent(activeContent)
+      const activeContent = settings.currentContentType;
+      if (activeContent) {
+        setCurrentContent(activeContent);
       }
       setInitialized(true);
 
