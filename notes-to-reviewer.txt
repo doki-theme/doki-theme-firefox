@@ -1,0 +1,5 @@
+In the provided source code exists a REVIEWER_README.md that goes over the step on how to construct the submitted source for this version.
+
+All the code & assets used by the plugin can be found in the public and src directory in the supplied source code.
+
+I did not provide a list of links of third party libraries, because the project uses NPM to manage dependencies. I figured that was sufficient.
