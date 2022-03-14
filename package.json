@@ -28,7 +28,7 @@
     "copy-webpack-plugin": "^10.2.4",
     "css-loader": "^6.7.1",
     "doki-build-source": "^74.2.3",
-    "eslint": "^8.10.0",
+    "eslint": "^8.11.0",
     "prettier": "2.5.1",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.2.8",
