@@ -19,7 +19,7 @@
   "devDependencies": {
     "@types/firefox-webext-browser": "^94.0.1",
     "@types/lodash": "^4.14.180",
-    "@types/react": "^17.0.40",
+    "@types/react": "^17.0.42",
     "@types/react-dom": "^17.0.13",
     "@types/react-select": "^5.0.1",
     "@types/react-tabs": "^2.3.4",
