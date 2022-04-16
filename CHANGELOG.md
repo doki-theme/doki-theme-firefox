@@ -1,5 +1,9 @@
 ## Changelog
 
+# 78.0-2.1.0 [React Update]
+
+- Non-Functional update. Updated React to v18.
+
 # 78.0-2.0.1 [The Boys]
 
 I'm trying to bring in a bit of inclusion.
