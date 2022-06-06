@@ -27,7 +27,7 @@
     "@typescript-eslint/parser": "^5.27.0",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",
-    "doki-build-source": "^84.2.3",
+    "doki-build-source": "^84.2.4",
     "eslint": "^8.16.0",
     "prettier": "2.6.2",
     "style-loader": "^3.3.1",
