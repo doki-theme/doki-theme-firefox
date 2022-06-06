@@ -6,6 +6,7 @@ import {
 } from "../Events";
 import { pluginSettings } from "../Storage";
 import { SingleThemeManager, ThemeStuff } from "./singleThemeManager";
+import { DokiTheme } from "../common/DokiTheme";
 
 const mediaQuery = "(prefers-color-scheme: dark)";
 
@@ -109,6 +110,18 @@ export class DeviceThemeManager extends SingleThemeManager {
 
   public static isDark() {
     return window.matchMedia(mediaQuery).matches;
+  }
+
+  protected decorateTheme(dokiTheme: DokiTheme): browser._manifest.ThemeType {
+    const decoratedTheme = super.decorateTheme(dokiTheme);
+    return {
+      ...decoratedTheme,
+      properties: {
+        ...decoratedTheme.properties,
+        color_scheme: "system",
+        content_color_scheme: "system",
+      },
+    };
   }
 
   private mediaChangeListener = this.handleMediaChange.bind(this);

@@ -7,6 +7,7 @@ import {
   PluginEventTypes,
   ThemeSetEventPayload,
 } from "../Events";
+import ThemeType = browser._manifest.ThemeType;
 
 export abstract class ThemeManager {
   abstract handleMessage(message: any): Promise<void>;
@@ -58,9 +59,13 @@ export abstract class ThemeManager {
 
   async applyBrowserTheme(dokiTheme: DokiTheme) {
     themeExtensionIconInToolBar(dokiTheme);
-    browser.theme.update(dokiTheme.browserTheme);
+    browser.theme.update(this.decorateTheme(dokiTheme));
     await pluginSettings.set({ currentTheme: dokiTheme.themeId });
     await this.dispatchCurrentThemeSet(dokiTheme);
+  }
+
+  protected decorateTheme(dokiTheme: DokiTheme): ThemeType {
+    return dokiTheme.browserTheme;
   }
 
   private async dispatchCurrentThemeSet(dokiTheme: DokiTheme) {

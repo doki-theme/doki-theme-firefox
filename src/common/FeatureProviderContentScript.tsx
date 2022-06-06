@@ -1,4 +1,10 @@
-import React, { FC, useEffect, useMemo, useState } from "react";
+import React, {
+  FC,
+  PropsWithChildren,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { pluginSettings } from "../Storage";
 import { FeatureSetEventPayload, PluginEventTypes } from "../Events";
 
@@ -24,7 +30,11 @@ export const FeatureContextContentScript =
     features: defaultFeatures,
   });
 
-const FeatureProvider: FC = ({ children }) => {
+interface Props {
+  nothing?: string;
+}
+
+const FeatureProvider: FC<PropsWithChildren<Props>> = ({ children }) => {
   const [initialized, setInitialized] = useState<boolean>(false);
   const [features, setFeatures] = useState<PluginFeatures>(defaultFeatures);
   const setTheme = (context: PluginFeatures) => {

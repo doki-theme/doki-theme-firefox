@@ -1,5 +1,9 @@
 ## Changelog
 
+# 78.0-2.1.1 [Device Match Fix]
+
+- Restored `Device Match` functionality for Firefox v100+.
+
 # 78.0-2.1.0 [React Update]
 
 - Non-Functional update. Updated React to v18.
