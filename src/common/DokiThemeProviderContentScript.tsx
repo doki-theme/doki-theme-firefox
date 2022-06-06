@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState } from "react";
+import React, {FC, PropsWithChildren, useEffect, useMemo, useState} from "react";
 import {
   ContentType,
   DEFAULT_DOKI_THEME,
@@ -16,7 +16,11 @@ export const ThemeContextContentScript = React.createContext<DokiThemeContext>({
   isInitialized: false,
 });
 
-const DokiThemeProviderContentScript: FC = ({ children }) => {
+interface Props {
+  nothing?: string
+}
+
+const DokiThemeProviderContentScript: FC<PropsWithChildren<Props>> = ({ children }) => {
   const [themeId, setThemeId] = useState<string>(DEFAULT_DARK_THEME_ID);
   const [initialized, setInitialized] = useState<boolean>(false);
   const [currentContent, setCurrentContent] = useState<ContentType>(
