@@ -14,7 +14,6 @@ This release is not for my Dark Theme Normies. Dark themes are nice, but I like 
 - Have I ever seen Code Geass? No. Can I appreciate C.C. without having seen the anime? Yeah buddy.
 - Guess while I'm talking about "anime I haven't seen but, chose to make a theme because the girl is pretty." We now have Yuzuriha Inori from Guilty Crown.
 
-
 # 78.0-2.1.1 [Device Match Fix]
 
 - Restored `Device Match` functionality for Firefox v100+.
