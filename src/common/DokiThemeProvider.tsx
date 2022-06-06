@@ -1,4 +1,10 @@
-import React, {FC, PropsWithChildren, useEffect, useMemo, useState} from "react";
+import React, {
+  FC,
+  PropsWithChildren,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   ContentType,
   DEFAULT_DOKI_THEME,
@@ -49,7 +55,7 @@ export const ThemeContext = React.createContext<DokiThemeContext>({
 });
 
 interface Props {
-  nothing?: string
+  nothing?: string;
 }
 
 const DokiThemeProvider: FC<PropsWithChildren<Props>> = ({ children }) => {

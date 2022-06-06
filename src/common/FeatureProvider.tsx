@@ -1,4 +1,10 @@
-import React, {FC, PropsWithChildren, useEffect, useMemo, useState} from "react";
+import React, {
+  FC,
+  PropsWithChildren,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { pluginSettings } from "../Storage";
 import {
   FeatureSetEventPayload,
@@ -32,7 +38,7 @@ export const FeatureContext = React.createContext<PluginFeatureContext>({
 });
 
 interface Props {
-  nothing?: string
+  nothing?: string;
 }
 
 const FeatureProvider: FC<PropsWithChildren<Props>> = ({ children }) => {
