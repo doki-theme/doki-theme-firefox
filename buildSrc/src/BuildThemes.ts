@@ -74,6 +74,7 @@ function buildFireFoxTheme(
   );
   const colorsOverride = dokiThemeChromeDefinition.overrides.theme &&
     dokiThemeChromeDefinition.overrides.theme.colors || {};
+  const colorScheme = dokiThemeDefinition.dark ? "dark" : "light";
   return {
     ...manifestTemplate,
     colors: replaceValues(
@@ -82,7 +83,11 @@ function buildFireFoxTheme(
         colorsOverride[key] || color,
         namedColors
       ))
-    )
+    ),
+    properties: {
+      color_scheme: colorScheme,
+      content_color_scheme: colorScheme,
+    }
   };
 }
 

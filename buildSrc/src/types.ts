@@ -19,5 +19,9 @@ export interface FireFoxTheme {
     "tab_background_text": string,
     "tab_text": string,
     "toolbar": string,
+  },
+  properties: {
+    color_scheme: string;
+    content_color_scheme: string,
   }
 }
