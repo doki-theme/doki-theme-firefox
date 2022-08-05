@@ -12,16 +12,20 @@ function createThemeVariantName(theme: DokiTheme) {
   return trimmedVariant || (theme.dark ? "Dark" : "Light");
 }
 
+type labelType = { label: string; value: DokiTheme };
+
 function getThemeSelector(
   values: any,
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void,
   prefix: string,
   theme: DokiTheme
 ) {
-  const options = values[prefix].character.themes.map((theme: DokiTheme) => ({
-    value: theme,
-    label: createThemeVariantName(theme),
-  }));
+  const options = values[prefix].character.themes
+    .map((theme: DokiTheme) => ({
+      value: theme,
+      label: createThemeVariantName(theme),
+    }))
+    .sort((a: labelType, b: labelType) => a.label.localeCompare(b.label));
   return (
     <div style={{ marginTop: "1rem" }}>
       <label>

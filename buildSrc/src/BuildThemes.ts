@@ -198,8 +198,9 @@ const firefoxBackgroundAssets = path.resolve(
 );
 
 async function walkAndCopyAssets(): Promise<void> {
+  const assetDir = path.resolve(repoDirectory, "..", "doki-theme-assets", "backgrounds", "wallpapers");
   const assetsToCopy = await walkDir(
-    path.resolve(repoDirectory, "..", "doki-theme-assets", "backgrounds", "wallpapers")
+    assetDir
   );
 
   assetsToCopy.filter(assetPath => assetPath.indexOf("transparent") < 0 && assetPath.indexOf("checksum") < 0)
@@ -213,6 +214,16 @@ async function walkAndCopyAssets(): Promise<void> {
         )
       );
     });
+
+  // special case where the wallpaper isn't the one I
+  // want to use as the background.
+  const bestGirl = 'zero_two_obsidian.png';
+  fs.copyFileSync(
+    path.resolve(assetDir, '..', bestGirl),
+    path.join(
+      firefoxBackgroundAssets, bestGirl
+    )
+  )
 }
 
 function scrubDefinition(masterThemeDefinition: MasterDokiThemeDefinition) {
